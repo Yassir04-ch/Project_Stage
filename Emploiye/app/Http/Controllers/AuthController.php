@@ -44,7 +44,7 @@ class AuthController extends Controller
                 'user'  => $result['user'],
                 'token' => $result['token'],
             ],
-        ]);
+        ],200);
     }
 
    
@@ -55,7 +55,7 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Déconnexion réussie.',
-        ]);
+        ],200);
     }
 
 
@@ -66,7 +66,7 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Déconnexion de tous les appareils réussie.',
-        ]);
+        ],200);
     }
 
     
@@ -77,7 +77,7 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'data'    => $user,
-        ]);
+        ],200);
     }
 
     
@@ -88,6 +88,6 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Mot de passe modifié. Veuillez vous reconnecter.',
-        ]);
+        ],200);
     }
 }

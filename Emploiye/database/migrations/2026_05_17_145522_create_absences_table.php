@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('absences', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')
+                  ->constrained('users')
+                  ->onDelete('cascade');
+            $table->date('date');
+            $table->enum('status', ['present', 'absent', 'late', 'half_day']);
+            $table->time('check_in')->nullable();   
+            $table->time('check_out')->nullable(); 
+            $table->text('note')->nullable();
+            $table->boolean('is_justified')->default(false);
             $table->timestamps();
+            $table->unique(['user_id', 'date']);
         });
     }
 

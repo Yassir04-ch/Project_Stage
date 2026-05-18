@@ -11,7 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::create('evaluations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('employee_id')
+                  ->constrained('users')
+                  ->onDelete('cascade');
+            $table->foreignId('evaluator_id')
+                  ->constrained('users')
+                  ->onDelete('cascade');
+            $table->integer('score');          
+            $table->text('comment')->nullable();
+            $table->date('evaluated_at');
+            $table->timestamps();
+        });
+
     }
 
     /**
@@ -19,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('evaluations'); 
     }
 };

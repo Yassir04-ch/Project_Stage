@@ -12,15 +12,31 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
  
-    protected $fillable = [
-        'role_id', 'firstname', 'cin','klastname', 'email', 'password',
+      protected $fillable = [
+        'role_id',
+        'firstname',
+        'lastname',
+        'cin',
+        'telephone',
+        'adresse',
+        'genre',
+        'date_naissance',
+        'date_embauche',
+        'type_contrat',
+        'salaire',
+        'photo',
+        'email',
+        'password',
     ];
- 
+
     protected $hidden = ['password', 'remember_token'];
- 
+
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password'          => 'hashed',
+        'date_naissance'    => 'date',
+        'date_embauche'     => 'date',
+        'salaire'           => 'decimal:2',
     ];
  
  

@@ -19,6 +19,14 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('cin');
+            $table->string('telephone')->nullable();
+            $table->text('adresse')->nullable();
+            $table->enum('genre', ['homme', 'femme']);
+            $table->date('date_naissance')->nullable();
+            $table->date('date_embauche')->nullable();
+            $table->enum('type_contrat', ['CDI', 'CDD', 'Stage', 'Freelance', 'Interim']);
+            $table->decimal('salaire', 10, 2)->nullable();
+            $table->string('photo')->nullable();
             $table->foreignId('role_id')
                   ->nullable()
                   ->constrained('roles')
