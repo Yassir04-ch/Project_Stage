@@ -38,23 +38,12 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Connexion réussie.',
-            'data'    => [
-                'user'  => $result['user'],
+            'message' => 'Connexion réussie',
+            'data' => [
+                'user' => $result['user'],
                 'token' => $result['token'],
-            ],
-        ],200);
-    }
-
-   
-    public function logout(Request $request): JsonResponse
-    {
-        $this->authService->logout($request->user());
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Déconnexion réussie.',
-        ],200);
+            ]
+        ], 200);
     }
 
 

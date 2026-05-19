@@ -27,9 +27,10 @@ class AuthService
     {
         $user = User::where('email', $data['email'])->first();
 
-        if (! $user || ! Hash::check($data['password'], $user->password)) {
+        if (!$user || !Hash::check($data['password'], $user->password)) {
+
             throw ValidationException::withMessages([
-                'email' => ['Email ou password incorect'],
+                'email' => ['Email ou mot de passe incorrect'],
             ]);
         }
 
@@ -38,15 +39,9 @@ class AuthService
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return [
-            'user'  => $user->load('role'),
+            'user' => $user->load('role'),
             'token' => $token,
         ];
-    }
-
-
-    public function logout(User $user): void
-    {
-        $user->currentAccessToken()->delete();
     }
 
     public function logoutAll(User $user): void

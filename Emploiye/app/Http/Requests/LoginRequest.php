@@ -8,25 +8,26 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LoginRequest extends FormRequest
 {
-    public function authorize(): bool 
-    { 
-        return true; 
+    public function authorize(): bool
+    {
+        return true;
     }
 
     public function rules(): array
     {
         return [
-            'email'    => 'required|email',
-            'password' => 'required|string',
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'email.required'    => 'email est obligatoire.',
-            'email.email'       => "email n'est pas valide.",
-            'password.required' => 'Le mot de passe est obligatoire.',
+            'email.required' => 'Email obligatoire',
+            'email.email' => 'Email invalide',
+            'password.required' => 'Password obligatoire',
+            'password.min' => 'Password minimum 8 caractères',
         ];
     }
 
@@ -34,9 +35,8 @@ class LoginRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'success' => false,
-            'message' => 'Erreur de validation.',
-            'errors'  => $validator->errors(),
+            'message' => 'Erreur validation',
+            'errors' => $validator->errors(),
         ], 422));
     }
 }
-
