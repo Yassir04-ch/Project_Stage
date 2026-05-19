@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\CreateEmployeeRequest;
-use App\Http\Requests\User\UpdateEmployeeRequest;
+use App\Http\Requests\CreateEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 use App\Services\UserService;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;

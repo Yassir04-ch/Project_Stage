@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -12,13 +11,8 @@ class AuthService
     
     public function register(array $data): array
     {
-        $user = User::create([
-            'firstname' => $data['firstname'],
-            'lastname'  => $data['lastname'],
-            'email'     => $data['email'],
-            'password'  => Hash::make($data['password']),
-            'role_id'   => $data['role_id'],
-        ]);
+        $data['password'] = Hash::make($data['password']);
+        $user = User::create($data);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 

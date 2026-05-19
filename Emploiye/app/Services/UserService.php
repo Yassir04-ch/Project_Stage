@@ -16,24 +16,12 @@ class UserService
             $photoPath = $data['photo']->store('photos/employees', 'public');
         }
 
-        $role = Role::where('name', Role::EMPLOYEE)->firstOrFail();
-
-        return User::create([
-            'role_id'        => $data['role_id'] ?? $role->id,
-            'firstname'      => $data['firstname'],
-            'lastname'       => $data['lastname'],
-            'cin'            => $data['cin'],
-            'telephone'      => $data['telephone'] ?? null,
-            'adresse'        => $data['adresse'] ?? null,
-            'genre'          => $data['genre'],
-            'date_naissance' => $data['date_naissance'] ?? null,
-            'date_embauche'  => $data['date_embauche'] ?? null,
-            'type_contrat'   => $data['type_contrat'],
-            'salaire'        => $data['salaire'] ?? null,
-            'photo'          => $photoPath,
-            'email'          => $data['email'],
-            'password'       => Hash::make($data['password']),
-        ]);
+        $role = Role::where('name','Employé')->firstOrFail();
+        $data['role_id'] = $role->id;
+        $data['password'] = Hash::make($data['password']);
+        $data['photo'] = $photoPath;
+        $user = User::create($data);
+        return $user;
     }
 
     public function updateEmployee(User $user, array $data): User
