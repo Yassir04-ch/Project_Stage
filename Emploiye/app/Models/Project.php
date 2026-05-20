@@ -20,12 +20,6 @@ class Project extends Model
         'budget'     => 'decimal:2',
     ];
  
-    public function employees()
-    {
-        return $this->belongsToMany(User::class, 'assignments', 'project_id', 'employee_id')
-                    ->withPivot('role_in_project', 'start_date', 'end_date')
-                    ->withTimestamps();
-    }
  
     public function assignments()
     {

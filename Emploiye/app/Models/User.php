@@ -1,12 +1,9 @@
 <?php
-// app/Models/User.php
-
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -51,14 +48,7 @@ class User extends Authenticatable
                     ->withPivot('level')
                     ->withTimestamps();
     }
- 
-    public function projects()
-    {
-        return $this->belongsToMany(Project::class, 'assignments', 'employee_id', 'project_id')
-                    ->withPivot('role_in_project', 'start_date', 'end_date')
-                    ->withTimestamps();
-    }
- 
+  
     public function assignments()
     {
         return $this->hasMany(Assignment::class, 'employee_id');

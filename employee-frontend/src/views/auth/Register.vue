@@ -84,7 +84,6 @@ const submitRegister = async () => {
 
       <form @submit.prevent="submitRegister" class="p-8 space-y-8">
         
-        <!-- SECTION 1: Informations Personnelles -->
         <div>
           <h3 class="text-base font-semibold text-slate-800 mb-5">Informations Personnelles</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -114,7 +113,6 @@ const submitRegister = async () => {
 
             <div class="flex flex-col gap-1.5">
               <label class="text-xs font-medium text-slate-600">Genre</label>
-              <!-- Zdna bg-none o padding icon bch mayb9ach select m3ye9 -->
               <select v-model="form.genre" class="w-full px-3.5 py-2 text-sm text-slate-900 bg-white border border-slate-300 rounded-lg outline-none transition duration-200 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 h-10 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.75rem_center] bg-no-repeat pr-10">
                 <option value="">Sélectionner le genre</option>
                 <option value="homme">Homme</option>
@@ -192,7 +190,6 @@ const submitRegister = async () => {
 
         <hr class="border-slate-100" />
 
-        <!-- SECTION 4: Sécurité / Mot de passe -->
         <div>
           <h3 class="text-base font-semibold text-slate-800 mb-5">Sécurité du Compte</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">

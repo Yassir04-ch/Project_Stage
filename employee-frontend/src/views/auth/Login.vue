@@ -24,7 +24,7 @@ const submitlogin = async () => {
     console.log(user);
 
     if (user.role.id == 1) {
-      router.push("/dashboard");
+      router.push("/users");
     } else {
       router.push("/profile");
     }

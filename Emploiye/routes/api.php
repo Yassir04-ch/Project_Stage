@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\UserController;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -18,5 +19,7 @@ Route::post('/createEmploiyee', [UserController::class, 'store']);
 Route::get('/users', [AdminController::class, 'users']);
 
 Route::get('/stats', [AdminController::class, 'stats']);
+
+Route::post('/projects', [ProjectController::class, 'store']);
 
 

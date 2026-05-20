@@ -18,8 +18,7 @@ return new class extends Migration
             $table->decimal('budget', 12, 2)->nullable();
             $table->date('start_date');
             $table->date('end_date')->nullable();
-            $table->enum('status', ['planning', 'active', 'completed', 'cancelled'])
-                  ->default('planning');
+            $table->enum('status', ['planning', 'active', 'completed', 'cancelled'])->default('planning');
             $table->timestamps();
 
         });

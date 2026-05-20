@@ -11,3 +11,7 @@ export const registerUser = async (userData) => {
 export const loginUser = async (userData) => {
   return await api.post("/login", userData);
 };
+
+export const createProject = async (data) => {
+  return await api.post("/projects", data);
+};
