@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Absence extends Model
 {
-    use HasFactory;
  
     protected $fillable = [
         'user_id', 'date', 'status',
@@ -28,10 +27,6 @@ class Absence extends Model
         return $this->hasOne(Justification::class);
     }
  
-    public function leaveBalance()
-    {
-        return $this->hasOne(LeaveBalance::class);
-    }
  
     public function isAbsent(): bool {
          return $this->status === 'absent';
@@ -39,6 +34,10 @@ class Absence extends Model
     public function isLate(): bool  { 
         return $this->status === 'late'; 
         }
+    public function isPresent(): bool
+    {
+        return $this->status === 'present';
+    }
 }
  
  

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Api\AbsenceController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -21,5 +22,10 @@ Route::get('/users', [AdminController::class, 'users']);
 Route::get('/stats', [AdminController::class, 'stats']);
 
 Route::post('/projects', [ProjectController::class, 'store']);
+Route::get('/projects', [ProjectController::class, 'index']);
 
 
+Route::get('/absences',[AbsenceController::class,'index']);
+Route::post('/absences',[AbsenceController::class,'store']);
+Route::put('/absences/{id}',[AbsenceController::class,'update']);
+Route::delete('/absences/{id}',[AbsenceController::class,'destroy']);

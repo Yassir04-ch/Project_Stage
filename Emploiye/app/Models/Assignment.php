@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Assignment extends Model
-{
-    use HasFactory;
- 
+{ 
     protected $fillable = [
         'employee_id', 'project_id',
         'role_in_project', 'start_date', 'end_date',
