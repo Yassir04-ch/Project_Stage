@@ -7,6 +7,9 @@ import Project from "@/views/projects/create.vue";
 import Home from "@/views/home.vue";
 import Absences from "@/views/absences/absence.vue";
 import CreateAbsences from "@/views/absences/create.vue";
+import CreateJustification from "@/views/justifications/create.vue";
+import JustificationView from "@/views/justifications/justification.vue";
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,7 +48,17 @@ const router = createRouter({
     path:"/absences_create",
     name:"absences_create",
     component:CreateAbsences
-    }
+    },
+    {
+    path:"/justification_create",
+    name:"justification_create",
+    component:CreateJustification
+    },
+    {
+    path: "/justifications/:id",
+    name: "justifications",
+    component: JustificationView,
+    },
   ],
 });
 

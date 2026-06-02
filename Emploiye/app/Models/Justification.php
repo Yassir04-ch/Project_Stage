@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Justification extends Model
 {
-    use HasFactory;
  
     protected $fillable = [
         'absence_id', 'justified_by',

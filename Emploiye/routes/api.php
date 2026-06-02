@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\AbsenceController;
+use App\Http\Controllers\Api\JustificationController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -29,3 +30,11 @@ Route::get('/absences',[AbsenceController::class,'index']);
 Route::post('/absences',[AbsenceController::class,'store']);
 Route::put('/absences/{id}',[AbsenceController::class,'update']);
 Route::delete('/absences/{id}',[AbsenceController::class,'destroy']);
+
+
+Route::get('/justifications',[JustificationController::class,'index']);
+Route::post('/justifications',[JustificationController::class,'store']);
+Route::put('/justifications/{id}',[JustificationController::class,'update']);
+Route::delete('/justifications/{id}',[JustificationController::class,'destroy']);
+Route::get('/justifications/absence/{id}',[JustificationController::class,'getByAbsence']);
+Route::post('/justifications/{id}/status', [JustificationController::class, 'updateStatus']);

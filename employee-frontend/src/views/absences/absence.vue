@@ -1,9 +1,18 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import api from "@/api/axios";
+import { useRouter } from "vue-router";
 
 const absences = ref([]);
 const loading = ref(false);
+
+const router = useRouter();
+
+const goToJustifications = (absenceId) => {
+
+  router.push(`/justifications/${absenceId}`);
+
+};
 
 const loadAbsences = async () => {
   loading.value = true;
@@ -76,6 +85,7 @@ onMounted(() => {
                 <th class="p-4">Status</th>
                 <th class="p-4">Check In</th>
                 <th class="p-4">Check Out</th>
+                <th class="p-4">justifications</th>
                 <th class="p-4">Justified</th>
                 <th class="p-4 pr-6 text-right">Actions</th>
               </tr>
@@ -175,6 +185,19 @@ onMounted(() => {
                     Delete Log
                   </button>
                 </td>
+
+                 <td class="p-4 pr-6 text-right">
+
+                    <button
+                      @click="goToJustifications(a.id)"
+                      class=" bg-blue-600 text-white px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-200 shadow-sm"
+                    >
+
+                      Justifications
+
+                    </button>
+
+                  </td>
 
               </tr>
             </tbody>
