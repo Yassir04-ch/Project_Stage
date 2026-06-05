@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateEmployeeRequest;
@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     private UserService $userService;
+
     public function __construct() {
         $this->userService = new UserService();
     }
@@ -35,6 +36,8 @@ class UserController extends Controller
         ],200);
     }
 
+
+
     public function store(CreateEmployeeRequest $request): JsonResponse
     {
         $employee = $this->userService->createEmployee($request->validated());
@@ -44,6 +47,28 @@ class UserController extends Controller
             'message' => 'Employé créé avec succès.',
             'data'    => $employee->load('role'),
         ], 201);
+    }
+
+    public function desactiverUser($id){
+        $user = User::findOrFail($id);
+        $this->userService->desactiverUser($user);
+        return response()->json([
+            'success' => true,
+            'message' => 'le compte du utilisateur est desactivée.',
+            'data'    => $user,
+
+        ],200);
+    }
+
+    public function activerUser($id){
+        $user = User::findOrFail($id);
+        $this->userService->desactiverUser($user);
+        return response()->json([
+            'success' => true,
+            'message' => 'le compte du utilisateur est desactivée.',
+            'data'    => $user,
+
+        ],200);
     }
 
     public function update(UpdateEmployeeRequest $request, User $user): JsonResponse

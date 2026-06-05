@@ -90,7 +90,7 @@ onMounted(() => {
           </a>
 
           <a
-            href="#"
+            href=""
             class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition"
           >
             <span>📊</span>

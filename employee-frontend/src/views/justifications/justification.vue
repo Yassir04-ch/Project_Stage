@@ -11,13 +11,14 @@ const absenceId = computed(() => route.params.absenceId)
 
 const updateStatus = async (id, status) => {
   try {
-    await api.put(`/justifications/${id}`,
+    await api.put(
+      `/justifications/${id}`,
       { status },
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-      }
+      },
     )
     loadJustifications()
   } catch (err) {
@@ -50,21 +51,14 @@ onMounted(() => {
 <template>
   <div class="min-h-screen bg-slate-50 p-6 md:p-10">
     <div class="max-w-5xl mx-auto">
-
       <!-- HEADER -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-slate-800">
-          Absence Justifications
-        </h1>
-        <p class="text-slate-500 text-sm mt-1">
-          All uploaded proofs & requests for this absence
-        </p>
+        <h1 class="text-3xl font-bold text-slate-800">Absence Justifications</h1>
+        <p class="text-slate-500 text-sm mt-1">All uploaded proofs & requests for this absence</p>
       </div>
 
       <!-- LOADING -->
-      <div v-if="loading" class="text-center py-20 text-slate-500">
-        Loading...
-      </div>
+      <div v-if="loading" class="text-center py-20 text-slate-500">Loading...</div>
 
       <!-- EMPTY -->
       <div
@@ -81,7 +75,6 @@ onMounted(() => {
           :key="j.id"
           class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6"
         >
-
           <!-- TOP -->
           <div class="flex justify-between items-start">
             <div>
@@ -107,47 +100,44 @@ onMounted(() => {
           <div class="mt-6">
             <p class="text-xs text-slate-400 mb-2">Proof Document</p>
             <div v-if="j.proof_file" class="flex gap-3">
-              
-                <a :href="`http://localhost:8000/storage/${j.proof_file}`"
+              <a
+                :href="`http://localhost:8000/storage/${j.proof_file}`"
                 target="_blank"
                 class="text-blue-600 underline"
-                >
+              >
                 View PDF
-                </a>              
-                <a :href="`http://localhost:8000/storage/${j.proof_file}`"
+              </a>
+              <a
+                :href="`http://localhost:8000/storage/${j.proof_file}`"
                 download
                 class="bg-indigo-600 text-white px-3 py-1 rounded"
-                >
+              >
                 Download PDF
-                </a>
+              </a>
             </div>
             <p v-else class="text-slate-400 text-sm">No file uploaded</p>
           </div>
 
-        <!-- ACTIONS -->
-        <div class="mt-6 flex gap-3">
+          <!-- ACTIONS -->
+          <div class="mt-6 flex gap-3">
+            <button
+              v-if="j.status === 'pending'"
+              @click="updateStatus(j.id, 'approved')"
+              class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-sm"
+            >
+              Accept
+            </button>
 
-        <button
-            v-if="j.status === 'pending'"
-            @click="updateStatus(j.id, 'approved')"
-            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-sm"
-        >
-            Accept
-        </button>
-
-        <button
-            v-if="j.status === 'pending'"
-            @click="updateStatus(j.id, 'rejected')"
-            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-sm"
-        >
-            Reject
-        </button>
-
-        </div>
-
+            <button
+              v-if="j.status === 'pending'"
+              @click="updateStatus(j.id, 'rejected')"
+              class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-sm"
+            >
+              Reject
+            </button>
+          </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>

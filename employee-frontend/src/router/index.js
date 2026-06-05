@@ -9,6 +9,10 @@ import Absences from "@/views/absences/absence.vue";
 import CreateAbsences from "@/views/absences/create.vue";
 import CreateJustification from "@/views/justifications/create.vue";
 import JustificationView from "@/views/justifications/justification.vue";
+import Projects from "@/views/dashboard/projects.vue";
+import DetailProjects from '@/views/projects/ProjectDetail.vue'
+import Assignments from '@/views/assignments/ProjectPlanning.vue'
+
 
 
 const router = createRouter({
@@ -58,6 +62,21 @@ const router = createRouter({
     path: "/justifications/:id",
     name: "justifications",
     component: JustificationView,
+    },
+    {
+    path: "/projects",
+    name: "Projects",
+    component: Projects,
+    },
+    {
+    path: '/projects/:id',
+    name: 'project.details',
+    component: DetailProjects,
+    },
+    {
+      path: '/projects/:id/assignments',
+      name: 'project.assignments',
+      component: Assignments,
     },
   ],
 });

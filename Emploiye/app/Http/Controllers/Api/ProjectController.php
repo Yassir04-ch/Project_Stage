@@ -35,4 +35,49 @@ class ProjectController extends Controller{
             'data' => $project
         ], 201);
     }
+
+    public function show($id)
+    {
+        $project = $this->service->getProjectById($id);
+
+        return response()->json([
+            'message' => 'project details',
+            'data' => $project
+        ],200);
+    }
+
+        public function update(Request $request, Project $project)
+    {
+        $data = $request->validate([
+            'name'        => 'sometimes|string|max:255',
+            'description' => 'nullable|string',
+            'budget'      => 'nullable|numeric|min:0',
+            'start_date'  => 'sometimes|date',
+            'end_date'    => 'nullable|date|after_or_equal:start_date',
+            'status'      => 'sometimes|in:planning,active,completed,cancelled',
+        ]);
+
+        $project->update($data);
+
+        return response()->json(['data' => $project]);
+    }
+
+    public function updateStatus(Request $request, Project $project)
+    {
+        $request->validate([
+            'status' => 'required|in:planning,active,completed,cancelled',
+        ]);
+
+        $project->update(['status' => $request->status]);
+
+        return response()->json(['data' => $project]);
+    }
+
+    public function destroy(Project $project)
+    {
+        $project->delete();
+        return response()->json(['message' => 'Project deleted successfully']);
+    }
+
+
 }

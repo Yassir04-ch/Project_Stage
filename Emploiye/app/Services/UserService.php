@@ -24,6 +24,14 @@ class UserService
         return $user;
     }
 
+    public function desactiverUser($user){
+       $user->update(['status'=>'banni']);
+    }
+   
+    public function activerUser($user){
+       $user->update(['status'=>'active']);
+    }
+
     public function updateEmployee(User $user, array $data): User
     {
         if (isset($data['photo'])) {

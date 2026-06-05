@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\AbsenceService;
+use App\Http\Requests\AssignmentRequest;
 use Illuminate\Http\Request;
+
 
 class AbsenceController extends Controller
 {
-    private $absenceService;
+    private AbsenceService $absenceService;
 
     public function __construct()
     {
@@ -23,11 +25,11 @@ class AbsenceController extends Controller
         ],200);
     }
 
-    public function store(Request $request)
+    public function store(AssignmentRequest $request)
     {
-        $absence = $this->absenceService->create(
-            $request->all()
-        );
+
+        $validated = $request->validated(); 
+        $absence = $this->absenceService->create($validated);
 
         return response()->json([
             "message"=>"absence created",

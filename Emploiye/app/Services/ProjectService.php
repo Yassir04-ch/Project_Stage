@@ -25,4 +25,11 @@ class ProjectService
         $project = Project::create($data);
         return $project;
     }
+
+    public function getProjectById($id)
+    {
+        return Project::findOrFail($id);
+    }
+
+    
 }
