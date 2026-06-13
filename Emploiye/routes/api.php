@@ -13,6 +13,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/profile',[AuthController::class, 'profile']);
+Route::get('/getUser/{id}',[AuthController::class, 'GetUser']);
 Route::post('/logout',[AuthController::class, 'logout']);
 Route::post('/logout-all',[AuthController::class, 'logoutAll']);
 Route::post('/change-password',[AuthController::class, 'changePassword']);

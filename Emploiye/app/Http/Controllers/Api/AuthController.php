@@ -8,6 +8,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -68,6 +69,13 @@ class AuthController extends Controller
         ],200);
     }
 
+    public function GetUser($id){
+        $user = User::find($id);
+        return response()->json([
+            'success'=>true,
+            'user'=>$user,
+        ],200);
+    }
     
     public function changePassword(Request $request): JsonResponse
     {

@@ -12,6 +12,7 @@ import JustificationView from "@/views/justifications/justification.vue";
 import Projects from "@/views/dashboard/projects.vue";
 import DetailProjects from '@/views/projects/ProjectDetail.vue'
 import Assignments from '@/views/assignments/ProjectPlanning.vue'
+import GetUser from '@/views/auth/Profile.vue'
 
 
 
@@ -77,6 +78,11 @@ const router = createRouter({
       path: '/projects/:id/assignments',
       name: 'project.assignments',
       component: Assignments,
+    },
+    {
+      path: '/getUser/:id',
+      name: 'user.details',
+      component: GetUser,
     },
   ],
 });

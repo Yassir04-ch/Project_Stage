@@ -41,7 +41,7 @@ class UserController extends Controller
     public function store(CreateEmployeeRequest $request): JsonResponse
     {
         $employee = $this->userService->createEmployee($request->validated());
-
+        //  dd($employee);
         return response()->json([
             'success' => true,
             'message' => 'Employé créé avec succès.',
