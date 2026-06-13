@@ -51,5 +51,5 @@ Route::get('/justifications',[JustificationController::class,'index']);
 Route::post('/justifications',[JustificationController::class,'store']);
 Route::put('/justifications/{id}',[JustificationController::class,'update']);
 Route::delete('/justifications/{id}',[JustificationController::class,'destroy']);
-Route::get('/justifications/absence/{id}',[JustificationController::class,'getByAbsence']);
+Route::get('/justifications/absence/{absenceId}',[JustificationController::class,'getByAbsence']);
 Route::post('/justifications/{id}/status', [JustificationController::class, 'updateStatus']);

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AbsenceRequest;
 use App\Services\AbsenceService;
-use App\Http\Requests\AssignmentRequest;
 use Illuminate\Http\Request;
 
 
@@ -25,12 +25,12 @@ class AbsenceController extends Controller
         ],200);
     }
 
-    public function store(AssignmentRequest $request)
+    public function store(Request $request)
     {
 
-        $validated = $request->validated(); 
+        $validated = $request->all(); 
         $absence = $this->absenceService->create($validated);
-
+        // dd($absence);
         return response()->json([
             "message"=>"absence created",
             "absence"=>$absence

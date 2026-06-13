@@ -10,7 +10,7 @@ const router = useRouter();
 
 const goToJustifications = (absenceId) => {
 
-  router.push(`/justifications/${absenceId}`);
+  router.push(`/justifications/absence/${absenceId}`);
 
 };
 

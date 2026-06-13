@@ -33,6 +33,8 @@ class JustificationController extends Controller
             ->where('absence_id', $absenceId)
             ->get();
 
+          dd($justifications);
+
         return response()->json([
             "justifications" => $justifications
         ]);

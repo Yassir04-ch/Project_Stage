@@ -13,7 +13,7 @@ class AbsenceService
 
     public function create(array $data)
     {
-        return Absence::create([
+        $absence = Absence::create([
             'user_id' => $data['user_id'],
             'date' => $data['date'],
             'status' => $data['status'],
@@ -22,6 +22,8 @@ class AbsenceService
             'note' => $data['note'] ?? null,
             'is_justified' => $data['is_justified'] ?? false,
         ]);
+
+        return $absence;
     }
 
     public function update($id,array $data)

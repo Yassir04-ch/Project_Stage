@@ -60,7 +60,7 @@ const router = createRouter({
     component:CreateJustification
     },
     {
-    path: "/justifications/:id",
+    path: "/justifications/absence/:absenceId",
     name: "justifications",
     component: JustificationView,
     },
