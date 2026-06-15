@@ -18,7 +18,7 @@ const getUser = async () => {
   loading.value = true
   error.value   = null
   try {
-    const id = route.params.id  // ✅ katji men /getUser/5
+    const id = route.params.id 
     const response = await api.get(`/getUser/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`

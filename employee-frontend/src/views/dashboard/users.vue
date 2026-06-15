@@ -3,10 +3,34 @@ import { onMounted, ref } from "vue";
 import api from "@/api/axios";
 import { useRouter } from "vue-router";
 
+
 const router = useRouter();
 
 const users = ref([]);
 const loading = ref(false);
+
+
+const currentUser = ref(null);
+
+// const getCurrentUser = async () => {
+//   try {
+//     const res = await api.get("/profile", {
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem("token")}`,
+//       },
+//     });
+
+//     currentUser.value = res.data.data;
+//   } catch (err) {
+//     console.log(err.response?.data);
+//   }
+// };
+// console.log(currentUser);
+
+// onMounted(() => {
+//   getCurrentUser();
+// });
+
 
 const getUsers = async () => {
 
@@ -21,8 +45,10 @@ const getUsers = async () => {
     });
 
     users.value = response.data.users;
+    currentUser.value = response.data.admin;
 
     console.log(users.value);
+     console.log(currentUser.value);
 
   } catch (error) {
 
@@ -108,21 +134,37 @@ onMounted(() => {
         </nav>
       </div>
 
-      <div
-        class="bg-slate-800 rounded-2xl p-4 flex items-center gap-3 shadow-inner"
+      <div class="bg-slate-800 rounded-2xl p-4 flex items-center gap-3 shadow-inner">
+      <router-link
+        to="/profile"
+        class="bg-slate-800 rounded-2xl p-4 flex items-center gap-3 shadow-inner hover:bg-slate-700 transition cursor-pointer"
       >
+        <!-- Avatar -->
         <div
-          class="w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center font-bold"
+          class="w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-white uppercase"
         >
-          YC
+          {{ currentUser?.firstname?.[0] }}{{ currentUser?.lastname?.[0] }}
         </div>
 
-        <div>
-          <h2 class="font-semibold">Yassir Cherqui</h2>
-          <p class="text-sm text-gray-400">Administrator</p>
+        <!-- Info -->
+        <div v-if="currentUser">
+          <h2 class="font-semibold text-white">
+            {{ currentUser.firstname }} {{ currentUser.lastname }}
+          </h2>
+
+          <p class="text-sm text-gray-400">
+            {{ currentUser.role?.name }}
+          </p>
         </div>
-      </div>
-    </aside>
+
+        <!-- Loading fallback -->
+        <div v-else>
+          <h2 class="font-semibold text-white">Loading...</h2>
+          <p class="text-sm text-gray-400">...</p>
+        </div>
+      </router-link> 
+  </div>
+</aside>
 
     <main class="flex-1 p-8 overflow-hidden">
 

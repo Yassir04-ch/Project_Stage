@@ -12,17 +12,20 @@ use App\Http\Controllers\Api\AssignmentController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/profile',[AuthController::class, 'profile']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/profile', [AuthController::class, 'profile']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout-all', [AuthController::class, 'logoutAll']);
+    Route::post('/change-password', [AuthController::class, 'changePassword']);
+    Route::get('/users', [AdminController::class, 'users']);
+});
+
 Route::get('/getUser/{id}',[AuthController::class, 'GetUser']);
-Route::post('/logout',[AuthController::class, 'logout']);
-Route::post('/logout-all',[AuthController::class, 'logoutAll']);
-Route::post('/change-password',[AuthController::class, 'changePassword']);
 
 Route::post('/createEmploiyee', [UserController::class, 'store']);
 Route::post('/desactiverUser', [UserController::class, 'desactiverUser']);
 Route::post('/activerUser', [UserController::class, 'activerUser']);
 
-Route::get('/users', [AdminController::class, 'users']);
 
 Route::get('/stats', [AdminController::class, 'stats']);
 
@@ -47,9 +50,10 @@ Route::put('/absences/{id}',[AbsenceController::class,'update']);
 Route::delete('/absences/{id}',[AbsenceController::class,'destroy']);
 
 
-Route::get('/justifications',[JustificationController::class,'index']);
-Route::post('/justifications',[JustificationController::class,'store']);
-Route::put('/justifications/{id}',[JustificationController::class,'update']);
-Route::delete('/justifications/{id}',[JustificationController::class,'destroy']);
-Route::get('/justifications/absence/{absenceId}',[JustificationController::class,'getByAbsence']);
+Route::get('/justifications/absence/{absenceId}', [JustificationController::class, 'getByAbsence']);
+
+Route::get('/justifications', [JustificationController::class, 'index']);
+Route::post('/justifications', [JustificationController::class, 'store']);
+Route::put('/justifications/{id}', [JustificationController::class, 'update']);
+Route::delete('/justifications/{id}', [JustificationController::class, 'destroy']);
 Route::post('/justifications/{id}/status', [JustificationController::class, 'updateStatus']);

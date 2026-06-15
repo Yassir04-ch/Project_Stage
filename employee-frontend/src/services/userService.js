@@ -9,3 +9,11 @@ export const getUser = async (id) => {
   return response.data
 }
 
+export const getProfile = async (id) => {
+  const response = await api.get(`/profile`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  })
+  return response.data
+}

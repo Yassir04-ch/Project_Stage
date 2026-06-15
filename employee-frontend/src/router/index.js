@@ -13,7 +13,7 @@ import Projects from "@/views/dashboard/projects.vue";
 import DetailProjects from '@/views/projects/ProjectDetail.vue'
 import Assignments from '@/views/assignments/ProjectPlanning.vue'
 import GetUser from '@/views/auth/Profile.vue'
-
+import Profile from '@/views/auth/me.vue'
 
 
 const router = createRouter({
@@ -83,6 +83,11 @@ const router = createRouter({
       path: '/getUser/:id',
       name: 'user.details',
       component: GetUser,
+    }, 
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
     },
   ],
 });

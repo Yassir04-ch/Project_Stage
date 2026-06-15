@@ -7,11 +7,16 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller {
-    public function users(){
+
+
+    public function users(Request $request): JsonResponse
+    {
         $users = User::with('role')->get();
+        $admin = $request->user();
         return response()->json([
             'success' => true,
             'users' => $users,
+            'admin' => $admin,
         ],200);
     }
 

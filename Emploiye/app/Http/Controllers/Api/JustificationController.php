@@ -29,16 +29,15 @@ class JustificationController extends Controller
 
     public function getByAbsence($absenceId)
     {
-        $justifications = Justification::with(['absence','justifiedBy'])
+        $justifications = Justification::with(['absence', 'justifiedBy'])
             ->where('absence_id', $absenceId)
             ->get();
-
-          dd($justifications);
 
         return response()->json([
             "justifications" => $justifications
         ]);
     }
+
 
     
     public function store(JustificationRequest $request)

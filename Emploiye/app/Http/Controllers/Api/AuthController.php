@@ -86,4 +86,14 @@ class AuthController extends Controller
             'message' => 'Mot de passe modifié. Veuillez vous reconnecter.',
         ],200);
     }
+
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Logged out successfully'
+        ]);
+    }
 }

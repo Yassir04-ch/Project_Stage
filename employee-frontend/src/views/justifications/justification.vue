@@ -29,11 +29,10 @@ const updateStatus = async (id, status) => {
 const loadJustifications = async () => {
   loading.value = true
   try {
-    const res = await api.get(`/justifications`, {
-      params: { absence_id: absenceId.value },
+    const res = await api.get(`/justifications/absence/${absenceId.value}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
     })
     justifications.value = res.data.justifications || []
   } catch (err) {
@@ -46,6 +45,7 @@ const loadJustifications = async () => {
 onMounted(() => {
   loadJustifications()
 })
+
 </script>
 
 <template>
