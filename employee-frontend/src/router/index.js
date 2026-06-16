@@ -15,7 +15,6 @@ import Assignments from '@/views/assignments/ProjectPlanning.vue'
 import GetUser from '@/views/auth/Profile.vue'
 import Profile from '@/views/auth/me.vue'
 
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -25,71 +24,97 @@ const router = createRouter({
       component: Register,
     },
     {
-      path:"/login",
-      name:"login",
-      component:Login,
+      path: "/login",
+      name: "login",
+      component: Login,
     },
-     {
-      path:"/project",
-      name:"project",
-      component:Project,
+    {
+      path: "/project",
+      name: "project",
+      component: Project,
+      meta: { requiresAuth: true }
     },
     {
       path: "/users",
       name: "dashboard",
       component: Users,
+      meta: { requiresAuth: true }
     },
     {
       path: "/",
       name: "home",
       component: Home,
+      // ✅ public -- machi requiresAuth
     },
     {
-    path:"/absences",
-    name:"absences",
-    component:Absences
+      path: "/absences",
+      name: "absences",
+      component: Absences,
+      meta: { requiresAuth: true }
     },
     {
-    path:"/absences_create",
-    name:"absences_create",
-    component:CreateAbsences
+      path: "/absences_create",
+      name: "absences_create",
+      component: CreateAbsences,
+      meta: { requiresAuth: true }
     },
     {
-    path:"/justification_create",
-    name:"justification_create",
-    component:CreateJustification
+      path: "/justification_create",
+      name: "justification_create",
+      component: CreateJustification,
+      meta: { requiresAuth: true }
     },
     {
-    path: "/justifications/absence/:absenceId",
-    name: "justifications",
-    component: JustificationView,
+      path: "/justifications/absence/:absenceId",
+      name: "justifications",
+      component: JustificationView,
+      meta: { requiresAuth: true }
     },
     {
-    path: "/projects",
-    name: "Projects",
-    component: Projects,
+      path: "/projects",
+      name: "Projects",
+      component: Projects,
+      meta: { requiresAuth: true }
     },
     {
-    path: '/projects/:id',
-    name: 'project.details',
-    component: DetailProjects,
+      path: '/projects/:id',
+      name: 'project.details',
+      component: DetailProjects,
+      meta: { requiresAuth: true }
     },
     {
       path: '/projects/:id/assignments',
       name: 'project.assignments',
       component: Assignments,
+      meta: { requiresAuth: true }
     },
     {
       path: '/getUser/:id',
       name: 'user.details',
       component: GetUser,
-    }, 
+      meta: { requiresAuth: true }
+    },
     {
       path: '/profile',
       name: 'profile',
       component: Profile,
+      meta: { requiresAuth: true }
     },
   ],
 });
+
+router.beforeEach((to, from) => {
+  const token = localStorage.getItem('token')
+
+  if (to.meta.requiresAuth && !token) {
+    return { name: 'login' }
+  }
+
+  if (to.name === 'login' && token) {
+    return { name: 'dashboard' }
+  }
+
+  return true
+})
 
 export default router;

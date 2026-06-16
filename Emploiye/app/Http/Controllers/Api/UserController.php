@@ -40,15 +40,22 @@ class UserController extends Controller
 
     public function store(CreateEmployeeRequest $request): JsonResponse
     {
-        $employee = $this->userService->createEmployee($request->validated());
-        //  dd($employee);
+        
+        $data = $request->validated();
+
+        $data['photo'] = $request->hasFile('photo') 
+            ? $request->file('photo') 
+            : null;
+
+        $employee = $this->userService->createEmployee($data);
+
         return response()->json([
             'success' => true,
             'message' => 'Employé créé avec succès.',
             'data'    => $employee->load('role'),
         ], 201);
     }
-
+    
     public function desactiverUser($id){
         $user = User::findOrFail($id);
         $this->userService->desactiverUser($user);

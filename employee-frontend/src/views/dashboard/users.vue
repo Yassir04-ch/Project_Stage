@@ -3,331 +3,246 @@ import { onMounted, ref } from "vue";
 import api from "@/api/axios";
 import { useRouter } from "vue-router";
 
-
 const router = useRouter();
 
 const users = ref([]);
 const loading = ref(false);
-
-
 const currentUser = ref(null);
 
-// const getCurrentUser = async () => {
-//   try {
-//     const res = await api.get("/profile", {
-//       headers: {
-//         Authorization: `Bearer ${localStorage.getItem("token")}`,
-//       },
-//     });
-
-//     currentUser.value = res.data.data;
-//   } catch (err) {
-//     console.log(err.response?.data);
-//   }
-// };
-// console.log(currentUser);
-
-// onMounted(() => {
-//   getCurrentUser();
-// });
-
-
 const getUsers = async () => {
-
   loading.value = true;
-
   try {
-
     const response = await api.get("/users", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
 
-    users.value = response.data.users;
-    currentUser.value = response.data.admin;
-
-    console.log(users.value);
-     console.log(currentUser.value);
-
+    users.value = response.data.users || [];
+    currentUser.value = response.data.admin || null;
   } catch (error) {
-
     console.log(error.response?.data);
-
   } finally {
-
     loading.value = false;
-
   }
 };
+
 onMounted(() => {
   getUsers();
 });
-
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-100 flex">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <aside
-      class="bg-slate-900 text-white w-72 min-h-screen p-5 flex flex-col justify-between shadow-2xl"
-    >
-      <div>
+  <div class="min-h-screen bg-slate-50 flex antialiased font-sans">
 
-        <div class="flex items-center gap-3 mb-10">
-
-          <div
-            class="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-xl font-bold shadow-lg"
-          >
+    <!-- 💻 SIDEBAR (STAYS RIGID & FIXED) -->
+    <aside class="bg-slate-950 text-slate-200 w-72 min-h-screen p-6 flex flex-col justify-between shadow-2xl shrink-0 border-r border-slate-800/40">
+      
+       <div class="flex flex-col">
+        <div class="flex items-center gap-3.5 mb-10 pb-4 border-b border-slate-900">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
             D
           </div>
-
           <div>
-            <h1 class="text-2xl font-bold">DataExpress</h1>
-            <p class="text-gray-400 text-sm">Admin Dashboard</p>
+            <h1 class="text-lg font-black tracking-tight text-white uppercase italic">DataExpress</h1>
+            <p class="text-xs text-indigo-400 font-bold tracking-wider uppercase">Workspace Admin</p>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Workspace</p>
+          <nav class="space-y-1.5">
+            <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+              <span class="text-base opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all">🏠</span>
+              <span>Dashboard</span>
+            </button>
+
+            <button @click="router.push('/projects')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+              <span class="text-base opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all">📁</span>
+              <span>Projects</span>
+            </button>
+
+            <button @click="router.push('/users')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-indigo-600 text-white font-semibold shadow-md shadow-indigo-600/10 group transition-all text-sm text-left">
+              <span class="text-base opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all">👥</span>
+              <span>Utilisateurs</span>
+            </button>
+
+            <button @click="router.push('/absences')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+              <i class="fa-regular fa-calendar-minus text-base w-5 group-hover:scale-110 transition-transform"></i>
+              <span>Absences</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <!-- 👤 CLEAN PROFILE FOOTER UNIT (FIXED GEOMETRY) -->
+      <div class="mt-auto pt-4 border-t border-slate-900">
+        <router-link
+          to="/profile"
+          class="bg-slate-900/80 border border-slate-800/40 rounded-xl p-3.5 flex items-center gap-3 shadow-inner hover:bg-slate-900 hover:border-slate-700/60 transition-all group cursor-pointer w-full"
+        >
+          <!-- User initial avatar icon placeholder -->
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center font-black text-white text-sm uppercase tracking-wide border border-indigo-400/20 shrink-0">
+            <span v-if="currentUser">{{ currentUser.firstname?.[0] }}{{ currentUser.lastname?.[0] }}</span>
+            <span v-else class="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
           </div>
 
-        </div>
+          <!-- Text block parameters safely constrained -->
+          <div class="flex-1 min-w-0">
+            <div v-if="currentUser">
+              <h2 class="text-sm font-bold text-white tracking-tight truncate uppercase group-hover:text-indigo-400 transition-colors">
+                {{ currentUser.firstname }} {{ currentUser.lastname }}
+              </h2>
+              <p class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mt-0.5 truncate">
+                {{ currentUser.role?.name ?? 'Admin' }}
+              </p>
+            </div>
+            
+            <!-- Loading state skeleton keeps frame stable -->
+            <div v-else class="space-y-1">
+              <div class="h-3 w-24 bg-slate-800 rounded animate-pulse"></div>
+              <div class="h-2 w-16 bg-slate-800 rounded animate-pulse"></div>
+            </div>
+          </div>
 
-        <nav class="space-y-3">
-
-          <a
-            href="#"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl bg-indigo-600 text-white shadow-lg"
-          >
-            <span>🏠</span>
-            <span>Dashboard</span>
-          </a>
-
-          <a
-            href="#"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition"
-          >
-            <span>👥</span>
-            <span>Utilisateurs</span>
-          </a>
-
-          <a
-            href="#"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition"
-          >
-            <span>📁</span>
-            <span>Projects</span>
-          </a>
-
-          <a
-            href=""
-            class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition"
-          >
-            <span>📊</span>
-            <span>Analytics</span>
-          </a>
-
-          <a
-            href="#"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition"
-          >
-            <span>⚙️</span>
-            <span>Settings</span>
-          </a>
-
-        </nav>
+          <span class="text-slate-600 group-hover:text-slate-400 transition-colors text-xs shrink-0 pl-1">➔</span>
+        </router-link>
       </div>
+    </aside>
 
-      <div class="bg-slate-800 rounded-2xl p-4 flex items-center gap-3 shadow-inner">
-      <router-link
-        to="/profile"
-        class="bg-slate-800 rounded-2xl p-4 flex items-center gap-3 shadow-inner hover:bg-slate-700 transition cursor-pointer"
-      >
-        <!-- Avatar -->
-        <div
-          class="w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-white uppercase"
-        >
-          {{ currentUser?.firstname?.[0] }}{{ currentUser?.lastname?.[0] }}
-        </div>
+    <!-- 📊 MAIN CONTROL WORKSPACE -->
+    <main class="flex-1 p-8 overflow-y-auto max-h-screen">
 
-        <!-- Info -->
-        <div v-if="currentUser">
-          <h2 class="font-semibold text-white">
-            {{ currentUser.firstname }} {{ currentUser.lastname }}
-          </h2>
-
-          <p class="text-sm text-gray-400">
-            {{ currentUser.role?.name }}
-          </p>
-        </div>
-
-        <!-- Loading fallback -->
-        <div v-else>
-          <h2 class="font-semibold text-white">Loading...</h2>
-          <p class="text-sm text-gray-400">...</p>
-        </div>
-      </router-link> 
-  </div>
-</aside>
-
-    <main class="flex-1 p-8 overflow-hidden">
-
-      <div
-        class="bg-white rounded-3xl shadow-md px-6 py-4 flex justify-between items-center mb-8"
-      >
-
+      <!-- TOP DASHBOARD STATS HEADER -->
+      <div class="bg-white rounded-2xl border border-slate-200/60 px-6 py-5 flex justify-between items-center mb-8 shadow-sm">
         <div>
-          <h1 class="text-3xl font-bold text-slate-800">
-            Dashboard
-          </h1>
-
-          <p class="text-gray-500 mt-1">
-            Welcome back 👋
-          </p>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">Panneau d'Administration</h1>
+          <p class="text-xs text-slate-400 font-medium mt-0.5">Ravi de vous revoir 👋 Suivi global de vos équipes.</p>
         </div>
 
-        <div class="flex items-center gap-4">
-
-        <button
-          @click="router.push('/register')"
-            class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-medium shadow-lg transition duration-300 flex items-center gap-2">
-            <span class="text-lg">+</span>
-            <span>Ajouter Employee</span>
-        </button>
-
+        <div class="flex items-center gap-3">
           <button
-            class="w-11 h-11 rounded-full bg-indigo-600 text-white shadow-lg"
+            @click="router.push('/register')"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold uppercase tracking-wider px-4 py-3 rounded-xl shadow-md shadow-indigo-600/15 transition-all flex items-center gap-2 active:scale-95"
           >
-            🔔
+            <span>+</span>
+            <span>Ajouter Employee</span>
           </button>
 
+          <button class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-all shadow-sm">
+            🔔
+          </button>
         </div>
       </div>
 
+      <!-- ANALYTICS HIGHLIGHT METRICS CARDS -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-
-        <div
-          class="bg-white p-6 rounded-3xl shadow-md hover:shadow-xl transition"
-        >
-          <p class="text-gray-500">Total Users</p>
-
-          <h2 class="text-4xl font-bold mt-3 text-slate-800">
-            120
-          </h2>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Effectif global</span>
+          <h2 class="text-3xl font-black mt-2 text-slate-900 tracking-tight">120</h2>
         </div>
 
-        <div
-          class="bg-white p-6 rounded-3xl shadow-md hover:shadow-xl transition"
-        >
-          <p class="text-gray-500">Projects</p>
-
-          <h2 class="text-4xl font-bold mt-3 text-slate-800">
-            35
-          </h2>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Projets actifs</span>
+          <h2 class="text-3xl font-black mt-2 text-slate-900 tracking-tight">35</h2>
         </div>
 
-        <div
-          class="bg-white p-6 rounded-3xl shadow-md hover:shadow-xl transition"
-        >
-          <p class="text-gray-500">Revenue</p>
-
-          <h2 class="text-4xl font-bold mt-3 text-slate-800">
-            $24K
-          </h2>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Chiffre mensuel</span>
+          <h2 class="text-3xl font-black mt-2 text-slate-900 tracking-tight">$24K</h2>
         </div>
-
       </div>
 
-      <div class="bg-white rounded-3xl shadow-md overflow-hidden">
-
-        <div class="p-6 border-b">
-          <h2 class="text-2xl font-bold text-slate-800">
-            Users List
-          </h2>
+      <!-- MAIN USERS DATABASE GRID TABLE -->
+      <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-white">
+          <h2 class="text-base font-bold text-slate-900 tracking-tight">Liste des Employé</h2>
+          <span class="text-xs bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-md">{{ users.length }} Enregistrés</span>
         </div>
 
-        <table class="w-full">
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="bg-slate-50/70 border-b border-slate-100">
+                <th class="text-left p-4 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Collaborateur</th>
+                <th class="text-left p-4 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Adresse Email</th>
+                <th class="text-left p-4 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Salaire</th>
+                <th class="text-left p-4 text-[11px] font-bold text-slate-400 uppercase tracking-wider">CIN</th>
+                <th class="text-left p-4 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Fonction</th>
+                <th class="text-left p-4 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Statut</th>
+              </tr>
+            </thead>
 
-          <thead class="bg-gray-50">
-            <tr>
+            <tbody class="divide-y divide-slate-100">
+              <!-- Loading Skeleton Matrix Rows -->
+              <template v-if="loading">
+                <tr v-for="n in 3" :key="n" class="animate-pulse">
+                  <td class="p-4" v-for="i in 6" :key="i">
+                    <div class="h-4 bg-slate-100 rounded w-full my-1"></div>
+                  </td>
+                </tr>
+              </template>
 
-              <th class="text-left p-4 text-gray-600">User</th>
-              <th class="text-left p-4 text-gray-600">Email</th>
-              <th class="text-left p-4 text-gray-600">salaire</th>
-              <th class="text-left p-4 text-gray-600">CIN</th>
-              <th class="text-left p-4 text-gray-600">Role</th>
-              <th class="text-left p-4 text-gray-600">Status</th>
-              <th class="text-left p-4 text-gray-600">Profile</th>
+              <!-- Real Loop Core Data Rows -->
+              <template v-else-if="users.length">
+                <tr v-for="user in users" :key="user.id" class="hover:bg-slate-50/50 transition-all">
+                  
+                  <td class="p-4">
+                   <router-link 
+                    :to="`/getUser/${user.id || user._id}`" 
+                    class="flex items-center gap-3 group cursor-pointer">
+                    <!-- Avatar unit li clickables -->
+                    <div class="w-9 h-9 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center uppercase shrink-0 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-all shadow-sm">
+                      {{ user.firstname?.[0] }}{{ user.lastname?.[0] }}
+                    </div>
 
-            </tr>
-          </thead>
+                    <!-- Smiya m9ada (t9dr t-keepiha wla thydha ela hssab fin hat had l-code exact) -->
+                    <div class="flex flex-col min-w-0">
+                      <span class="text-xs font-bold text-slate-800 uppercase truncate group-hover:text-indigo-600 transition-colors">
+                        {{ user.firstname }} {{ user.lastname }}
+                      </span>
+                      <span class="text-[10px] font-mono text-slate-400">View Profile ➔</span>
+                    </div>
+                  </router-link>
+                  </td>
 
-          <tbody>
+                  <td class="p-4 text-sm text-slate-500 font-medium">{{ user.email }}</td>
+                  
+                  <td class="p-4 text-sm font-bold text-slate-700">
+                    {{ user.salaire ? `${Number(user.salaire).toLocaleString('fr-FR')} DH` : '—' }}
+                  </td>
+                  
+                  <td class="p-4 text-sm font-mono font-medium text-slate-600 tracking-wide">{{ user.cin ?? '—' }}</td>
+                  
+                  <td class="p-4">
+                    <span class="inline-flex text-[10px] font-bold px-2 py-0.5 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-md uppercase tracking-wider shadow-sm">
+                      {{ user.role?.name ?? 'Membre' }}
+                    </span>
+                  </td>
 
-            <tr
-              v-for="user in users"
-              :key="user.id"
-              class="border-b hover:bg-gray-50 transition"
-            >
+                  <td class="p-4">
+                    <span class="inline-flex items-center gap-1.5 text-[10px] font-bold px-2 py-0.5 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-md uppercase tracking-wider">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      Actif
+                    </span>
+                  </td>
 
-              <td class="p-4">
+                </tr>
+              </template>
 
-                <div class="flex items-center gap-3">
-
-                  <div
-                    class="w-11 h-11 rounded-full bg-indigo-600/10 text-indigo-700 font-bold flex items-center justify-center uppercase"
-                  >
-                    {{ user.firstname[0] }}{{ user.lastname[0] }}
-                  </div>
-
-                  <div>
-                    <h3 class="font-semibold text-slate-800">
-                      {{ user.firstname }} {{ user.lastname }}
-                    </h3>
-
-                  </div>
-
-                </div>
-
-              </td>
-
-              <td class="p-4 text-gray-600">
-                {{ user.email }}
-              </td>
-
-              <td class="p-4">
-                 <h3 class="font-semibold text-slate-800">
-                    {{ user.salaire }}
-                 </h3>
-              </td>
-
-               <td class="p-4">
-                 <h3 class="font-semibold text-slate-800">
-                    {{ user.cin }}
-                 </h3>
-              </td>
-
-              <td class="p-4">
-                <span
-                  class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium"
-                >
-                  {{ user.role.name }}
-                </span>
-              </td>
-
-              <td class="p-4">
-                <span
-                  class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium"
-                >
-                  Active
-                </span>
-              </td>
-
-            </tr>
-
-          </tbody>
-
-        </table>
-
+              <!-- Empty fallbacks context matrix -->
+              <tr v-else>
+                <td colspan="6" class="p-12 text-center text-xs font-bold text-slate-400 uppercase tracking-widest bg-slate-50/20">
+                  Aucun utilisateur trouvé f l-base de données
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
     </main>
-
   </div>
 </template>

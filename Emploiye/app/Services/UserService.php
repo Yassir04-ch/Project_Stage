@@ -11,17 +11,18 @@ class UserService
 {
     public function createEmployee(array $data): User
     {
+        
         $photoPath = null;
-        if (isset($data['photo'])) {
+
+        if (isset($data['photo']) && $data['photo'] instanceof \Illuminate\Http\UploadedFile) {
             $photoPath = $data['photo']->store('photos/employees', 'public');
         }
 
-        $role = Role::where('name','Employé')->firstOrFail();
-        $data['role_id'] = $role->id;
+        $data['role_id'] = 4;
         $data['password'] = Hash::make($data['password']);
         $data['photo'] = $photoPath;
-        $user = User::create($data);
-        return $user;
+
+        return User::create($data);
     }
 
     public function desactiverUser($user){
