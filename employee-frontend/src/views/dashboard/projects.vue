@@ -72,7 +72,7 @@ onMounted(() => {
             D
           </div>
           <div>
-            <h1 class="text-lg font-black tracking-tight text-white uppercase italic">DataExpress</h1>
+            <h1 class="text-lg font-black tracking-tight text-white uppercase italic">DATAXPRESS</h1>
             <p class="text-xs text-indigo-400 font-bold tracking-wider uppercase">Workspace Admin</p>
           </div>
         </div>

@@ -14,6 +14,8 @@ import DetailProjects from '@/views/projects/ProjectDetail.vue'
 import Assignments from '@/views/assignments/ProjectPlanning.vue'
 import GetUser from '@/views/auth/Profile.vue'
 import Profile from '@/views/auth/me.vue'
+import UserEditView from '@/views/employees/Edit.vue'
+import Skills from '@/views/skills/Skills.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,8 +46,7 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: Home,
-      // ✅ public -- machi requiresAuth
-    },
+     },
     {
       path: "/absences",
       name: "absences",
@@ -100,7 +101,19 @@ const router = createRouter({
       component: Profile,
       meta: { requiresAuth: true }
     },
-  ],
+    {
+    path: '/users/edit/:id',
+    name: 'user-edit',
+    component: UserEditView,
+    meta: { requiresAuth: true } 
+  },
+  {
+    path: '/skills',
+    name: 'skills',
+    component: Skills,
+    meta: { requiresAuth: true }
+  },
+]
 });
 
 router.beforeEach((to, from) => {

@@ -71,6 +71,7 @@ class AuthController extends Controller
 
     public function GetUser($id){
         $user = User::find($id);
+        $user->load(['skills','role','absences']);
         return response()->json([
             'success'=>true,
             'user'=>$user,

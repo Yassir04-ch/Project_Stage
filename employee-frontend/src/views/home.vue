@@ -15,7 +15,7 @@ const router = useRouter();
         DX
       </div>
       <h1 class="text-xl font-bold tracking-tight text-slate-900">
-        Data<span class="text-indigo-600">Express</span>
+        Data<span class="text-indigo-600">Xpress</span>
       </h1>
     </div>
 
@@ -44,7 +44,7 @@ const router = useRouter();
       </h2>
       
       <p class="text-slate-500 text-base sm:text-lg max-w-xl mx-auto leading-relaxed font-normal">
-        DataExpress transforms complex enterprise structures into smart, scalable data assets. We help you unify databases and unlock automated intelligence.
+        DATAXPRESS transforms complex enterprise structures into smart, scalable data assets. We help you unify databases and unlock automated intelligence.
       </p>
 
       <div class="flex items-center justify-center gap-4 pt-2">

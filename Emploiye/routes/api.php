@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\JustificationController;
 use App\Http\Controllers\Api\AssignmentController;
+use App\Http\Controllers\Api\SkillController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -18,6 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout-all', [AuthController::class, 'logoutAll']);
     Route::post('/change-password', [AuthController::class, 'changePassword']);
     Route::get('/users', [AdminController::class, 'users']);
+    Route::put('/updateUser/{id}', [UserController::class, 'update']);
 });
 
 Route::get('/getUser/{id}',[AuthController::class, 'GetUser']);
@@ -57,3 +59,10 @@ Route::post('/justifications', [JustificationController::class, 'store']);
 Route::put('/justifications/{id}', [JustificationController::class, 'update']);
 Route::delete('/justifications/{id}', [JustificationController::class, 'destroy']);
 Route::post('/justifications/{id}/status', [JustificationController::class, 'updateStatus']);
+
+Route::get('/skills', [SkillController::class, 'index']);
+Route::post('/skills', [SkillController::class, 'store']);
+Route::delete('/skills/{skill}', [SkillController::class, 'destroy']);
+
+Route::get('/users/{user}/skills', [SkillController::class, 'getEmployeeSkills']);
+Route::post('/users/{user}/skills', [SkillController::class, 'assignToEmployee']);

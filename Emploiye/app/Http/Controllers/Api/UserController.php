@@ -7,6 +7,7 @@ use App\Http\Requests\CreateEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Services\UserService;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -78,16 +79,40 @@ class UserController extends Controller
         ],200);
     }
 
-    public function update(UpdateEmployeeRequest $request, User $user): JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
-        $employee = $this->userService->updateEmployee($user, $request->validated());
+        $validatedData = $request->validate([
+            'firstname'      => 'required|string|max:255',
+            'lastname'       => 'required|string|max:255',
+            'email'          => 'required|email|unique:users,email,' . $id,
+            'cin'            => 'nullable|string|max:20',
+            'telephone'      => 'nullable|string|max:20',
+            'genre'          => 'nullable|string|in:homme,femme',
+            'type_contrat'   => 'nullable|string|max:50',
+            'salaire'        => 'nullable|numeric|min:0',
+            'date_naissance' => 'nullable|date',
+            'date_embauche'  => 'nullable|date',
+            'photo'          => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
+        ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Employé mis à jour avec succès.',
-            'data'    => $employee,
-        ],200);
+        try {
+            $user = $this->userService->updateUser((int)$id, $validatedData);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Profil mis à jour avec succès',
+                'user'    => $user
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la mise à jour: ' . $e->getMessage()
+            ], 500);
+        }
     }
+
+
 
     public function destroy(User $user): JsonResponse
     {
@@ -98,4 +123,6 @@ class UserController extends Controller
             'message' => 'Employé supprimé avec succès.',
         ],200);
     }
+
+
 }

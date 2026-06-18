@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +13,8 @@ class UserService
         
         $photoPath = null;
 
-        if (isset($data['photo']) && $data['photo'] instanceof \Illuminate\Http\UploadedFile) {
+        if (isset($data['photo']) && $data['photo'] instanceof \Illuminate\Http\UploadedFile) 
+        {
             $photoPath = $data['photo']->store('photos/employees', 'public');
         }
 
@@ -78,5 +78,26 @@ class UserService
                 $q->where('genre', $v)
             )
             ->paginate(15);
+    }
+
+    public function updateUser(int $id, array $data): User
+    {
+        $user = User::findOrFail($id);
+
+        if (isset($data['photo']) && $data['photo'] instanceof \Illuminate\Http\UploadedFile) {
+            
+            if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                Storage::disk('public')->delete($user->photo);
+            }
+
+            $path = $data['photo']->store('users', 'public');
+            $data['photo'] = $path;
+        } else {
+            unset($data['photo']);
+        }
+
+        $user->update($data);
+
+        return $user;
     }
 }
