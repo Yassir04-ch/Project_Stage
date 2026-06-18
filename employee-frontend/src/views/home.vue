@@ -25,8 +25,7 @@ const router = useRouter();
       <a href="#contact" class="hover:text-indigo-600 transition-colors">Contact</a>
       <button
         @click="router.push('/login')"
-        class="bg-slate-200/70 text-slate-700 px-5 py-2 rounded-full hover:bg-slate-200 transition-all font-semibold text-sm"
-      >
+        class="bg-slate-200/70 text-slate-700 px-5 py-2 rounded-full hover:bg-slate-200 transition-all font-semibold text-sm">
         Client Portal
       </button>
     </div>
@@ -160,14 +159,57 @@ const router = useRouter();
     </div>
   </section>
 
-  <footer class="bg-slate-900 text-slate-400 py-12 text-center px-6 border-t border-slate-800">
-    <div class="max-w-7xl mx-auto space-y-3">
-      <h4 class="font-extrabold text-white text-xl tracking-tight">
-        Data<span class="text-indigo-400">Express</span>
-      </h4>
-      <p class="italic text-xs text-slate-500">
-        "Accélérateur de votre maturité Data."
-      </p>
+  <footer class="bg-slate-900 text-slate-400 py-16 px-8 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
+      
+      <div class="space-y-3.5">
+        <h4 class="font-extrabold text-white text-2xl tracking-tight">
+          Data<span class="text-indigo-400">Express</span>
+        </h4>
+        <p class="text-slate-400 text-xs leading-relaxed max-w-xs">
+          Transforming complex corporate frameworks into high-velocity analytical ecosystems. Cloud data integration, streaming pipelines, and automated intelligence pipelines.
+        </p>
+        <p class="italic text-[11px] text-indigo-400/80 font-medium">
+          "Accélérateur de votre maturité Data."
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <h5 class="text-white text-xs font-black tracking-widest uppercase text-slate-200">Siège Social & Contact</h5>
+        <ul class="space-y-2.5 text-xs">
+          <li class="flex items-start gap-2.5">
+            <span class="opacity-60">📍</span>
+            <span>Casablanca Nearshore Park, Shore 7,<br>Boulevard Al Qods, Sidi Maârouf, Maroc</span>
+          </li>
+          <li class="flex items-center gap-2.5">
+            <span class="opacity-60">📞</span>
+            <span class="font-mono">+212 (0) 522 45 89 00</span>
+          </li>
+          <li class="flex items-center gap-2.5">
+            <span class="opacity-60">✉️</span>
+            <span class="font-mono text-indigo-300">contact@dataexpress.ma</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="space-y-4">
+        <h5 class="text-white text-xs font-black tracking-widest uppercase text-slate-200">Navigation rapide</h5>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <a href="#home" class="hover:text-white transition-colors">Accueil Hub</a>
+          <a href="#expertise" class="hover:text-white transition-colors">Nos Services</a>
+          <a href="#contact" class="hover:text-white transition-colors">Demande d'Audit</a>
+          <span @click="router.push('/login')" class="hover:text-white transition-colors cursor-pointer">Espace Client</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="max-w-7xl mx-auto mt-12 pt-6 border-t border-slate-800/60 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-slate-500 font-medium">
+      <p>&copy; 2026 DataXpress S.A. Tous droits réservés.</p>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-slate-400 transition-colors">Mentions Légales</a>
+        <a href="#" class="hover:text-slate-400 transition-colors">Confidentialité</a>
+      </div>
     </div>
   </footer>
 
