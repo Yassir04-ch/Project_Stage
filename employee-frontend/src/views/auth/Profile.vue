@@ -83,13 +83,13 @@ onMounted(() => {
 
     <aside class="bg-slate-950 text-slate-200 w-72 min-h-screen p-6 flex flex-col justify-between shadow-[4px_0_24px_rgba(0,0,0,0.08)] shrink-0 border-r border-slate-900 z-20">
       <div class="flex flex-col">
-        <div class="flex items-center gap-3.5 mb-10 pb-5 border-b border-slate-900">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white text-xl font-black shadow-[0_4px_12px_rgba(99,102,241,0.3)]">
+        <div class="flex items-center gap-3.5 mb-10 pb-4 border-b border-slate-900">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
             D
           </div>
           <div>
-            <h1 class="text-lg font-black tracking-wider text-white uppercase italic leading-none">DataExpress</h1>
-            <p class="text-[10px] text-indigo-400 font-bold tracking-widest uppercase mt-1.5">Workspace Admin</p>
+            <h1 class="text-lg font-black tracking-tight text-white uppercase italic">DATAXPRESS</h1>
+            <p class="text-xs text-indigo-400 font-bold tracking-wider uppercase">Workspace Admin</p>
           </div>
         </div>
 

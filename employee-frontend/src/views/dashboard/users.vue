@@ -7,6 +7,7 @@ const router = useRouter();
 
 const users = ref([]);
 const loading = ref(false);
+const statusLoading = ref({}); // tracking dynamic status changes
 const currentUser = ref(null);
 
 const getUsers = async () => {
@@ -27,6 +28,29 @@ const getUsers = async () => {
   }
 };
 
+const toggleStatus = async (user) => {
+  const isCurrentlyActive = user.status === 'active';
+  const endpoint = isCurrentlyActive ? `/users/${user.id}/desactiver` : `/users/${user.id}/activer`;
+  
+  statusLoading.value[user.id] = true;
+  try {
+    const response = await api.put(endpoint, {}, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    
+    if (response.data.success) {
+      // Update local state directly
+      user.status = isCurrentlyActive ? 'banni' : 'active';
+    }
+  } catch (error) {
+    console.log("Erreur lors du changement de statut", error.response?.data);
+  } finally {
+    statusLoading.value[user.id] = false;
+  }
+};
+
 onMounted(() => {
   getUsers();
 });
@@ -37,7 +61,6 @@ onMounted(() => {
 
   <div class="min-h-screen bg-slate-50 flex antialiased font-sans">
 
-    <!-- 💻 SIDEBAR (STAYS RIGID & FIXED) -->
     <aside class="bg-slate-950 text-slate-200 w-72 min-h-screen p-6 flex flex-col justify-between shadow-2xl shrink-0 border-r border-slate-800/40">
       
        <div class="flex flex-col">
@@ -77,19 +100,16 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- 👤 CLEAN PROFILE FOOTER UNIT (FIXED GEOMETRY) -->
       <div class="mt-auto pt-4 border-t border-slate-900">
         <router-link
           to="/profile"
           class="bg-slate-900/80 border border-slate-800/40 rounded-xl p-3.5 flex items-center gap-3 shadow-inner hover:bg-slate-900 hover:border-slate-700/60 transition-all group cursor-pointer w-full"
         >
-          <!-- User initial avatar icon placeholder -->
           <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center font-black text-white text-sm uppercase tracking-wide border border-indigo-400/20 shrink-0">
             <span v-if="currentUser">{{ currentUser.firstname?.[0] }}{{ currentUser.lastname?.[0] }}</span>
             <span v-else class="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
           </div>
 
-          <!-- Text block parameters safely constrained -->
           <div class="flex-1 min-w-0">
             <div v-if="currentUser">
               <h2 class="text-sm font-bold text-white tracking-tight truncate uppercase group-hover:text-indigo-400 transition-colors">
@@ -100,7 +120,6 @@ onMounted(() => {
               </p>
             </div>
             
-            <!-- Loading state skeleton keeps frame stable -->
             <div v-else class="space-y-1">
               <div class="h-3 w-24 bg-slate-800 rounded animate-pulse"></div>
               <div class="h-2 w-16 bg-slate-800 rounded animate-pulse"></div>
@@ -112,10 +131,8 @@ onMounted(() => {
       </div>
     </aside>
 
-    <!-- 📊 MAIN CONTROL WORKSPACE -->
     <main class="flex-1 p-8 overflow-y-auto max-h-screen">
 
-      <!-- TOP DASHBOARD STATS HEADER -->
       <div class="bg-white rounded-2xl border border-slate-200/60 px-6 py-5 flex justify-between items-center mb-8 shadow-sm">
         <div>
           <h1 class="text-2xl font-black text-slate-900 tracking-tight">Panneau d'Administration</h1>
@@ -137,7 +154,6 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- ANALYTICS HIGHLIGHT METRICS CARDS -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all">
           <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Effectif global</span>
@@ -155,7 +171,6 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- MAIN USERS DATABASE GRID TABLE -->
       <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
         <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-white">
           <h2 class="text-base font-bold text-slate-900 tracking-tight">Liste des Employé</h2>
@@ -172,40 +187,38 @@ onMounted(() => {
                 <th class="text-left p-4 text-[11px] font-bold text-slate-400 uppercase tracking-wider">CIN</th>
                 <th class="text-left p-4 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Fonction</th>
                 <th class="text-left p-4 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Statut</th>
+                <th class="text-center p-4 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
 
             <tbody class="divide-y divide-slate-100">
-              <!-- Loading Skeleton Matrix Rows -->
               <template v-if="loading">
                 <tr v-for="n in 3" :key="n" class="animate-pulse">
-                  <td class="p-4" v-for="i in 6" :key="i">
+                  <td class="p-4" v-for="i in 7" :key="i">
                     <div class="h-4 bg-slate-100 rounded w-full my-1"></div>
                   </td>
                 </tr>
               </template>
 
-              <!-- Real Loop Core Data Rows -->
               <template v-else-if="users.length">
                 <tr v-for="user in users" :key="user.id" class="hover:bg-slate-50/50 transition-all">
                   
                   <td class="p-4">
-                   <router-link 
-                    :to="`/getUser/${user.id || user._id}`" 
-                    class="flex items-center gap-3 group cursor-pointer">
-                    <!-- Avatar unit li clickables -->
-                    <div class="w-9 h-9 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center uppercase shrink-0 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-all shadow-sm">
-                      {{ user.firstname?.[0] }}{{ user.lastname?.[0] }}
-                    </div>
+                    <router-link 
+                      :to="`/getUser/${user.id || user._id}`" 
+                      class="flex items-center gap-3 group cursor-pointer"
+                    >
+                      <div class="w-9 h-9 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center uppercase shrink-0 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-all shadow-sm">
+                        {{ user.firstname?.[0] }}{{ user.lastname?.[0] }}
+                      </div>
 
-                    <!-- Smiya m9ada (t9dr t-keepiha wla thydha ela hssab fin hat had l-code exact) -->
-                    <div class="flex flex-col min-w-0">
-                      <span class="text-xs font-bold text-slate-800 uppercase truncate group-hover:text-indigo-600 transition-colors">
-                        {{ user.firstname }} {{ user.lastname }}
-                      </span>
-                      <span class="text-[10px] font-mono text-slate-400">View Profile ➔</span>
-                    </div>
-                  </router-link>
+                      <div class="flex flex-col min-w-0">
+                        <span class="text-xs font-bold text-slate-800 uppercase truncate group-hover:text-indigo-600 transition-colors">
+                          {{ user.firstname }} {{ user.lastname }}
+                        </span>
+                        <span class="text-[10px] font-mono text-slate-400">View Profile ➔</span>
+                      </div>
+                    </router-link>
                   </td>
 
                   <td class="p-4 text-sm text-slate-500 font-medium">{{ user.email }}</td>
@@ -223,18 +236,38 @@ onMounted(() => {
                   </td>
 
                   <td class="p-4">
-                    <span class="inline-flex items-center gap-1.5 text-[10px] font-bold px-2 py-0.5 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-md uppercase tracking-wider">
+                    <span v-if="user.status === 'active'" class="inline-flex items-center gap-1.5 text-[10px] font-bold px-2 py-0.5 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-md uppercase tracking-wider">
                       <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                       Actif
                     </span>
+                    <span v-else class="inline-flex items-center gap-1.5 text-[10px] font-bold px-2 py-0.5 bg-rose-50 border border-rose-100 text-rose-700 rounded-md uppercase tracking-wider">
+                      <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                      Banni
+                    </span>
+                  </td>
+
+                  <td class="p-4 text-center">
+                    <button 
+                      @click="toggleStatus(user)"
+                      :disabled="statusLoading[user.id]"
+                      class="px-3 py-1.5 rounded-xl text-[11px] font-bold tracking-wide transition-all border active:scale-95 disabled:opacity-50 w-28 text-center inline-flex items-center justify-center gap-1"
+                      :class="user.status === 'active' 
+                        ? 'bg-rose-50 hover:bg-rose-100 border-rose-200 text-rose-600 shadow-sm shadow-rose-500/5' 
+                        : 'bg-emerald-50 hover:bg-emerald-100 border-emerald-200 text-emerald-600 shadow-sm shadow-emerald-500/5'"
+                    >
+                      <i v-if="statusLoading[user.id]" class="fas fa-spinner animate-spin"></i>
+                      <span v-else>
+                        <i :class="user.status === 'active' ? 'fas fa-user-slash text-[10px]' : 'fas fa-user-check text-[10px]'"></i>
+                      </span>
+                      <span>{{ user.status === 'active' ? 'Désactiver' : 'Activer' }}</span>
+                    </button>
                   </td>
 
                 </tr>
               </template>
 
-              <!-- Empty fallbacks context matrix -->
               <tr v-else>
-                <td colspan="6" class="p-12 text-center text-xs font-bold text-slate-400 uppercase tracking-widest bg-slate-50/20">
+                <td colspan="7" class="p-12 text-center text-xs font-bold text-slate-400 uppercase tracking-widest bg-slate-50/20">
                   Aucun utilisateur trouvé f l-base de données
                 </td>
               </tr>

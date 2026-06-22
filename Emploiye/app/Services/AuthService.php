@@ -11,7 +11,14 @@ class AuthService
     
     public function register(array $data): array
     {
+        $photoPath = null;
+        if (isset($data['photo']) && $data['photo'] instanceof \Illuminate\Http\UploadedFile) {
+            $photoPath = $data['photo']->store('photos/employees', 'public');
+        }
+
+        $data['photo']    = $photoPath;
         $data['password'] = Hash::make($data['password']);
+
         $user = User::create($data);
 
         $token = $user->createToken('auth_token')->plainTextToken;

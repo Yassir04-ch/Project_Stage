@@ -1,7 +1,7 @@
 import api from "@/api/axios";
 
 export const registerUser = async (userData) => {
-  return await api.post("/register", userData, {
+  return await api.post("/createEmploiyee", userData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

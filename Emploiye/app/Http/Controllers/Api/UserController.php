@@ -57,26 +57,26 @@ class UserController extends Controller
         ], 201);
     }
     
-    public function desactiverUser($id){
+    public function activerUser($id)
+    {
         $user = User::findOrFail($id);
-        $this->userService->desactiverUser($user);
+        $this->userService->activerUser($user); // Fixed calling context
         return response()->json([
             'success' => true,
-            'message' => 'le compte du utilisateur est desactivée.',
+            'message' => 'le compte du utilisateur est activée.',
             'data'    => $user,
-
-        ],200);
+        ], 200);
     }
 
-    public function activerUser($id){
+    public function desactiverUser($id)
+    {
         $user = User::findOrFail($id);
         $this->userService->desactiverUser($user);
         return response()->json([
             'success' => true,
             'message' => 'le compte du utilisateur est desactivée.',
             'data'    => $user,
-
-        ],200);
+        ], 200);
     }
 
     public function update(Request $request, $id): JsonResponse

@@ -23,11 +23,12 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::get('/getUser/{id}',[AuthController::class, 'GetUser']);
-
 Route::post('/createEmploiyee', [UserController::class, 'store']);
-Route::post('/desactiverUser', [UserController::class, 'desactiverUser']);
-Route::post('/activerUser', [UserController::class, 'activerUser']);
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::put('/users/{id}/activer', [UserController::class, 'activerUser']);
+    Route::put('/users/{id}/desactiver', [UserController::class, 'desactiverUser']);
+});
 
 Route::get('/stats', [AdminController::class, 'stats']);
 

@@ -28,7 +28,7 @@ class RegisterRequest extends FormRequest
             'date_embauche'  => 'nullable|date',
             'type_contrat' => 'nullable|string|in:CDI,CDD,Stage,Freelance,Interim',
             'salaire' => 'nullable|numeric|min:0',
-            'photo' => 'nullable|image|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
 

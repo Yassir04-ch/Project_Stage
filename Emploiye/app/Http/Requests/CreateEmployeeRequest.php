@@ -25,7 +25,7 @@ class CreateEmployeeRequest extends FormRequest
             'date_embauche'  => 'nullable|date',
             'type_contrat'   => 'required|in:CDI,CDD,Stage,Freelance,Interim',
             'salaire'        => 'nullable|numeric|min:0',
-            'photo'          => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'email'          => 'required|email|unique:users,email',
             'password'       => 'required|string|min:8',
             'role_id'        => 'nullable|exists:roles,id',

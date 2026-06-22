@@ -18,7 +18,6 @@ class UserService
             $photoPath = $data['photo']->store('photos/employees', 'public');
         }
 
-        $data['role_id'] = 4;
         $data['password'] = Hash::make($data['password']);
         $data['photo'] = $photoPath;
 
@@ -26,11 +25,13 @@ class UserService
     }
 
     public function desactiverUser($user){
-       $user->update(['status'=>'banni']);
+        $user->status = 'banni';
+        $user->save(); 
     }
    
     public function activerUser($user){
-       $user->update(['status'=>'active']);
+        $user->status = 'active';
+        $user->save();
     }
 
     public function updateEmployee(User $user, array $data): User

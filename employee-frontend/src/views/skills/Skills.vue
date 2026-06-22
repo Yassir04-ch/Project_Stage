@@ -1,3 +1,65 @@
+<script setup>
+import { ref, onMounted } from 'vue'
+import api from '@/api/axios'
+
+const skills     = ref([])
+const loading    = ref(false)
+const creating   = ref(false)
+const showForm   = ref(false)
+const newSkillName = ref('')
+const success    = ref('')
+const error      = ref('')
+const formError  = ref('')
+
+const loadSkills = async () => {
+  loading.value = true
+  try {
+    const res = await api.get('/skills')
+    skills.value = res.data.skills
+  } catch (err) {
+    error.value = 'Erreur lors du chargement'
+  } finally {
+    loading.value = false
+  }
+}
+
+const createSkill = async () => {
+  if (!newSkillName.value.trim()) {
+    formError.value = 'Le nom est obligatoire'
+    return
+  }
+  creating.value = true
+  formError.value = ''
+  try {
+    const res = await api.post('/skills', { name: newSkillName.value.trim() })
+    skills.value.push(res.data.skill)
+    newSkillName.value = ''
+    showForm.value = false
+    success.value = 'Compétence créée avec succès'
+    setTimeout(() => success.value = '', 3000)
+  } catch (err) {
+    formError.value = err.response?.data?.errors?.name?.[0] ?? 'Erreur lors de la création'
+  } finally {
+    creating.value = false
+  }
+}
+
+const deleteSkill = async (skill) => {
+  if (!confirm(`Supprimer "${skill.name}" ?`)) return
+  try {
+    await api.delete(`/skills/${skill.id}`)
+    skills.value = skills.value.filter(s => s.id !== skill.id)
+    success.value = 'Compétence supprimée'
+    setTimeout(() => success.value = '', 3000)
+  } catch (err) {
+    error.value = 'Erreur lors de la suppression'
+    setTimeout(() => error.value = '', 3000)
+  }
+}
+
+onMounted(() => loadSkills())
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-100 flex">
 
@@ -7,7 +69,7 @@
         <div class="flex items-center gap-3 mb-10">
           <div class="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-xl font-bold shadow-lg">D</div>
           <div>
-            <h1 class="text-2xl font-bold">DataExpress</h1>
+            <h1 class="text-2xl font-bold">DataXpress</h1>
             <p class="text-gray-400 text-sm">Admin Dashboard</p>
           </div>
         </div>
@@ -117,65 +179,3 @@
     </main>
   </div>
 </template>
-
-<script setup>
-import { ref, onMounted } from 'vue'
-import api from '@/api/axios'
-
-const skills     = ref([])
-const loading    = ref(false)
-const creating   = ref(false)
-const showForm   = ref(false)
-const newSkillName = ref('')
-const success    = ref('')
-const error      = ref('')
-const formError  = ref('')
-
-const loadSkills = async () => {
-  loading.value = true
-  try {
-    const res = await api.get('/skills')
-    skills.value = res.data.skills
-  } catch (err) {
-    error.value = 'Erreur lors du chargement'
-  } finally {
-    loading.value = false
-  }
-}
-
-const createSkill = async () => {
-  if (!newSkillName.value.trim()) {
-    formError.value = 'Le nom est obligatoire'
-    return
-  }
-  creating.value = true
-  formError.value = ''
-  try {
-    const res = await api.post('/skills', { name: newSkillName.value.trim() })
-    skills.value.push(res.data.skill)
-    newSkillName.value = ''
-    showForm.value = false
-    success.value = 'Compétence créée avec succès'
-    setTimeout(() => success.value = '', 3000)
-  } catch (err) {
-    formError.value = err.response?.data?.errors?.name?.[0] ?? 'Erreur lors de la création'
-  } finally {
-    creating.value = false
-  }
-}
-
-const deleteSkill = async (skill) => {
-  if (!confirm(`Supprimer "${skill.name}" ?`)) return
-  try {
-    await api.delete(`/skills/${skill.id}`)
-    skills.value = skills.value.filter(s => s.id !== skill.id)
-    success.value = 'Compétence supprimée'
-    setTimeout(() => success.value = '', 3000)
-  } catch (err) {
-    error.value = 'Erreur lors de la suppression'
-    setTimeout(() => error.value = '', 3000)
-  }
-}
-
-onMounted(() => loadSkills())
-</script>

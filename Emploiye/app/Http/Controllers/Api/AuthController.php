@@ -20,7 +20,13 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request): JsonResponse
     {
-        $result = $this->authService->register($request->validated());
+        $data = $request->validated();
+        
+        $data['photo'] = $request->hasFile('photo') 
+            ? $request->file('photo') 
+            : null;
+
+        $result = $this->authService->register($data);
 
         return response()->json([
             'success' => true,
