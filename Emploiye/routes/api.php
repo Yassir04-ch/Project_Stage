@@ -28,7 +28,6 @@ Route::post('/createEmploiyee', [UserController::class, 'store']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/{id}/activer', [UserController::class, 'activerUser']);
     Route::put('/users/{id}/desactiver', [UserController::class, 'desactiverUser']);
-});
 
 Route::get('/stats', [AdminController::class, 'stats']);
 
@@ -67,3 +66,8 @@ Route::delete('/skills/{skill}', [SkillController::class, 'destroy']);
 
 Route::get('/users/{user}/skills', [SkillController::class, 'getEmployeeSkills']);
 Route::post('/users/{user}/skills', [SkillController::class, 'assignToEmployee']);
+
+Route::get('/notifications', [UserController::class, 'getNotification']);
+Route::put('/notifications/{id}/read',[UserController::class, 'markAsRead']);
+
+});

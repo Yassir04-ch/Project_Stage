@@ -16,6 +16,7 @@ import GetUser from '@/views/auth/Profile.vue'
 import Profile from '@/views/auth/me.vue'
 import UserEditView from '@/views/employees/Edit.vue'
 import Skills from '@/views/skills/Skills.vue'
+import Notifications from '@/views/notifications/list.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -113,6 +114,12 @@ const router = createRouter({
     component: Skills,
     meta: { requiresAuth: true }
   },
+  {
+    path: '/notifications',
+    name: 'notifications',
+    component: Notifications,
+    meta: { requiresAuth: true }
+}
 ]
 });
 

@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateEmployeeRequest;
-use App\Http\Requests\UpdateEmployeeRequest;
 use App\Services\UserService;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -122,6 +122,64 @@ class UserController extends Controller
             'success' => true,
             'message' => 'Employé supprimé avec succès.',
         ],200);
+    }
+
+    public function getNotification(Request $request)
+    {
+        $user = $request->user();
+        $notifications =  $user->notifications()->latest()->get();
+
+        return response()->json([
+            'success' => true,
+            'notifications' => $notifications
+        ]);
+    }
+
+    public function unreadNotifications(Request $request)
+    {
+        $user = $request->user();
+        $total =  $user->notifications()->where('is_read', false)->count();
+        return response()->json([
+            'success' => true,
+            'count' => $total
+        ]);
+    }
+
+    public function markAsRead($id , Request $request)
+    {
+        $notification = $request->user()->notifications()->findOrFail($id);
+
+        $notification->update([
+            'is_read' => true
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Notification marquée comme lue'
+        ]);
+    }
+
+    public function markAllAsRead(Request $request)
+    {
+        $request->user()->notifications()->where('is_read', false)->update([
+                'is_read' => true
+            ]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Toutes les notifications sont lues'
+        ]);
+    }
+
+    public function deleteNotification($id , Request $request)
+    {
+        $notification = $request->user()->notifications()->findOrFail($id);
+
+        $notification->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Notification supprimée'
+        ]);
     }
 
 

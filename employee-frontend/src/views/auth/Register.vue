@@ -21,11 +21,11 @@ const form = reactive({
   type_contrat: "",
   salaire: "",
   photo: null,
-  role_id: 4, // Default nkhaliwh Employé (4) awla bdlo l-li bghiti
+  role_id: 4, // Default Employé
 });
 
-const errors         = ref({});
-const loading        = ref(false);
+const errors          = ref({});
+const loading         = ref(false);
 const availableSkills = ref([]);
 const selectedSkills  = ref([]);
 
@@ -44,9 +44,10 @@ const handleFile = (event) => {
 const loadSkills = async () => {
   try {
     const res = await api.get("/skills");
-    availableSkills.value = res.data.skills;
+    // Fallbacks ela hssab dynamic structure dyal wrapper data
+    availableSkills.value = res.data.data || res.data.skills || res.data;
   } catch (err) {
-    console.log(err);
+    console.error("Erreur lors du chargement des compétences:", err);
   }
 };
 
@@ -89,28 +90,40 @@ const submitRegister = async () => {
     if (form.salaire)        formData.append("salaire", form.salaire);
     if (form.photo)          formData.append("photo", form.photo);
 
-    console.log('FormData photo:', formData.get('photo'));
+    console.log('FormData ready to submit.');
 
     const response = await registerUser(formData);
-    console.log("REGISTER RESPONSE:", response);
+    console.log("REGISTER RESPONSE:", response.data);
 
-    const employeeId = response.data.data.user.id;
-    console.log("EMPLOYEE ID:", employeeId);
+    // 🔥 Fix core: safe checking dynamic hierarchy dyal l-ID
+    const employeeId = response.data?.data?.user?.id 
+                    || response.data?.data?.id 
+                    || response.data?.user?.id 
+                    || response.data?.id;
+
+    console.log("RESOLVED EMPLOYEE ID FOR SKILLS:", employeeId);
  
+    if (!employeeId) {
+       throw new Error("Impossible de récupérer l'ID de l'employé créé.");
+    }
+
+    // Sync skills match safe pipeline execution
     if (selectedSkills.value.length > 0) {
       await api.post(`/users/${employeeId}/skills`, {
         skills: selectedSkills.value,
       });
     }
 
-    alert("Employé ajouté avec succès !");
+    alert("Employé et compétences ajoutés avec succès !");
+    router.push({ name: 'dashboard' });
 
   } catch (error) {
     if (error.response?.status === 422) {
       errors.value = error.response.data.errors;
       console.log("VALIDATION ERRORS:", error.response.data.errors); 
     } else {
-      console.log(error);
+      console.error(error);
+      alert("Une erreur est survenue lors de l'enregistrement.");
     }
   } finally {
     loading.value = false;
@@ -149,7 +162,7 @@ onMounted(() => loadSkills());
             <div class="flex flex-col gap-1.5">
               <label class="text-xs font-semibold text-slate-600">Nom <span class="text-rose-500">*</span></label>
               <input v-model="form.lastname" type="text" placeholder="Nom de l'employé"
-                class="w-full px-3.5 py-2 text-sm text-slate-900 bg-white border rounded-xl outline-none transition duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 h-11 shadow-sm"
+                class="w-full px-3.5 py-2 text-sm text-slate-990 bg-white border rounded-xl outline-none transition duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 h-11 shadow-sm"
                 :class="errors.lastname ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-50' : 'border-slate-200'" />
               <p class="text-xs font-medium text-rose-500 mt-0.5 flex items-center gap-1" v-if="errors.lastname">
                 <span>⚠️</span> {{ errors.lastname[0] }}
@@ -408,7 +421,7 @@ onMounted(() => loadSkills());
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
             </svg>
-            <span>{{ loading ? 'Enregistrement sécurisé...' : 'Créer le profil de l\'employé' }}</span>
+            <span>{{ loading ? 'Enregistrement sécurisé...' : "Créer le profil de l'employé" }}</span>
           </button>
         </div>
 
