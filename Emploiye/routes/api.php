@@ -64,9 +64,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users/{user}/skills', [SkillController::class, 'assignToEmployee']);
 
     Route::get('/notifications', [NotificationController::class, 'index']);
-    Route::post('/notifications/{notification}/read', [NotificationController::class, 'update']);
-    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
 
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
+
+    Route::put('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+
+    Route::put('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
+
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+    
     Route::post('/broadcasting/auth', function (\Illuminate\Http\Request $request) {
         return Broadcast::auth($request);
     });
