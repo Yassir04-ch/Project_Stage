@@ -1,12 +1,15 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 import api from "@/api/axios";
 import { useRouter } from "vue-router";
+
 
 const router = useRouter();
 
 const user = ref(null);
 const loading = ref(false);
+
+const unreadCount = ref(0);
 
 // State for Dark/Light Mode toggle
 const isDark = ref(localStorage.getItem("theme") !== "light");
@@ -57,6 +60,34 @@ const getProfile = async () => {
   }
 };
 
+const loadUnreadCount = async () => {
+  try {
+    const res = await api.get("/notifications");
+    const notifications = res.data.notifications || [];
+    unreadCount.value = notifications.filter(n => !n.is_read).length;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const listenToNotifications = () => {
+  const userId = user.value?.id;
+  if (!userId || !window.Echo) return;
+
+  window.Echo.private(`notifications.${userId}`)
+    .listen('.notification.new', (e) => {
+      unreadCount.value++; // ✅ zid count automatiquement
+    });
+};
+
+const stopListening = () => {
+  const userId = user.value?.id;
+  if (userId && window.Echo) {
+    window.Echo.leave(`notifications.${userId}`);
+  }
+};
+
+
 const handleLogout = async () => {
   try {
     await api.post(
@@ -75,9 +106,16 @@ const handleLogout = async () => {
   router.push("/");
 };
 
-onMounted(() => {
-  getProfile();
+onMounted(async () => {
+  await getProfile();
+  await loadUnreadCount();
+  listenToNotifications();
 });
+
+onUnmounted(() => {
+  stopListening();
+});
+
 </script>
 
 <template>
@@ -98,10 +136,15 @@ onMounted(() => {
 
       <div class="flex items-center gap-3">
         <div :class="isDark ? 'bg-slate-900/40 border-slate-800/60' : 'bg-slate-100 border-slate-200'" class="flex items-center gap-1 p-1.5 rounded-xl border">
-          <button @click="router.push('/notifications')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+            <button @click="router.push('/notifications')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="relative px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
             <i class="fas fa-bell text-sm opacity-60"></i> <span class="hidden md:inline">Notifications</span>
-          </button>
-          <button @click="router.push('/absences')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+            <!-- ✅ Badge -->
+            <span v-if="unreadCount > 0"
+                class="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white dark:border-slate-950">
+                {{ unreadCount > 9 ? '9+' : unreadCount }}
+            </span>
+            </button>
+            <button @click="router.push('/absences')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
             <i class="fa-regular fa-calendar-minus text-sm opacity-60"></i> <span class="hidden md:inline">Absences</span>
           </button>
           <button @click="router.push('/assignments')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">

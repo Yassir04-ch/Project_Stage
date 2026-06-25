@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 import { getNotifications, markAsRead, deleteNotification, markAllAsRead } from "@/services/notificationService";
 import { useRouter } from "vue-router";
 
@@ -11,6 +11,7 @@ const activeTab = ref("all");
 
 // Initialisation clean match dynamic laravel entity structure
 const currentUser = ref({
+    id: null,
     name: "Utilisateur",
     role: "Employé",
     photo: null
@@ -43,6 +44,7 @@ const loadNotifications = async () => {
         const backendUser = responseData.user;
         if (backendUser) {
             currentUser.value = {
+                id: backendUser.id, // ✅ zid id -- khasso bach listener ykhdam
                 name: `${backendUser.firstname || ''} ${backendUser.lastname || ''}`.trim() || backendUser.name || "Utilisateur",
                 role: backendUser.role?.name || "Employé",
                 photo: backendUser.photo || backendUser.avatar || null
@@ -52,6 +54,41 @@ const loadNotifications = async () => {
         console.error("Erreur chargement notifications:", err);
     } finally {
         loading.value = false;
+    }
+};
+
+// ✅ Real-time listener via Pusher / Laravel Echo
+const listenToNotifications = () => {
+    const userId = currentUser.value?.id;
+
+    if (!userId) {
+        console.warn('User ID not available, cannot listen to notifications');
+        return;
+    }
+
+    if (!window.Echo) {
+        console.error('window.Echo not found -- check bootstrap.js import in main.js');
+        return;
+    }
+
+    window.Echo.private(`notifications.${userId}`)
+        .listen('.notification.new', (e) => {
+            console.log('🔔 NOTIFICATION RECEIVED:', e);
+
+            // ✅ zid notification jdida f top, bla duplication
+            const exists = notifications.value.some(n => n.id === e.notification.id);
+            if (!exists) {
+                notifications.value.unshift(e.notification);
+            }
+        });
+
+    console.log(`✅ Listening on private channel: notifications.${userId}`);
+};
+
+const stopListening = () => {
+    const userId = currentUser.value?.id;
+    if (userId && window.Echo) {
+        window.Echo.leave(`notifications.${userId}`);
     }
 };
 
@@ -98,7 +135,14 @@ const formatTime = (dateStr) => {
     });
 };
 
-onMounted(loadNotifications);
+onMounted(async () => {
+    await loadNotifications();
+    listenToNotifications(); // ✅ zid had ba3d ma currentUser.id khassha tkun mwjouda
+});
+
+onUnmounted(() => {
+    stopListening(); // ✅ cleanup mlli component khrj
+});
 </script>
 
 <template>
@@ -112,13 +156,6 @@ onMounted(loadNotifications);
                     ⚡
                 </div>
                 <span class="text-sm font-bold text-slate-900 tracking-tight hidden sm:block">Dashboard HR</span>
-            </div>
-
-            <div class="hidden md:flex items-center gap-2 bg-slate-100 rounded-xl px-3.5 py-1.5 border border-slate-200/40 w-80">
-                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input type="text" placeholder="Rechercher un employé, projet..." class="bg-transparent text-xs outline-none text-slate-700 w-full placeholder:text-slate-400 font-medium" />
             </div>
 
             <div class="flex items-center gap-4">
