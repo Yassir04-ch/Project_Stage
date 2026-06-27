@@ -49,7 +49,7 @@ const updateStatus = async (newStatus) => {
 const formatDate = (dateStr) => {
     if (!dateStr) return '--'
     try {
-        return new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
+        return new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' })
     } catch (e) {
         return dateStr.substring(0, 10)
     }
@@ -58,14 +58,14 @@ const formatDate = (dateStr) => {
 const getStatusClass = (status) => {
     if (!status) return 'bg-slate-100 text-slate-700 border-slate-200'
     const st = status.toLowerCase()
-    if (st === 'active')    return 'bg-amber-50 text-amber-700 border-amber-200'
-    if (st === 'completed') return 'bg-emerald-50 text-emerald-700 border-emerald-200'
-    if (st === 'cancelled') return 'bg-red-50 text-red-600 border-red-200'
-    return 'bg-indigo-50 text-indigo-700 border-indigo-200'
+    if (st === 'active')    return 'bg-amber-50 text-amber-700 border-amber-200/80'
+    if (st === 'completed') return 'bg-emerald-50 text-emerald-700 border-emerald-200/80'
+    if (st === 'cancelled') return 'bg-rose-50 text-rose-700 border-rose-200/80'
+    return 'bg-indigo-50 text-indigo-700 border-indigo-200/80'
 }
 
 const statusLabel = (s) => {
-    const map = { planning: '📋 Planning', active: '⚙️ Active', completed: '✅ Completed', cancelled: '❌ Cancelled' }
+    const map = { planning: '📋 Planning', active: '⚙️ Active', completed: '✅ Fait', cancelled: '❌ Annulé' }
     return map[s] ?? s
 }
 
@@ -75,165 +75,146 @@ onMounted(() => getProject())
 <template>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <div class="min-h-screen bg-[#f8fafc] text-slate-600 font-sans antialiased p-4 sm:p-6 md:p-10 relative overflow-hidden">
+    <div class="min-h-screen bg-slate-50/50 text-slate-600 font-sans antialiased p-4 sm:p-6 md:p-8 relative overflow-hidden">
 
         <div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-600/5 rounded-full blur-[120px] pointer-events-none"></div>
         <div class="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[100px] pointer-events-none"></div>
 
-        <div class="max-w-4xl mx-auto space-y-6 relative z-10">
+        <div class="max-w-4xl mx-auto space-y-5 relative z-10">
 
-            <!-- Top bar -->
             <div class="flex items-center justify-between">
                 <router-link to="/projects"
-                    class="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-indigo-600 bg-white border border-slate-200/60 px-4 py-2.5 rounded-xl shadow-sm transition-all active:scale-95">
+                    class="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-indigo-600 bg-white border border-slate-200/60 px-4 py-2.5 rounded-xl shadow-xs transition-all active:scale-95">
                     <i class="fas fa-arrow-left text-[10px]"></i>
                     <span>Retour aux projets</span>
                 </router-link>
+                
                 <button @click="getProject" :disabled="loading"
-                    class="w-9 h-9 flex items-center justify-center bg-white border border-slate-200/60 text-slate-400 hover:text-indigo-600 rounded-xl shadow-sm transition-colors">
-                    <i class="fas fa-sync-alt" :class="{'animate-spin': loading}"></i>
+                    class="w-9 h-9 flex items-center justify-center bg-white border border-slate-200/60 text-slate-400 hover:text-indigo-600 rounded-xl shadow-xs transition-all active:scale-95 disabled:opacity-50">
+                    <i class="fas fa-sync-alt text-xs" :class="{'animate-spin': loading}"></i>
                 </button>
             </div>
 
-            <!-- Skeleton -->
-            <div v-if="loading" class="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm space-y-6 animate-pulse">
-                <div class="h-8 bg-slate-100 rounded-xl w-1/3"></div>
+            <div v-if="loading" class="bg-white rounded-2xl border border-slate-200/60 p-6 sm:p-8 shadow-xs space-y-6 animate-pulse">
+                <div class="h-7 bg-slate-100 rounded-lg w-1/3"></div>
                 <div class="space-y-3">
-                    <div class="h-4 bg-slate-100 rounded-lg w-full"></div>
-                    <div class="h-4 bg-slate-50 rounded-lg w-5/6"></div>
+                    <div class="h-4 bg-slate-100 rounded-md w-full"></div>
+                    <div class="h-4 bg-slate-50 rounded-md w-5/6"></div>
                 </div>
-                <div class="grid grid-cols-3 gap-4 pt-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
                     <div class="h-16 bg-slate-50 rounded-xl"></div>
                     <div class="h-16 bg-slate-50 rounded-xl"></div>
                     <div class="h-16 bg-slate-50 rounded-xl"></div>
                 </div>
             </div>
 
-            <!-- Main card -->
-            <div v-else-if="project" class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+            <div v-else-if="project" class="bg-white rounded-2xl border border-slate-200/60 shadow-xs overflow-hidden">
 
-                <!-- Header -->
-                <div class="p-6 sm:p-8 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-2xl bg-indigo-600/10 text-indigo-600 flex items-center justify-center text-lg shrink-0 border border-indigo-100">
+                <div class="p-6 sm:p-7 border-b border-slate-100 bg-slate-50/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100/60 flex items-center justify-center text-base shrink-0 shadow-xs">
                             <i class="fas fa-folder-open"></i>
                         </div>
-                        <div>
-                            <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-2 py-0.5 rounded-md">Fiche Projet</span>
-                            <h1 class="text-xl sm:text-2xl font-black text-slate-800 tracking-tight mt-1">{{ project.name }}</h1>
+                        <div class="space-y-0.5">
+                            <span class="text-[9px] font-extrabold text-indigo-600 uppercase tracking-wider bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100/50">Fiche Projet</span>
+                            <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{{ project.name }}</h1>
                         </div>
                     </div>
+                    
                     <div class="flex items-center gap-2 self-start sm:self-auto flex-wrap">
-                        <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl border uppercase tracking-wider shadow-sm"
+                        <span class="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1.5 rounded-xl border uppercase tracking-wide shadow-xs"
                             :class="getStatusClass(project.status)">
                             <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
                             {{ project.status || 'PLANNING' }}
                         </span>
-                    <router-link
-                    :to="{
-                    name:'project.assignments',
-                    params:{ id: route.params.id }
-                    }"
-                    class="inline-flex items-center gap-1.5 bg-white border border-slate-200 hover:border-indigo-300 hover:text-indigo-600 text-slate-500 text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all active:scale-95"
-                    >
-                        <i class="fas fa-project-diagram text-[11px]"></i>
-                        Planning
-                    </router-link> 
-                  </div>
+
+                        <router-link
+                            :to="{ name: 'project.assignments', params: { id: route.params.id } }"
+                            class="inline-flex items-center gap-1.5 bg-white border border-slate-200 hover:border-indigo-300 hover:text-indigo-600 text-slate-600 text-xs font-semibold px-3.5 py-1.5 rounded-xl shadow-xs transition-all active:scale-[0.98]"
+                        >
+                            <i class="fas fa-project-diagram text-[10px] text-slate-400"></i>
+                            <span>Planning</span>
+                        </router-link> 
+                    </div>
                 </div>
 
-                <!-- Content -->
-                <div class="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-6 sm:p-7 grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                    <!-- Description -->
-                    <div class="md:col-span-2 space-y-4">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                    <div class="md:col-span-2 space-y-3">
+                        <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
                             <i class="fas fa-align-left text-slate-300"></i> Description Générale
                         </h3>
-                        <div class="bg-slate-50/60 border border-slate-100/80 rounded-2xl p-5 text-slate-600 text-sm leading-relaxed whitespace-pre-line min-h-[100px]">
+                        <div class="bg-slate-50/40 border border-slate-200/50 rounded-xl p-4 text-slate-600 text-xs leading-relaxed whitespace-pre-line min-h-[120px]">
                             {{ project.description || 'Aucune description fournie pour ce projet.' }}
                         </div>
                     </div>
 
-                    <!-- Right column -->
-                    <div class="space-y-5">
+                    <div class="space-y-4">
 
-                        <!-- Budget -->
-                        <div class="bg-white border border-slate-100 shadow-sm p-4 rounded-2xl flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base shrink-0">
+                        <div class="bg-white border border-slate-200/60 shadow-xs p-4 rounded-xl flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100/60 flex items-center justify-center text-sm shrink-0">
                                 <i class="fas fa-wallet"></i>
                             </div>
-                            <div>
+                            <div class="space-y-0.5">
                                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Budget Alloué</p>
-                                <p class="text-base font-black text-slate-800 font-mono mt-0.5">
-                                    {{ typeof project.budget === 'number' ? project.budget.toLocaleString() : (project.budget ?? '--') }}
-                                    <span class="text-xs font-bold text-slate-400">DH</span>
+                                <p class="text-base font-bold text-slate-800 tracking-tight">
+                                    {{ typeof project.budget === 'number' ? project.budget.toLocaleString('fr-FR') : (project.budget ?? '--') }}
+                                    <span class="text-xs font-semibold text-slate-400 ml-0.5">MAD</span>
                                 </p>
                             </div>
                         </div>
 
-                        <!-- Timeline -->
-                        <div class="bg-white border border-slate-100 shadow-sm p-5 rounded-2xl space-y-4">
-                            <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wide flex items-center gap-2">
-                                <i class="fas fa-calendar-alt text-slate-300"></i> Calendrier du Projet
+                        <div class="bg-white border border-slate-200/60 shadow-xs p-4 rounded-xl space-y-3">
+                            <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wide flex items-center gap-2 border-b border-slate-100 pb-2">
+                                <i class="fas fa-calendar-alt text-slate-300"></i> Calendrier Exécution
                             </h4>
-                            <div class="flex items-center justify-between border-b border-slate-50 pb-2.5">
-                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-400">
+                            <div class="flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-1.5 text-slate-400 font-medium">
                                     <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-                                    <span>Date Début</span>
+                                    <span>Début</span>
                                 </div>
-                                <span class="text-xs font-bold text-slate-700 bg-slate-50 px-2 py-1 rounded-lg">{{ formatDate(project.start_date) }}</span>
+                                <span class="font-bold text-slate-700 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">{{ formatDate(project.start_date) }}</span>
                             </div>
-                            <div class="flex items-center justify-between pt-0.5">
-                                <div class="flex items-center gap-2 text-xs font-semibold text-slate-400">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                                    <span>Date Limite</span>
+                            <div class="flex items-center justify-between text-xs pt-0.5">
+                                <div class="flex items-center gap-1.5 text-slate-400 font-medium">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                                    <span>Limite</span>
                                 </div>
-                                <span class="text-xs font-bold text-slate-700 bg-slate-50 px-2 py-1 rounded-lg">{{ formatDate(project.end_date) }}</span>
+                                <span class="font-bold text-slate-700 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">{{ formatDate(project.end_date) }}</span>
                             </div>
                         </div>
-
-                        <!-- Planning quick link -->
-                        <router-link :to="`/projects/${route.params.id}/planning`"
-                            class="flex items-center gap-3 bg-white border border-slate-100 hover:border-indigo-200 shadow-sm p-4 rounded-2xl transition-all group">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base shrink-0 group-hover:bg-indigo-100 transition-colors">
-                                <i class="fas fa-project-diagram"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Équipe & Gantt</p>
-                                <p class="text-xs font-bold text-indigo-600 mt-0.5">Voir le planning →</p>
-                            </div>
-                        </router-link>
 
                     </div>
                 </div>
 
-                <!-- Status update -->
-                <div class="px-6 sm:px-8 pb-8">
-                    <div class="bg-slate-50/60 border border-slate-100 rounded-2xl p-5 space-y-4">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                            <i class="fas fa-sliders-h text-slate-300"></i> Modifier le statut
+                <div class="px-6 sm:px-7 pb-6">
+                    <div class="bg-slate-50/50 border border-slate-200/60 rounded-xl p-4.5 space-y-3.5">
+                        <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fas fa-sliders-h text-slate-300"></i> Pilotage & Cycle de vie
                         </h3>
+                        
                         <div class="flex flex-wrap gap-2">
                             <button v-for="s in statuses" :key="s"
                                 @click="updateStatus(s)"
                                 :disabled="updatingStatus || project.status === s"
-                                class="text-xs font-bold px-4 py-2 rounded-xl border uppercase tracking-wider transition-all active:scale-95 disabled:cursor-not-allowed"
+                                class="text-[11px] font-bold px-3.5 py-2 rounded-xl border uppercase tracking-wider transition-all active:scale-[0.97] disabled:cursor-not-allowed flex items-center justify-center"
                                 :class="project.status === s
-                                    ? getStatusClass(s) + ' shadow-sm'
-                                    : 'bg-white text-slate-500 border-slate-200 hover:border-indigo-300 hover:text-indigo-600 disabled:opacity-40'"
+                                    ? getStatusClass(s) + ' shadow-xs font-extrabold ring-1 ring-offset-1 ring-slate-100'
+                                    : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300 hover:text-slate-800 disabled:opacity-40'"
                             >
-                                <i v-if="updatingStatus && project.status !== s" class="fas fa-circle-notch animate-spin mr-1 text-[10px]"></i>
+                                <i v-if="updatingStatus && project.status !== s" class="fas fa-circle-notch animate-spin mr-1.5 text-[10px]"></i>
                                 {{ statusLabel(s) }}
                             </button>
                         </div>
+
                         <transition
                             enter-active-class="transition-all duration-300" enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0"
                             leave-active-class="transition-all duration-200" leave-to-class="opacity-0">
                             <div v-if="statusSuccess"
-                                class="flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-xl">
+                                class="flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-100 px-3 py-2 rounded-xl animate-fadeIn"
+                            >
                                 <i class="fas fa-check-circle"></i>
-                                Statut mis à jour avec succès
+                                <span>Statut du projet synchronisé avec succès.</span>
                             </div>
                         </transition>
                     </div>
@@ -241,22 +222,29 @@ onMounted(() => getProject())
 
             </div>
 
-            <!-- Not found -->
-            <div v-else class="bg-white rounded-3xl border border-slate-100 p-12 text-center text-slate-400 shadow-sm">
-                <div class="w-14 h-14 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center text-xl mx-auto mb-4 border border-red-100">
+            <div v-else class="bg-white rounded-2xl border border-slate-200/60 p-12 text-center text-slate-400 shadow-xs animate-fadeIn">
+                <div class="w-12 h-12 bg-rose-50 text-rose-500 rounded-xl flex items-center justify-center text-lg mx-auto mb-4 border border-rose-100">
                     <i class="fas fa-exclamation-triangle"></i>
                 </div>
                 <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wide">Projet Introuvable</h3>
-                <p class="text-xs text-slate-400 max-w-xs mx-auto mt-1">
-                    Impossible de charger les données. Le projet est inexistant ou vous n'avez pas l'autorisation d'y accéder.
+                <p class="text-xs text-slate-400 max-w-xs mx-auto mt-1 leading-relaxed">
+                    Impossible de charger les détails requis. Le jeton d'accès a peut-être expiré ou la ressource n'existe plus.
                 </p>
                 <router-link to="/projects"
                     class="inline-flex items-center gap-2 mt-6 text-xs font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 border border-indigo-100 px-4 py-2.5 rounded-xl transition-all active:scale-95">
                     <i class="fas fa-arrow-left text-[10px]"></i>
-                    Retour aux projets
+                    <span>Retour à la liste</span>
                 </router-link>
             </div>
 
         </div>
     </div>
 </template>
+
+<style scoped>
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(2px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn { animation: fadeIn 0.2s ease-out forwards; }
+</style>

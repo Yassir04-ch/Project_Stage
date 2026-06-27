@@ -40,3 +40,4 @@ export const deleteAbsence = async (id) => {
 
   return response.data;
 };
+

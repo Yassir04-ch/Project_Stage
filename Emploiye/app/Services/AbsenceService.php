@@ -13,22 +13,22 @@ class AbsenceService
 
     public function create(array $data)
     {
-        $absence = Absence::create([
-            'user_id' => $data['user_id'],
-            'date' => $data['date'],
-            'status' => $data['status'],
-            'check_in' => $data['check_in'] ?? null,
-            'check_out' => $data['check_out'] ?? null,
-            'note' => $data['note'] ?? null,
-            'is_justified' => $data['is_justified'] ?? false,
-        ]);
+        if ($data['status'] === 'absent') {
+            $data['check_in'] = null;
+            $data['check_out'] = null;
+        }
 
-        return $absence;
+        return Absence::create($data);
     }
 
-    public function update($id,array $data)
+    public function update($id, array $data)
     {
         $absence = Absence::findOrFail($id);
+
+        if (isset($data['status']) && $data['status'] === 'absent') {
+            $data['check_in'] = null;
+            $data['check_out'] = null;
+        }
 
         $absence->update($data);
 
@@ -38,7 +38,6 @@ class AbsenceService
     public function delete($id)
     {
         $absence = Absence::findOrFail($id);
-
         return $absence->delete();
     }
 }

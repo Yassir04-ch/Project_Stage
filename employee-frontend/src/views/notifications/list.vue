@@ -9,7 +9,6 @@ const notifications = ref([]);
 const loading = ref(false);
 const activeTab = ref("all"); 
 
-// Initialisation clean match dynamic laravel entity structure
 const currentUser = ref({
     id: null,
     name: "Utilisateur",
@@ -26,7 +25,6 @@ const photoUrl = computed(() => {
     return `http://127.0.0.1:8000/storage/${currentUser.value.photo}`;
 });
 
-// Filtrage dyal l-notifications ela hssab l-tab active
 const filteredNotifications = computed(() => {
     if (activeTab.value === "unread") {
         return notifications.value.filter(n => !n.is_read);
@@ -44,7 +42,7 @@ const loadNotifications = async () => {
         const backendUser = responseData.user;
         if (backendUser) {
             currentUser.value = {
-                id: backendUser.id, // ✅ zid id -- khasso bach listener ykhdam
+                id: backendUser.id,
                 name: `${backendUser.firstname || ''} ${backendUser.lastname || ''}`.trim() || backendUser.name || "Utilisateur",
                 role: backendUser.role?.name || "Employé",
                 photo: backendUser.photo || backendUser.avatar || null
@@ -57,7 +55,6 @@ const loadNotifications = async () => {
     }
 };
 
-// ✅ Real-time listener via Pusher / Laravel Echo
 const listenToNotifications = () => {
     const userId = currentUser.value?.id;
 
@@ -75,7 +72,6 @@ const listenToNotifications = () => {
         .listen('.notification.new', (e) => {
             console.log('🔔 NOTIFICATION RECEIVED:', e);
 
-            // ✅ zid notification jdida f top, bla duplication
             const exists = notifications.value.some(n => n.id === e.notification.id);
             if (!exists) {
                 notifications.value.unshift(e.notification);

@@ -221,8 +221,19 @@ onMounted(() => {
               </div>
             </div>
 
-            <div class="shrink-0 flex justify-center pb-1">
-              <button @click="router.push(`/users/edit/${user.id}`)" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-[0_4px_14px_rgba(79,70,229,0.3)] flex items-center gap-2.5 active:scale-95">
+            <div class="shrink-0 flex flex-wrap justify-center items-center gap-3 pb-1">
+              <router-link
+                v-if="user"
+                :to="{
+                  name: 'absences_create',
+                  query: { employee_id: user.id }
+                }"
+                class="bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-[0_4px_14px_rgba(220,38,38,0.3)] flex items-center gap-2.5 active:scale-95"
+              >
+                <i class="fas fa-calendar-times text-[13px]"></i> Ajouter une absence
+              </router-link>
+
+              <button @click="router.push(`/users/edit/${user.id}`)" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-[0_4px_14px_rgba(79,70,229,0.3)] flex items-center gap-2.5 active:scale-95">
                 <i class="fas fa-sliders text-[13px]"></i> Modifier le profil
               </button>
             </div>

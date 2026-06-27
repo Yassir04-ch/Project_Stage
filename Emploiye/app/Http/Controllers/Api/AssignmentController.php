@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreAssignmentRequest;
 use App\Models\Assignment;
 use App\Models\Project;
 use App\Services\AssignmentService;
@@ -21,14 +22,10 @@ class AssignmentController extends Controller
         ]);
     }
 
-    public function store(Request $request, Project $project)
+    public function store(StoreAssignmentRequest $request, Project $project)
     {
-        $data = $request->validate([
-            'employee_id'    => 'required|exists:users,id',
-            'role_in_project'=> 'required|string|max:255',
-            'start_date'     => 'required|date',
-            'end_date'       => 'nullable|date|after_or_equal:start_date',
-        ]);
+        
+        $data = $request->validated();
 
         try {
 

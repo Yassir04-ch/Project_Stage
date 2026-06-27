@@ -11,7 +11,6 @@ const loading = ref(false);
 
 const unreadCount = ref(0);
 
-// State for Dark/Light Mode toggle
 const isDark = ref(localStorage.getItem("theme") !== "light");
 
 const toggleTheme = () => {
@@ -76,7 +75,7 @@ const listenToNotifications = () => {
 
   window.Echo.private(`notifications.${userId}`)
     .listen('.notification.new', (e) => {
-      unreadCount.value++; // ✅ zid count automatiquement
+      unreadCount.value++; 
     });
 };
 
