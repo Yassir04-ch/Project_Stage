@@ -386,7 +386,11 @@ onMounted(async () => {
         <div v-else-if="projectEmployees && projectEmployees.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div v-for="emp in projectEmployees" :key="emp.id" :class="isDark ? 'bg-slate-800/30 border-slate-700/40' : 'bg-slate-50 border-slate-100'" class="p-3 rounded-xl border flex items-center gap-3">
             <div class="w-9 h-9 rounded-lg bg-sky-500/10 text-sky-500 flex items-center justify-center font-black text-sm shrink-0">
-              <i class="fas fa-user"></i>
+                <router-link 
+                    :to="`/getUser/${emp.id || emp._id}`" 
+                    class="flex items-center gap-3 group cursor-pointer">
+                <i class="fas fa-user"></i>
+                </router-link>
             </div>
             <div>
               <h5 class="text-xs font-bold uppercase" :class="isDark ? 'text-slate-200' : 'text-slate-800'">{{ emp.firstname }} {{ emp.lastname }}</h5>
