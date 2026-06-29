@@ -81,6 +81,17 @@ class AssignmentController extends Controller
         }
     }
 
+    public function myAssignments(Request $request)
+    {
+        $employee = $request->user();
+
+        return response()->json([
+            'success' => true,
+            'data'    => $this->service->getEmployeeAssignments($employee)
+        ]);
+    }
+
+
     public function destroy(Assignment $assignment)
     {
         try {

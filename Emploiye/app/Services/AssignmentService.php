@@ -159,4 +159,47 @@ class AssignmentService
             )
         );
     }
+
+    public function getEmployeeAssignments(User $employee)
+    {
+        $assignments = Assignment::where('employee_id', $employee->id)
+            ->with('project')
+            ->orderByDesc('start_date')
+            ->get();
+
+        $today = now()->toDateString();
+
+        $current = Assignment::where('employee_id', $employee->id)
+            ->whereHas('project', fn ($q) => $q->where('status', 'active'))
+            ->where(function ($q) use ($today) {
+                $q->whereNull('end_date')
+                ->orWhere('end_date', '>=', $today);
+            })
+            ->with('project')
+            ->orderBy('start_date')
+            ->get();
+
+        $upcoming = Assignment::where('employee_id', $employee->id)
+            ->where('start_date', '>', $today)
+            ->with('project')
+            ->orderBy('start_date')
+            ->get();
+
+        $past = Assignment::where('employee_id', $employee->id)
+            ->whereNotNull('end_date')
+            ->where('end_date', '<', $today)
+            ->with('project')
+            ->orderByDesc('end_date')
+            ->get();
+
+        return [
+            'employee'    => $employee->only('id', 'firstname', 'lastname', 'email'),
+            'total'       => $assignments->count(),
+            'current'     => $current,
+            'upcoming'    => $upcoming,
+            'past'        => $past,
+            'assignments' => $assignments,
+        ];
+    }
+    
 }

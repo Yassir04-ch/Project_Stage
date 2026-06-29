@@ -146,9 +146,14 @@ onUnmounted(() => {
             <button @click="router.push('/absences')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
             <i class="fa-regular fa-calendar-minus text-sm opacity-60"></i> <span class="hidden md:inline">Absences</span>
           </button>
-          <button @click="router.push('/assignments')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-            <i class="fas fa-folder text-sm opacity-60"></i> <span class="hidden md:inline">Projets</span>
+          <button @click="router.push('/Myassignement')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+            <i class="fas fa-folder text-sm opacity-60"></i> <span class="hidden md:inline">Assignement</span>
           </button>
+
+          <button @click="router.push('/projects')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+            <i class="fa-regular fa-calendar-minus text-sm opacity-60"></i> <span class="hidden md:inline">Projects</span>
+          </button>
+
           <button class="px-4 py-2.5 rounded-lg text-xs font-black bg-indigo-600 text-white shadow-[0_4px_12px_rgba(79,70,229,0.25)] flex items-center gap-2">
             <i class="fas fa-user text-sm"></i> <span class="hidden md:inline">Mon Profile</span>
           </button>

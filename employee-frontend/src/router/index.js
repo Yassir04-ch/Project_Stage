@@ -17,6 +17,7 @@ import Profile from '@/views/auth/me.vue'
 import UserEditView from '@/views/employees/Edit.vue'
 import Skills from '@/views/skills/Skills.vue'
 import Notifications from '@/views/notifications/list.vue'
+import Myassignement from '@/views/auth/assignment.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -119,7 +120,14 @@ const router = createRouter({
     name: 'notifications',
     component: Notifications,
     meta: { requiresAuth: true }
-}
+  },
+  {
+    path: '/Myassignement',
+    name: 'Myassignement',
+    component: Myassignement,
+    meta: { requiresAuth: true }
+  },
+
 ]
 });
 

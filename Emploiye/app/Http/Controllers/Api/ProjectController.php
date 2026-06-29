@@ -79,5 +79,29 @@ class ProjectController extends Controller{
         return response()->json(['message' => 'Project deleted successfully']);
     }
 
+    public function getProjectEmployees($projectId)
+    {
+        $project = Project::with(['assignments.employee'])->findOrFail($projectId);
+
+        $employeesList = [];
+
+        foreach ($project->assignments as $assignment) {
+            if ($assignment->employee) {
+                $employeesList[] = [
+                    'id'          => $assignment->employee->id,
+                    'firstname'   => $assignment->employee->firstname,
+                    'lastname'    => $assignment->employee->lastname,
+                    'email'       => $assignment->employee->email,
+                    'role_in_project' => $assignment->role_in_project, 
+                ];
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'data'    => $employeesList
+        ]);
+    }
+
 
 }

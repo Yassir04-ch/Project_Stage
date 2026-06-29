@@ -48,6 +48,14 @@ export default {
         )
 
         return response.data
+    },
+
+    async getMyAssignments() {
+        const response = await api.get(
+            `/my-assignments`,
+            authHeaders()
+        )
+        return response 
     }
 
 }

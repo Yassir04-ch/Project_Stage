@@ -44,6 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('assignments/{assignment}', [AssignmentController::class, 'update']);
     Route::delete('assignments/{assignment}', [AssignmentController::class, 'destroy']);
 
+    Route::get('/my-assignments', [AssignmentController::class, 'myAssignments']);
+
     Route::get('/absences', [AbsenceController::class, 'index']);
     Route::post('/absences', [AbsenceController::class, 'store']);
     Route::put('/absences/{id}', [AbsenceController::class, 'update']);
@@ -76,5 +78,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/broadcasting/auth', function (\Illuminate\Http\Request $request) {
         return Broadcast::auth($request);
     });
+
+    Route::get('/projects/{id}/employees', [ProjectController::class, 'getProjectEmployees']);
 
 });
