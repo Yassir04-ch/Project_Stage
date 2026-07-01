@@ -9,7 +9,6 @@ const loading = ref(false)
 const errorMsg = ref("")
 const successMsg = ref("")
 
-// Récupération des données depuis l'URL de façon fluide
 const employeeName = ref(route.query.employee_name || route.params.employee_name || 'Collaborateur')
 
 const form = ref({
@@ -281,13 +280,3 @@ onMounted(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-fadeIn {
-  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-</style>

@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Justification;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
 
 class JustificationService
 {
@@ -14,15 +16,18 @@ class JustificationService
 
     public function create(array $data)
     {
+        $user = auth()->user();
+
+        $data['status'] = 'pending';
+        $data['justified_by'] = $user->id;
+
         if (isset($data['proof_file'])) {
             $data['proof_file'] = $data['proof_file']
                 ->store('justifications', 'public');
         }
 
-        $data['status'] = 'pending';
-
         return Justification::create($data)
-            ->load(['absence','justifiedBy']);
+            ->load(['absence', 'justifiedBy']);
     }
 
     public function update($id, array $data)

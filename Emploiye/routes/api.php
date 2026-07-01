@@ -51,12 +51,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/absences/{id}', [AbsenceController::class, 'update']);
     Route::delete('/absences/{id}', [AbsenceController::class, 'destroy']);
 
+    Route::get('/my-absences', [AbsenceController::class, 'myAbsences']);
+
     Route::get('/justifications/absence/{absenceId}', [JustificationController::class, 'getByAbsence']);
     Route::get('/justifications', [JustificationController::class, 'index']);
     Route::post('/justifications', [JustificationController::class, 'store']);
     Route::put('/justifications/{id}', [JustificationController::class, 'update']);
     Route::delete('/justifications/{id}', [JustificationController::class, 'destroy']);
-    Route::post('/justifications/{id}/status', [JustificationController::class, 'updateStatus']);
+    Route::put('/justifications/{id}/status', [JustificationController::class, 'updateStatus']);
 
     Route::get('/skills', [SkillController::class, 'index']);
     Route::post('/skills', [SkillController::class, 'store']);

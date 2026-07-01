@@ -25,7 +25,7 @@ class AbsenceRequest extends FormRequest
         return [
             'user_id'      => 'required|exists:users,id',
             'date'         => 'required|date|before_or_equal:today',
-            'status'       => 'required|in:present,absent,late,half_day',
+            'status'       => 'nullable|in:present,absent,late,half_day',
             'check_in'     => 'nullable|required_if:status,present,late,half_day|date_format:H:i',
             'check_out'    => 'nullable|date_format:H:i|after:check_in',
             'note'         => 'nullable|string|max:500',

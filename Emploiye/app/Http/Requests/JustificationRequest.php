@@ -17,8 +17,6 @@ class JustificationRequest extends FormRequest
 
             'absence_id' => 'required|exists:absences,id',
 
-            'justified_by' => 'required|exists:users,id',
-
             'type' => 'required|string|in:medical,family,mission,other',
 
             'reason' => 'required|string|max:500',

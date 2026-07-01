@@ -18,6 +18,8 @@ import UserEditView from '@/views/employees/Edit.vue'
 import Skills from '@/views/skills/Skills.vue'
 import Notifications from '@/views/notifications/list.vue'
 import Myassignement from '@/views/auth/assignment.vue'
+import MyAbsences from '@/views/auth/absences.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -127,6 +129,12 @@ const router = createRouter({
     component: Myassignement,
     meta: { requiresAuth: true }
   },
+  {
+    path: '/myabsences',
+    name: 'my.absences',
+    component: MyAbsences,
+    meta: { requiresAuth: true }
+  }
 
 ]
 });

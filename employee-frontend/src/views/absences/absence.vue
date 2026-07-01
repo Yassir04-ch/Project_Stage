@@ -48,7 +48,7 @@ const deleteAbsence = async (id) => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    getData(); // Reload matrix
+    getData(); 
   } catch (err) {
     console.error(err.response?.data);
   }

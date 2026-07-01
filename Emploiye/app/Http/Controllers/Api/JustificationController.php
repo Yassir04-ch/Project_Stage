@@ -39,16 +39,14 @@ class JustificationController extends Controller
     }
 
 
-    
     public function store(JustificationRequest $request)
     {
-
         $justification = $this->justificationService->create($request->validated());
 
         return response()->json([
             "message" => "Justification created",
             "justification" => $justification
-        ],201);
+        ], 201);
     }
 
     
@@ -66,11 +64,11 @@ class JustificationController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        $justification = Justification::findOrFail($id);
-
         $request->validate([
             'status' => 'required|in:approved,rejected'
         ]);
+
+        $justification = Justification::with('absence')->findOrFail($id);
 
         $justification->status = $request->status;
         $justification->save();
@@ -78,13 +76,18 @@ class JustificationController extends Controller
         if ($request->status === 'approved') {
             $justification->absence->update([
                 'is_justified' => true,
-                'status' => 'justified'
+            ]);
+        }
+
+        if ($request->status === 'rejected') {
+            $justification->absence->update([
+                'is_justified' => false,
             ]);
         }
 
         return response()->json([
-            'message' => 'Status updated',
-            'justification' => $justification->load('absence')
+            'message' => 'Status updated successfully',
+            'justification' => $justification->fresh()->load('absence'),
         ]);
     }
 

@@ -86,16 +86,23 @@ class UserService
         $user = User::findOrFail($id);
 
         if (isset($data['photo']) && $data['photo'] instanceof \Illuminate\Http\UploadedFile) {
-            
             if ($user->photo && Storage::disk('public')->exists($user->photo)) {
                 Storage::disk('public')->delete($user->photo);
             }
-
-            $path = $data['photo']->store('users', 'public');
-            $data['photo'] = $path;
+            $data['photo'] = $data['photo']->store('photos/employees', 'public'); // match m3a store setup
         } else {
             unset($data['photo']);
         }
+
+        if (isset($data['skills']) && is_array($data['skills'])) {
+            $sync = [];
+            foreach ($data['skills'] as $skill) {
+                $sync[$skill['id']] = ['level' => $skill['level']];
+            }
+            $user->skills()->sync($sync);
+        }
+
+        unset($data['skills']);
 
         $user->update($data);
 

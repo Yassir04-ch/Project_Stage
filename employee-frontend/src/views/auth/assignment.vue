@@ -23,11 +23,9 @@ const selectedAssignment = ref(null);
 const projectEmployees = ref([]);
 const loadingEmployees = ref(false);
 
-// Fonction bach t-jbd les employes li m-assigniyin l dak l-projet ( mn service/api )
 const fetchProjectTeam = async (projectId) => {
   loadingEmployees.value = true;
   try {
-    // T9der t-bdel '/projects/' + projectId + '/employees' b endpoint dialek f backend
     const response = await api.get(`/projects/${projectId}/employees`);
     projectEmployees.value = response.data.data || response.data;
   } catch (err) {
@@ -42,7 +40,6 @@ const openDetailsModal = async (assignment) => {
   selectedAssignment.value = assignment;
   isModalOpen.value = true;
   
-  // N-3ayto l-fonction bch t-jbd l-a3da'
   if (assignment.project_id) {
     await fetchProjectTeam(assignment.project_id);
   }
@@ -157,8 +154,8 @@ onMounted(async () => {
             </span>
           </button>
           
-          <button @click="router.push('/absences')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-            <i class="fa-regular fa-calendar-minus text-sm opacity-60"></i> <span class="hidden md:inline">Absences</span>
+          <button @click="router.push('/myabsences')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+            <i class="fa-regular fa-calendar-minus text-sm opacity-60"></i> <span class="hidden md:inline">Mes Projets</span>
           </button>
           
           <button class="px-4 py-2.5 rounded-lg text-xs font-black bg-sky-600 text-white shadow-[0_4px_12px_rgba(2,132,199,0.25)] flex items-center gap-2">

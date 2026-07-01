@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+use Illuminate\Http\Request;
 
 use App\Models\Absence;
 
@@ -19,6 +20,14 @@ class AbsenceService
         }
 
         return Absence::create($data);
+    }
+
+    public function getMyAbsences(int $userId)
+    {
+        return Absence::where('user_id', $userId)
+            ->with('justification')
+            ->latest('date')
+            ->get();
     }
 
     public function update($id, array $data)

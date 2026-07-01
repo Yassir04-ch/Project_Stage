@@ -60,7 +60,7 @@ class UserController extends Controller
     public function activerUser($id)
     {
         $user = User::findOrFail($id);
-        $this->userService->activerUser($user); // Fixed calling context
+        $this->userService->activerUser($user);
         return response()->json([
             'success' => true,
             'message' => 'le compte du utilisateur est activée.',
@@ -93,6 +93,10 @@ class UserController extends Controller
             'date_naissance' => 'nullable|date',
             'date_embauche'  => 'nullable|date',
             'photo'          => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
+            
+            'skills'         => 'nullable|array',
+            'skills.*.id'    => 'required_with:skills|exists:skills,id',
+            'skills.*.level' => 'required_with:skills|in:beginner,intermediate,advanced',
         ]);
 
         try {
@@ -101,7 +105,7 @@ class UserController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Profil mis à jour avec succès',
-                'user'    => $user
+                'user'    => $user->load('skills') 
             ], 200);
 
         } catch (Exception $e) {

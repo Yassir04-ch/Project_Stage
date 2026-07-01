@@ -143,8 +143,8 @@ onUnmounted(() => {
                 {{ unreadCount > 9 ? '9+' : unreadCount }}
             </span>
             </button>
-            <button @click="router.push('/absences')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-            <i class="fa-regular fa-calendar-minus text-sm opacity-60"></i> <span class="hidden md:inline">Absences</span>
+            <button @click="router.push('/myabsences')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+            <i class="fa-regular fa-calendar-minus text-sm opacity-60"></i> <span class="hidden md:inline">Mes Absences</span>
           </button>
           <button @click="router.push('/Myassignement')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
             <i class="fas fa-folder text-sm opacity-60"></i> <span class="hidden md:inline">Assignement</span>
