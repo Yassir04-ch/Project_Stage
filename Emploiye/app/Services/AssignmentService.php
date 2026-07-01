@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\Mail;
 
 class AssignmentService
 {
+
+    public NotificationSevice $notify;
+
+    public function __construct()
+    {
+        $this->notify = new NotificationSevice();
+    }
+
     public function getProjectAssignments(Project $project)
     {
         $assignments = $project->assignments()
@@ -76,7 +84,7 @@ class AssignmentService
 
         $employee = User::findOrFail($data['employee_id']);
 
-        $this->notifyUser(
+        $this->notify->notifyUser(
             $employee,
             'project_assigned',
             'Nouvelle affectation',
@@ -100,7 +108,7 @@ class AssignmentService
 
         if ($assignment->employee) {
 
-            $this->notifyUser(
+            $this->notify->notifyUser(
                 $assignment->employee,
                 'assignment_updated',
                 'Affectation modifiée',
@@ -117,13 +125,12 @@ class AssignmentService
         );
     }
 
-    public function deleteAssignment(
-        Assignment $assignment
-    ) {
+    public function deleteAssignment(Assignment $assignment)
+    {
         $employee = $assignment->employee;
 
         if ($employee) {
-            $this->notifyUser(
+            $this->notify->notifyUser(
                 $employee,
                 'assignment_deleted',
                 'Affectation supprimée',
@@ -138,27 +145,6 @@ class AssignmentService
         return $assignment->delete();
     }
 
-    private function notifyUser(User $user,string $type,string $title,string $message,array $data = []): void 
-    {
-
-        $notification = Notification::create([
-            'user_id' => $user->id,
-            'type'    => $type,
-            'title'   => $title,
-            'message' => $message,
-            'data'    => $data,
-            'is_read' => false,
-        ]);
-
-        broadcast(new NotificationSent($notification))->toOthers();
-
-        Mail::to($user->email)->send(
-            new EmployeeNotificationMail(
-                $title,
-                $message
-            )
-        );
-    }
 
     public function getEmployeeAssignments(User $employee)
     {
@@ -201,5 +187,5 @@ class AssignmentService
             'assignments' => $assignments,
         ];
     }
-    
+
 }

@@ -55,9 +55,7 @@ class NotificationController extends Controller
 
     public function destroy($id, Request $request)
     {
-        $notification = $request->user()
-            ->notifications()
-            ->findOrFail($id);
+        $notification = $request->user()->notifications()->findOrFail($id);
 
         $notification->delete();
 

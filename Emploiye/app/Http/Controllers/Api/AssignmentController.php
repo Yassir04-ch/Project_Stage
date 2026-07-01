@@ -29,10 +29,7 @@ class AssignmentController extends Controller
 
         try {
 
-            $assignment = $this->service->createAssignment(
-                $project,
-                $data
-            );
+            $assignment = $this->service->createAssignment($project,$data);
 
             return response()->json([
                 'success' => true,

@@ -2,13 +2,22 @@
 
 namespace App\Services;
 
+use App\Models\Absence;
 use App\Models\Justification;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 
 class JustificationService
 {
+
+    public NotificationSevice $notify;
+
+    public function __construct()
+    {
+        $this->notify = new NotificationSevice();
+    }
+
     public function getAll()
     {
         return Justification::with(['absence','justifiedBy'])->get();
@@ -22,32 +31,30 @@ class JustificationService
         $data['justified_by'] = $user->id;
 
         if (isset($data['proof_file'])) {
-            $data['proof_file'] = $data['proof_file']
-                ->store('justifications', 'public');
+            $data['proof_file'] = $data['proof_file']->store('justifications', 'public');
         }
 
-        return Justification::create($data)
-            ->load(['absence', 'justifiedBy']);
-    }
+        $justification = Justification::create($data);
 
-    public function update($id, array $data)
-    {
-        $justification = Justification::findOrFail($id);
-
-        if (isset($data['proof_file'])) {
-
-            if ($justification->proof_file) {
-                Storage::disk('public')
-                    ->delete($justification->proof_file);
-            }
-
-            $data['proof_file'] = $data['proof_file']
-                ->store('justifications', 'public');
+        $admins = User::whereHas('role', function ($query) {
+             $query->where('name', 'Administrateur');
+           })->get();
+           
+        foreach ($admins as $admin) {
+            $this->notify->notifyUser(
+                $admin,
+                'justification_created',
+                'Nouvelle justification',
+                "{$user->first_name} {$user->last_name} a soumis une justification.",
+                [
+                    'justification_id' => $justification->id,
+                    'absence_id' => $justification->absence_id,
+                    'employee_id' => $user->id,
+                ]
+            );
         }
 
-        $justification->update($data);
-
-        return $justification->load(['absence','justifiedBy']);
+        return $justification->load(['absence', 'justifiedBy']);
     }
 
     public function delete($id)

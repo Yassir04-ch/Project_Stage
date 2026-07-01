@@ -4,9 +4,18 @@ namespace App\Services;
 use Illuminate\Http\Request;
 
 use App\Models\Absence;
+use App\Models\User;
 
 class AbsenceService
 {
+
+    public NotificationSevice $notify;
+
+    public function __construct()
+    {
+        $this->notify = new NotificationSevice();
+    }
+
     public function getAll()
     {
         return Absence::with('user.role')->latest()->get();
@@ -19,9 +28,27 @@ class AbsenceService
             $data['check_out'] = null;
         }
 
-        return Absence::create($data);
-    }
+        $absence = Absence::create($data);
 
+        $employee = User::find($data['user_id']);
+
+        if ($employee) {
+            $this->notify->notifyUser(
+                $employee,
+                'absence_created',
+                'Nouvelle absence',
+                'Une absence a été enregistrée pour vous.',
+                [
+                    'absence_id' => $absence->id,
+                    'date' => $absence->date,
+                    'status' => $absence->status,
+                ]
+            );
+        }
+
+        return $absence;
+    }
+    
     public function getMyAbsences(int $userId)
     {
         return Absence::where('user_id', $userId)
