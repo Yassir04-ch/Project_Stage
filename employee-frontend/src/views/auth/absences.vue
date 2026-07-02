@@ -162,11 +162,16 @@ onUnmounted(() => stopListening());
 
         <button
           v-if="user?.role?.name === 'Administrateur'"
-          @click="router.push('/dashboard')"
+          @click="router.push('/users')"
           :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'"
           class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
           <i class="fas fa-gauge text-sm opacity-60"></i>
           <span class="hidden md:inline">Dashboard</span>
+        </button>
+
+        <button @click="router.push('/emploiyee')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+          <i class="fas fa-user text-sm"></i>
+          <span class="hidden md:inline">Emploiyée</span>
         </button>
 
         <button @click="router.push('/profile')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">

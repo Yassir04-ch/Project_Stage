@@ -35,7 +35,7 @@ class AssignmentController extends Controller
                 'success' => true,
                 'message' => 'Employé affecté avec succès.',
                 'data'    => $assignment
-            ], 201);
+            ], 201); 
 
         } catch (\Exception $e) {
 

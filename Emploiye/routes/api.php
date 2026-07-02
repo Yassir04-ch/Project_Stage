@@ -30,6 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/{id}/activer', [UserController::class, 'activerUser']);
     Route::put('/users/{id}/desactiver', [UserController::class, 'desactiverUser']);
 
+    Route::get('/emploiyee', [UserController::class, 'emploiyee']);
+
     Route::get('/stats', [AdminController::class, 'stats']);
 
     Route::post('/projects', [ProjectController::class, 'store']);

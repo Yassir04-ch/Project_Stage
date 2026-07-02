@@ -20,6 +20,7 @@ import Notifications from '@/views/notifications/list.vue'
 import Myassignement from '@/views/auth/assignment.vue'
 import MyAbsences from '@/views/auth/absences.vue'
 import AllProjects from '@/views/projects/index.vue'
+import AllEmploiyee from '@/views/employees/List.vue'
 
 
 const router = createRouter({
@@ -140,6 +141,12 @@ const router = createRouter({
     path: '/allprojects',
     name: 'allprojects',
     component: AllProjects,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/emploiyee',
+    name: 'emploiyee',
+    component: AllEmploiyee,
     meta: { requiresAuth: true }
   }
 

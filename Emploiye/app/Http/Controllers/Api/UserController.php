@@ -29,6 +29,19 @@ class UserController extends Controller
         ]);
     }
 
+    public function emploiyee(Request $request)
+    {
+        $employees = User::with('role')
+            ->when($request->filled('role'), function ($query) use ($request) {
+                $query->whereHas('role', function ($q) use ($request) {
+                    $q->where('name', $request->role);
+                });
+            })
+            ->paginate(8);
+
+        return response()->json($employees);
+    }
+
     public function show(User $user): JsonResponse
     {
         return response()->json([

@@ -23,11 +23,7 @@ const submitlogin = async () => {
     const user = response.data.data.user;
     console.log(user);
 
-    if (user.role.id == 1) {
-      router.push("/users");
-    } else {
-      router.push("/profile");
-    }
+    router.push("/profile");
 
   } catch (error) {
     if (error.response?.status === 422) {
