@@ -134,47 +134,66 @@ onMounted(async () => {
 
   <div :class="isDark ? 'bg-slate-950 text-slate-400' : 'bg-slate-50 text-slate-600'" class="min-h-screen font-sans antialiased w-full flex flex-col selection:bg-indigo-500/30 selection:text-white transition-colors duration-300">
 
-    <nav :class="isDark ? 'bg-slate-950/40 border-slate-900/80 text-slate-200' : 'bg-white/60 border-slate-200 text-slate-800'" class="backdrop-blur-xl px-8 py-4 flex justify-between items-center shadow-2xl border-b shrink-0 sticky top-0 z-50 w-full transition-colors duration-300">
-      <div class="flex items-center gap-3.5">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-purple-500 flex items-center justify-center text-white text-xl font-black shadow-[0_4px_12px_rgba(56,189,248,0.3)] italic">
-          D
+   <nav :class="isDark ? 'bg-slate-950/40 border-slate-900/80 text-slate-200' : 'bg-white/60 border-slate-200 text-slate-800'" class="backdrop-blur-xl px-8 py-4 flex justify-between items-center shadow-2xl border-b shrink-0 sticky top-0 z-50 w-full transition-colors duration-300">
+    <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white text-xl font-black shadow-[0_4px_12px_rgba(99,102,241,0.3)] italic">
+        D
         </div>
         <div>
-          <h1 :class="isDark ? 'text-white' : 'text-slate-900'" class="text-base font-black tracking-wider uppercase italic leading-none">DataXpress</h1>
-          <p class="text-[10px] text-sky-500 dark:text-sky-400 font-bold tracking-widest uppercase mt-1">Workspace Hub</p>
+        <h1 :class="isDark ? 'text-white' : 'text-slate-900'" class="text-base font-black tracking-wider uppercase italic leading-none">DataXpress</h1>
+        <p class="text-[10px] text-indigo-500 dark:text-indigo-400 font-bold tracking-widest uppercase mt-1">Workspace Hub</p>
         </div>
-      </div>
+    </div>
 
-      <div class="flex items-center gap-3">
+    <div class="flex items-center gap-3">
         <div :class="isDark ? 'bg-slate-900/40 border-slate-800/60' : 'bg-slate-100 border-slate-200'" class="flex items-center gap-1 p-1.5 rounded-xl border">
-          <button @click="router.push('/notifications')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="relative px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-            <i class="fas fa-bell text-sm opacity-60"></i> <span class="hidden md:inline">Notifications</span>
-            <span v-if="unreadCount > 0" class="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white dark:border-slate-950">
-              {{ unreadCount > 9 ? '9+' : unreadCount }}
-            </span>
-          </button>
-          
-          <button @click="router.push('/myabsences')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-            <i class="fa-regular fa-calendar-minus text-sm opacity-60"></i> <span class="hidden md:inline">Mes Projets</span>
-          </button>
-          
-          <button class="px-4 py-2.5 rounded-lg text-xs font-black bg-sky-600 text-white shadow-[0_4px_12px_rgba(2,132,199,0.25)] flex items-center gap-2">
-            <i class="fas fa-folder text-sm"></i> <span class="hidden md:inline">Assignement</span>
-          </button>
 
-         <button @click="router.push('/projects')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-            <i class="fa-regular fa-calendar-minus text-sm opacity-60"></i> <span class="hidden md:inline">Projects</span>
-          </button>
-          
+        <!-- Notifications -->
+        <button @click="router.push('/notifications')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="relative px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+            <i class="fas fa-bell text-sm opacity-60"></i>
+            <span class="hidden md:inline">Notifications</span>
+            <span v-if="unreadCount > 0"
+            class="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white dark:border-slate-950">
+            {{ unreadCount > 9 ? '9+' : unreadCount }}
+            </span>
+        </button>
+
+        <!-- Mes Absences -->
+        <button @click="router.push('/myabsences')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+            <i class="fa-regular fa-calendar-minus text-sm opacity-60"></i>
+            <span class="hidden md:inline">Mes Absences</span>
+        </button>
+
+        <!-- Assignement -->
+        <button class="px-4 py-2.5 rounded-lg text-xs font-black bg-sky-600 text-white shadow-[0_4px_12px_rgba(2,132,199,0.25)] flex items-center gap-2">
+                <i class="fas fa-folder text-sm"></i> <span class="hidden md:inline">Assignement</span>
+        </button>
+
+        <!-- Projects -->
+        <button @click="router.push('/allprojects')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+            <i class="fas fa-diagram-project text-sm opacity-60"></i>
+            <span class="hidden md:inline">Projects</span>
+        </button>
+
+        <button
+            v-if="user?.role?.name === 'Administrateur'"
+            @click="router.push('/dashboard')"
+            :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'"
+            class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+            <i class="fas fa-gauge text-sm opacity-60"></i>
+            <span class="hidden md:inline">Dashboard</span>
+        </button>
+
           <button @click="router.push('/profile')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
             <i class="fas fa-user text-sm opacity-60"></i> <span class="hidden md:inline">Mon Profile</span>
           </button>
+
         </div>
 
-        <button @click="toggleTheme" :class="isDark ? 'bg-slate-900 text-amber-400 border-slate-800' : 'bg-white text-sky-600 border-slate-200 shadow-sm'" class="w-10 h-10 rounded-xl border flex items-center justify-center transition-all active:scale-95 text-sm">
-          <i :class="isDark ? 'fas fa-sun' : 'fas fa-moon'"></i>
+        <button @click="toggleTheme" :class="isDark ? 'bg-slate-900 text-amber-400 border-slate-800' : 'bg-white text-indigo-600 border-slate-200 shadow-sm'" class="w-10 h-10 rounded-xl border flex items-center justify-center transition-all active:scale-95 text-sm">
+        <i :class="isDark ? 'fas fa-sun' : 'fas fa-moon'"></i>
         </button>
-      </div>
+    </div>
     </nav>
 
     <main class="flex-1 w-full flex flex-col justify-start relative overflow-hidden p-8 md:p-12">

@@ -50,16 +50,20 @@ class JustificationController extends Controller
     }
 
     
-    public function update(JustificationRequest $request,int $id)
+    public function update(JustificationRequest $request, int $id)
     {
+        $data = $request->validated();
 
-        $justification = $this->justificationService
-            ->update($id,$request->validated());
+        if ($request->hasFile('proof_file')) {
+            $data['proof_file'] = $request->file('proof_file');
+        }
+
+        $justification = $this->justificationService->update($id, $data);
 
         return response()->json([
-            "message" => "Justification updated",
+            "message"       => "Justification updated",
             "justification" => $justification
-        ],200);
+        ], 200);
     }
 
     public function updateStatus(Request $request, $id)

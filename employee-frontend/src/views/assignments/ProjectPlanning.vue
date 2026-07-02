@@ -15,7 +15,7 @@ const freeEmployees = ref([])
 const busyEmployees = ref([])
 
 const showForm = ref(false)
-const mobileMenuOpen = ref(false) // Dynamic state for responsive nav drawer
+const mobileMenuOpen = ref(false)
 
 const flashMsg = ref('')
 const flashType = ref('success')
@@ -142,262 +142,267 @@ onMounted(fetchData)
 <template>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <div class="min-h-screen bg-[#f8fafc] text-slate-600 font-sans antialiased flex flex-col md:flex-row relative">
+  <div class="min-h-screen bg-slate-50 text-slate-700 font-sans antialiased relative selection:bg-indigo-100 selection:text-indigo-900">
     
-    <div class="absolute top-0 right-0 w-[800px] h-[350px] bg-gradient-to-b from-indigo-50/30 via-slate-50/5 to-transparent rounded-full blur-3xl -z-10 pointer-events-none"></div>
+    <!-- Background Decoration -->
+    <div class="absolute top-0 inset-x-0 h-64 bg-gradient-to-b from-indigo-100/40 to-transparent pointer-events-none -z-10"></div>
 
-    <aside class="hidden md:flex flex-col w-64 bg-slate-900 text-slate-400 shrink-0 min-h-screen border-r border-slate-800 shadow-xl relative z-30">
-      <div class="p-6 border-b border-slate-800 flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
-            D
-          </div>
-          <div>
-            <h1 class="text-lg font-black tracking-tight text-white uppercase italic">DATAXPRESS</h1>
-            <p class="text-xs text-indigo-400 font-bold tracking-wider uppercase">Workspace Admin</p>
-          </div>
+    <main class="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto z-10 relative">
+      
+      <!-- Top Navigation Action -->
+      <div class="mb-8">
+        <button 
+          @click="$router.back()" 
+          class="inline-flex items-center gap-2 px-3 py-2 -ml-3 text-sm font-semibold text-slate-500 hover:text-indigo-600 hover:bg-white hover:shadow-sm rounded-lg transition-all group"
+        >
+          <i class="fas fa-arrow-left text-xs group-hover:-translate-x-1 transition-transform"></i>
+          <span>Retour aux projets</span>
+        </button>
       </div>
 
-      <nav class="space-y-1.5 p-4 flex-1">
-        <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 font-semibold transition-all text-sm group text-left">
-          <span class="text-base opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all">🏠</span>
-          <span>Dashboard</span>
-        </button>
-
-        <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 font-semibold transition-all text-sm group text-left">
-          <span class="text-base opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all">📁</span>
-          <span>Projects</span>
-        </button>
-
-        <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-indigo-600 text-white font-semibold shadow-md shadow-indigo-600/10 group transition-all text-sm text-left">
-          <span class="text-base opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all">👥</span>
-          <span>Utilisateurs</span>
-        </button>
-
-        <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 font-semibold transition-all text-sm group text-left">
-          <i class="fa-regular fa-calendar-minus text-base w-5 group-hover:scale-110 transition-transform"></i>
-          <span>Absences</span>
-        </button>
-      </nav>
-
-      <div class="p-4 border-t border-slate-800 bg-slate-950/40 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-white shadow-inner">
-          YC
-        </div>
-        <div class="overflow-hidden flex-1">
-          <h4 class="text-xs font-bold text-slate-200 truncate leading-none">Administrateur HR</h4>
-          <p class="text-[10px] text-slate-500 truncate mt-1">session@youcode.ma</p>
-        </div>
-      </div>
-    </aside>
-
-    <header class="md:hidden bg-slate-900 text-slate-400 border-b border-slate-800 flex items-center justify-between px-5 py-4 shrink-0 relative z-30 shadow-md">
-      <div class="flex items-center gap-3">
-        <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white text-xs font-black">HR</div>
-        <h2 class="text-white font-bold text-xs tracking-tight">Enterprise Suite</h2>
-      </div>
-      <button @click="mobileMenuOpen = !mobileMenuOpen" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-800 text-slate-200 transition-colors">
-        <i class="fas" :class="mobileMenuOpen ? 'fa-xmark text-sm' : 'fa-bars text-sm'"></i>
-      </button>
-
-      <div v-if="mobileMenuOpen" class="absolute top-[100%] left-0 w-full bg-slate-900 border-b border-slate-800 p-4 space-y-1 shadow-xl animate-[slideDown_0.15s_ease-out]">
-        <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 text-white text-xs font-bold">🏠 Dashboard</button>
-        <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-indigo-600 text-white text-xs font-bold">👥 Utilisateurs</button>
-        <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 text-white text-xs font-bold">📋 Absences</button>
-      </div>
-    </header>
-
-    <main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto z-10">
-      <div class="max-w-5xl mx-auto space-y-6">
+      <div class="space-y-6">
         
-        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-[0_2px_12px_rgba(15,23,42,0.02)] p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <!-- Header Card -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100/60 text-indigo-600 flex items-center justify-center text-lg shrink-0 shadow-sm">
-              <i class="fas fa-cubes"></i>
+            <div class="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-xl shrink-0">
+              <i class="fas fa-briefcase"></i>
             </div>
             <div>
-              <h1 class="font-bold text-lg sm:text-xl text-slate-900 tracking-tight leading-tight">
-                {{ project.name || 'Project Team Allocation' }}
+              <h1 class="font-extrabold text-xl sm:text-2xl text-slate-900 tracking-tight">
+                {{ project.name || 'Allocation des Ressources' }}
               </h1>
-              <p class="text-xs text-slate-400 mt-1 font-semibold flex items-center gap-2">
-                <span class="inline-flex items-center gap-1 bg-slate-50 border border-slate-200/60 px-2 py-0.5 rounded-md text-slate-500">
-                  <i class="far fa-calendar-alt text-[10px] text-slate-400"></i>
+              <div class="flex items-center gap-3 mt-1.5">
+                <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500">
+                  <i class="far fa-calendar text-slate-400"></i>
                   {{ formatDate(project.start_date) }}
                 </span>
                 <i class="fas fa-arrow-right text-[10px] text-slate-300"></i>
-                <span class="inline-flex items-center gap-1 bg-slate-50 border border-slate-200/60 px-2 py-0.5 rounded-md text-slate-500">
+                <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500">
+                  <i class="fas fa-flag-checkered text-slate-400"></i>
                   {{ formatDate(project.end_date) }}
                 </span>
-              </p>
+              </div>
             </div>
           </div>
 
           <button
             @click="showForm = !showForm"
-            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shrink-0 border shadow-sm"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold transition-all active:scale-95 shrink-0 border"
             :class="showForm 
-              ? 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200' 
-              : 'bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-600 shadow-indigo-600/10'"
+              ? 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300' 
+              : 'bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-600 shadow-md shadow-indigo-600/20'"
           >
-            <i class="fas" :class="showForm ? 'fa-xmark' : 'fa-user-plus'"></i>
-            <span>{{ showForm ? 'Fermer Panel' : 'Assigner Membre' }}</span>
+            <i class="fas" :class="showForm ? 'fa-times' : 'fa-plus'"></i>
+            <span>{{ showForm ? 'Fermer' : 'Assigner un Collaborateur' }}</span>
           </button>
         </div>
 
-        <Transition name="fade">
+        <!-- Alerts -->
+        <Transition 
+          enter-active-class="transition duration-300 ease-out"
+          enter-from-class="opacity-0 -translate-y-2"
+          enter-to-class="opacity-100 translate-y-0"
+          leave-active-class="transition duration-200 ease-in"
+          leave-from-class="opacity-100 translate-y-0"
+          leave-to-class="opacity-0 -translate-y-2"
+        >
           <div
             v-if="flashMsg"
-            class="p-4 rounded-xl border flex items-center gap-3 text-xs font-bold shadow-sm backdrop-blur-md animate-[slideDown_0.2s_ease-out]"
-            :class="flashType === 'success' ? 'bg-emerald-50/90 text-emerald-800 border-emerald-200/60' : 'bg-rose-50/90 text-rose-800 border-rose-200/60'"
+            class="p-4 rounded-xl border flex items-center gap-3 text-sm font-semibold shadow-sm"
+            :class="flashType === 'success' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-rose-50 text-rose-800 border-rose-200'"
           >
-            <i class="fas" :class="flashType === 'success' ? 'fa-circle-check text-emerald-600' : 'fa-circle-exclamation text-rose-600'"></i>
+            <i class="fas" :class="flashType === 'success' ? 'fa-check-circle text-emerald-500' : 'fa-exclamation-circle text-rose-500'"></i>
             <p>{{ flashMsg }}</p>
           </div>
         </Transition>
 
-        <div v-if="showForm" class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-[0_4px_20px_rgba(15,23,42,0.03)] space-y-5 animate-[slideDown_0.2s_ease-out]">
-          <div class="pb-2 border-b border-slate-100">
-            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-              <span class="w-1.5 h-3 bg-indigo-600 rounded-full"></span>
-              Configuration de l'assignation du personnel
-            </h3>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="flex flex-col gap-1.5">
-              <label class="text-xs font-bold text-slate-600">Employé ciblée</label>
-              <div class="relative">
-                <select v-model="form.employee_id" 
-                  class="border border-slate-200 bg-white rounded-xl px-3 py-2.5 text-xs font-medium w-full outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 appearance-none h-10 shadow-sm cursor-pointer"
-                  :class="formErrors.employee_id ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-50' : ''">
-                  <option value="">Sélectionner un profil...</option>
-                  <optgroup label="🟢 Employés Libres" v-if="freeEmployees.length"></optgroup>
-                  <option v-for="e in freeEmployees" :key="e.id" :value="e.id">
-                    &nbsp;&nbsp;{{ fullName(e) }}
-                  </option>
-                  <optgroup label="🟡 Occupés (Autre projet)" v-if="busyEmployees.length"></optgroup>
-                  <option v-for="e in busyEmployees" :key="e.id" :value="e.id">
-                    &nbsp;&nbsp;{{ fullName(e) }}
-                  </option>
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
-                  <i class="fas fa-chevron-down text-[10px]"></i>
-                </div>
-              </div>
-              <p v-if="formErrors.employee_id" class="text-rose-500 text-[11px] font-medium mt-0.5 flex items-center gap-1">
-                <span>⚠️</span> {{ formErrors.employee_id[0] }}
-              </p>
+        <!-- Form Panel -->
+        <Transition
+          enter-active-class="transition duration-300 ease-out origin-top"
+          enter-from-class="opacity-0 scale-y-95 -translate-y-2"
+          enter-to-class="opacity-100 scale-y-100 translate-y-0"
+          leave-active-class="transition duration-200 ease-in origin-top"
+          leave-from-class="opacity-100 scale-y-100 translate-y-0"
+          leave-to-class="opacity-0 scale-y-95 -translate-y-2"
+        >
+          <div v-if="showForm" class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+            <div class="pb-3 border-b border-slate-100">
+              <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                <span class="w-2 h-2 bg-indigo-600 rounded-full"></span>
+                Paramètres d'assignation
+              </h3>
             </div>
 
-            <div class="flex flex-col gap-1.5">
-              <label class="text-xs font-bold text-slate-600">Rôle au projet</label>
-              <input
-                v-model="form.role_in_project"
-                type="text"
-                placeholder="Ex: Lead Developer"
-                class="border border-slate-200 bg-white rounded-xl px-3 py-2.5 text-xs font-medium w-full outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 h-10 shadow-sm"
-              />
-            </div>
-
-            <div class="flex flex-col gap-1.5">
-              <label class="text-xs font-bold text-slate-600">Date de Début</label>
-              <input type="date" v-model="form.start_date" class="border border-slate-200 bg-white rounded-xl px-3 py-2.5 text-xs font-medium w-full outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 h-10 shadow-sm cursor-pointer" />
-            </div>
-
-            <div class="flex flex-col gap-1.5">
-              <label class="text-xs font-bold text-slate-600">Date de Fin</label>
-              <input type="date" v-model="form.end_date" class="border border-slate-200 bg-white rounded-xl px-3 py-2.5 text-xs font-medium w-full outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 h-10 shadow-sm cursor-pointer" />
-            </div>
-          </div>
-
-          <div v-if="selectedBusyEmployee" class="bg-amber-50/60 border border-amber-200 text-amber-800 rounded-xl px-4 py-3 text-xs flex items-center gap-2.5 font-medium animate-[fadeIn_0.2s_ease-out]">
-            <i class="fas fa-triangle-exclamation text-amber-500 text-sm"></i>
-            <span>Attention: <strong>{{ fullName(selectedBusyEmployee) }}</strong> collabore déjà sur un autre projet actif à ces dates.</span>
-          </div>
-
-          <div class="flex justify-end pt-2 border-t border-slate-50">
-            <button
-              @click="storeAssignment"
-              :disabled="submitting"
-              class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow-md shadow-indigo-600/10 disabled:opacity-40 transition-all active:scale-[0.99] flex items-center justify-center gap-2"
-            >
-              <i class="fas" :class="submitting ? 'fa-circle-notch animate-spin' : 'fa-circle-check'"></i>
-              <span>{{ submitting ? 'Enregistrement...' : 'Confirmer Allocation' }}</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="space-y-4">
-          <div class="px-1 flex items-center justify-between">
-            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-              <i class="fas fa-user-group text-slate-400"></i> Membres Assignés ({{ assignments.length }})
-            </h2>
-          </div>
-
-          <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div v-for="n in 3" :key="n" class="bg-white border border-slate-200/60 p-5 rounded-2xl animate-pulse flex items-center gap-4 shadow-sm">
-              <div class="w-11 h-11 bg-slate-100 rounded-xl shrink-0"></div>
-              <div class="space-y-2.5 flex-1">
-                <div class="h-3.5 bg-slate-100 rounded-lg w-2/3"></div>
-                <div class="h-2.5 bg-slate-50 rounded-md w-1/2"></div>
-              </div>
-            </div>
-          </div>
-
-          <div v-else-if="assignments.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div
-              v-for="a in assignments"
-              :key="a.id"
-              class="bg-white border border-slate-200/80 hover:border-indigo-200 hover:shadow-[0_8px_24px_rgba(79,70,229,0.04)] rounded-2xl p-4 flex items-start justify-between gap-3 transition-all group relative"
-            >
-              <router-link 
-                :to="`/getUser/${a.employee?.id || a.employee?._id}`" 
-                class="flex items-center gap-3.5 overflow-hidden flex-1 group/link cursor-pointer"
-              >
-                <div class="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-xs uppercase tracking-wider shrink-0 bg-gradient-to-br shadow-inner overflow-hidden border border-slate-100 group-hover/link:scale-[1.03] transition-transform"
-                     :class="a.employee?.image ? '' : ganttColor(a.employee_id)">
-                  <img 
-                    v-if="a.employee?.image" 
-                    :src="a.employee.image" 
-                    alt="Avatar" 
-                    class="w-full h-full object-cover"
-                  />
-                  <span v-else>
-                    {{ avatarInitials(fullName(a.employee)) }}
-                  </span>
-                </div>
-
-                <div class="overflow-hidden flex-1">
-                  <h4 class="font-bold text-slate-800 text-sm truncate group-hover/link:text-indigo-600 transition-colors" :title="fullName(a.employee)">
-                    {{ fullName(a.employee) }}
-                  </h4>
-                  <p class="text-xs text-slate-400 font-semibold truncate mt-0.5">
-                    {{ a.role_in_project || 'Collaborateur' }}
-                  </p>
-                  <div class="mt-2.5 text-[10px] font-bold text-slate-500 flex items-center gap-1">
-                    <span class="bg-slate-50 border border-slate-200/60 px-1.5 py-0.5 rounded text-slate-600">{{ formatDate(a.start_date) }}</span>
-                    <i class="fas fa-arrow-right text-[9px] text-slate-300 px-0.5"></i>
-                    <span class="bg-slate-50 border border-slate-200/60 px-1.5 py-0.5 rounded text-slate-500">{{ formatDate(a.end_date) }}</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <!-- Select Employee -->
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Employé ciblé</label>
+                <div class="relative">
+                  <select v-model="form.employee_id" 
+                    class="border border-slate-200 bg-slate-50 rounded-lg px-3 py-2.5 text-sm font-medium w-full outline-none transition-all focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 appearance-none cursor-pointer"
+                    :class="formErrors.employee_id ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-50' : ''">
+                    <option value="" disabled>Sélectionner un profil...</option>
+                    <optgroup label="🟢 Disponibles" v-if="freeEmployees.length"></optgroup>
+                    <option v-for="e in freeEmployees" :key="e.id" :value="e.id">
+                      {{ fullName(e) }}
+                    </option>
+                    <optgroup label="🟡 Déjà assignés" v-if="busyEmployees.length"></optgroup>
+                    <option v-for="e in busyEmployees" :key="e.id" :value="e.id">
+                      {{ fullName(e) }}
+                    </option>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+                    <i class="fas fa-chevron-down text-[10px]"></i>
                   </div>
                 </div>
-              </router-link>
+                <p v-if="formErrors.employee_id" class="text-rose-500 text-xs font-medium mt-1 flex items-center gap-1">
+                  <i class="fas fa-exclamation-triangle text-[10px]"></i> {{ formErrors.employee_id[0] }}
+                </p>
+              </div>
 
+              <!-- Role -->
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Rôle au projet</label>
+                <input
+                  v-model="form.role_in_project"
+                  type="text"
+                  placeholder="Ex: Lead Developer"
+                  class="border border-slate-200 bg-slate-50 rounded-lg px-3 py-2.5 text-sm font-medium w-full outline-none transition-all focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50"
+                />
+              </div>
+
+              <!-- Start Date -->
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Date de Début</label>
+                <input type="date" v-model="form.start_date" class="border border-slate-200 bg-slate-50 rounded-lg px-3 py-2.5 text-sm font-medium w-full outline-none transition-all focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 cursor-pointer" />
+              </div>
+
+              <!-- End Date -->
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Date de Fin</label>
+                <input type="date" v-model="form.end_date" class="border border-slate-200 bg-slate-50 rounded-lg px-3 py-2.5 text-sm font-medium w-full outline-none transition-all focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 cursor-pointer" />
+              </div>
+            </div>
+
+            <!-- Warning Alert -->
+            <Transition
+              enter-active-class="transition duration-300 ease-out"
+              enter-from-class="opacity-0 -translate-y-1"
+              enter-to-class="opacity-100 translate-y-0"
+              leave-active-class="transition duration-200 ease-in"
+              leave-from-class="opacity-100 translate-y-0"
+              leave-to-class="opacity-0 -translate-y-1"
+            >
+              <div v-if="selectedBusyEmployee" class="bg-amber-50 border border-amber-200 text-amber-800 rounded-lg p-4 text-sm flex items-start sm:items-center gap-3 font-medium">
+                <i class="fas fa-exclamation-triangle text-amber-500 mt-0.5 sm:mt-0"></i>
+                <p>Attention : <strong>{{ fullName(selectedBusyEmployee) }}</strong> collabore déjà sur un autre projet à ces dates.</p>
+              </div>
+            </Transition>
+
+            <div class="flex justify-end pt-4 border-t border-slate-100">
               <button
-                @click="deleteAssignment(a.id)"
-                :disabled="deletingId === a.id"
-                class="w-8 h-8 flex items-center justify-center text-slate-300 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-100 rounded-xl transition-all shrink-0 active:scale-90 relative z-20 self-center"
-                title="Supprimer l'affectation"
+                @click="storeAssignment"
+                :disabled="submitting"
+                class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-lg text-sm font-bold shadow-sm disabled:opacity-50 transition-all active:scale-95 flex items-center justify-center gap-2"
               >
-                <i class="fas" :class="deletingId === a.id ? 'fa-spinner animate-spin text-rose-600' : 'fa-trash-can text-xs'"></i>
+                <i class="fas" :class="submitting ? 'fa-circle-notch animate-spin' : 'fa-check'"></i>
+                <span>{{ submitting ? 'Enregistrement...' : 'Confirmer l\'Allocation' }}</span>
               </button>
             </div>
           </div>
+        </Transition>
 
-          <div v-else class="bg-white border border-slate-200/80 rounded-2xl p-12 text-center shadow-sm">
-            <div class="w-12 h-12 bg-slate-50 border border-slate-200/60 rounded-xl flex items-center justify-center mx-auto mb-3 text-slate-400">
-              <i class="fas fa-user-slash text-sm"></i>
+        <!-- Assignments Section -->
+        <div class="space-y-4 pt-2">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+            <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+              Équipe du projet
+              <span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md text-xs font-bold border border-slate-200">{{ assignments.length }}</span>
+            </h2>
+          </div>
+
+          <!-- Loading Skeleton -->
+          <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div v-for="n in 3" :key="n" class="bg-white border border-slate-200 p-5 rounded-xl animate-pulse">
+              <div class="flex gap-4">
+                <div class="w-10 h-10 bg-slate-100 rounded-full shrink-0"></div>
+                <div class="space-y-2 flex-1 pt-1">
+                  <div class="h-4 bg-slate-100 rounded w-2/3"></div>
+                  <div class="h-3 bg-slate-50 rounded w-1/3"></div>
+                </div>
+              </div>
+              <div class="mt-4 pt-4 border-t border-slate-50 h-3 bg-slate-50 rounded w-full"></div>
             </div>
-            <p class="text-xs font-bold text-slate-800 uppercase tracking-wide">Aucun membre assigné</p>
-            <p class="text-[11px] text-slate-400 mt-1 max-w-xs mx-auto">Le panel d'allocation est vide. Cliquez sur "Assigner Membre" pour intégrer du personnel.</p>
+          </div>
+
+          <!-- Professional Grid Cards -->
+          <div v-else-if="assignments.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div
+              v-for="a in assignments"
+              :key="a.id"
+              class="bg-white border border-slate-200 hover:border-indigo-300 rounded-xl p-5 transition-all duration-200 hover:shadow-md group flex flex-col h-full relative"
+            >
+              <!-- Top: Info & Delete -->
+              <div class="flex justify-between items-start mb-4">
+                <router-link :to="`/getUser/${a.employee?.id || a.employee?._id}`" class="flex items-center gap-3 overflow-hidden group/link">
+                  <!-- Avatar -->
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs uppercase shrink-0 bg-gradient-to-br shadow-inner overflow-hidden text-white"
+                       :class="a.employee?.image ? '' : ganttColor(a.employee_id)">
+                    <img 
+                      v-if="a.employee?.image" 
+                      :src="a.employee.image" 
+                      alt="Avatar" 
+                      class="w-full h-full object-cover"
+                    />
+                    <span v-else>
+                      {{ avatarInitials(fullName(a.employee)) }}
+                    </span>
+                  </div>
+                  
+                  <!-- Name & Role Badge -->
+                  <div class="overflow-hidden">
+                    <h4 class="font-bold text-slate-800 text-sm truncate group-hover/link:text-indigo-600 transition-colors" :title="fullName(a.employee)">
+                      {{ fullName(a.employee) }}
+                    </h4>
+                    <span class="inline-block mt-0.5 px-2 py-0.5 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded text-[10px] font-bold tracking-wide uppercase truncate max-w-full">
+                      {{ a.role_in_project || 'Collaborateur' }}
+                    </span>
+                  </div>
+                </router-link>
+
+                <!-- Delete Action -->
+                <button
+                  @click="deleteAssignment(a.id)"
+                  :disabled="deletingId === a.id"
+                  class="text-slate-300 hover:text-rose-600 hover:bg-rose-50 p-2 rounded-lg transition-colors active:scale-95 disabled:opacity-50"
+                  title="Retirer l'employé"
+                >
+                  <i class="fas" :class="deletingId === a.id ? 'fa-spinner animate-spin text-rose-600' : 'fa-trash-alt text-sm'"></i>
+                </button>
+              </div>
+
+              <!-- Bottom: Dates Timeline -->
+              <div class="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-medium">
+                <div class="flex items-center gap-1.5" title="Date de début">
+                  <i class="far fa-calendar text-slate-400"></i>
+                  <span>{{ formatDate(a.start_date) }}</span>
+                </div>
+                <div class="h-px flex-1 bg-slate-100 mx-3"></div>
+                <div class="flex items-center gap-1.5" title="Date de fin">
+                  <i class="fas fa-flag-checkered text-slate-400"></i>
+                  <span>{{ formatDate(a.end_date) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+           <div v-else class="bg-white border border-slate-200 border-dashed rounded-xl p-12 text-center">
+            <div class="w-14 h-14 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+              <i class="fas fa-users-slash text-xl"></i>
+            </div>
+            <h3 class="text-sm font-bold text-slate-800 mb-1">Aucun collaborateur assigné</h3>
+            <p class="text-sm text-slate-500 max-w-sm mx-auto">L'équipe de ce projet est actuellement vide. Utilisez le bouton ci-dessus pour ajouter des membres.</p>
           </div>
         </div>
 
@@ -405,16 +410,3 @@ onMounted(fetchData)
     </main>
   </div>
 </template>
-
-<style scoped>
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-}
-</style>

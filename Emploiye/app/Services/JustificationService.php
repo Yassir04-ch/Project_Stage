@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Absence;
 use App\Models\Justification;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
@@ -39,7 +38,7 @@ class JustificationService
         $admins = User::whereHas('role', function ($query) {
              $query->where('name', 'Administrateur');
            })->get();
-           
+
         foreach ($admins as $admin) {
             $this->notify->notifyUser(
                 $admin,
@@ -53,6 +52,22 @@ class JustificationService
                 ]
             );
         }
+
+        return $justification->load(['absence', 'justifiedBy']);
+    }
+
+    public function update(int $id, array $data)
+    {
+        $justification = Justification::findOrFail($id);
+
+        if (isset($data['proof_file']) && $data['proof_file'] instanceof \Illuminate\Http\UploadedFile) {
+            if ($justification->proof_file) {
+                Storage::disk('public')->delete($justification->proof_file);
+            }
+            $data['proof_file'] = $data['proof_file']->store('justifications', 'public');
+        }
+
+        $justification->update($data);
 
         return $justification->load(['absence', 'justifiedBy']);
     }
