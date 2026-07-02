@@ -137,21 +137,44 @@ onMounted(() => {
 
       <!-- GRID -->
       <div v-if="!loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div v-for="emp in employees" :key="emp.id" class="relative group p-6 rounded-3xl border bg-white dark:bg-slate-900/40 border-slate-200 dark:border-slate-800 transition-all hover:-translate-y-2">
-          <div class="relative group mb-5 mx-auto w-28">
-            <div class="absolute -inset-1 bg-gradient-to-tr from-indigo-500 via-purple-600 to-pink-500 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
-            <img v-if="emp.photo" :src="getPhotoUrl(emp.photo)" class="w-28 h-28 rounded-2xl object-cover relative border-2 shadow-2xl mx-auto" />
-            <div v-else class="w-28 h-28 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-4xl relative border-2 border-transparent uppercase tracking-wider">
-              {{ emp.firstname?.[0] }}{{ emp.lastname?.[0] }}
+        <div v-for="emp in employees" :key="emp.id" 
+            class="group relative p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 bg-white/50 dark:bg-slate-900/20 backdrop-blur-sm transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-indigo-500/10">
+            
+            <!-- Avatar Frame -->
+            <div class="relative mb-5 mx-auto w-28">
+            <div class="absolute -inset-1 bg-gradient-to-tr from-indigo-500 via-purple-600 to-pink-500 rounded-2xl blur opacity-20 group-hover:opacity-50 transition duration-500"></div>
+            
+            <img v-if="emp.photo" :src="getPhotoUrl(emp.photo)" 
+                class="w-28 h-28 rounded-2xl object-cover relative border-[3px] border-white dark:border-slate-800 shadow-xl" />
+            
+            <div v-else class="w-28 h-28 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-4xl relative border-[3px] border-white dark:border-slate-800 shadow-xl uppercase">
+                {{ emp.firstname?.[0] }}{{ emp.lastname?.[0] }}
             </div>
-          </div>
-          <div class="text-center">
-            <h3 class="font-black uppercase text-sm" :class="isDark ? 'text-white' : 'text-slate-900'">{{ emp.firstname }} {{ emp.lastname }}</h3>
-            <p class="text-[10px] text-slate-400 mb-4">{{ emp.email }}</p>
-            <button @click="router.push(`/getUser/${emp.id}`)" class="w-full py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-[10px] font-bold uppercase hover:bg-indigo-600 hover:text-white transition-all">Voir Profil</button>
-          </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="text-center space-y-1">
+            <h3 class="font-black uppercase text-sm tracking-wide text-slate-800 dark:text-white">
+                {{ emp.firstname }} {{ emp.lastname }}
+            </h3>
+            
+            <!-- Role Badge -->
+            <div class="flex justify-center">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+                {{ emp.role?.name || 'Employé' }}
+                </span>
+            </div>
+
+            <p class="text-[10px] font-medium text-slate-400 pt-2">{{ emp.email }}</p>
+            </div>
+
+            <!-- Action Button -->
+            <button @click="router.push(`/getUser/${emp.id}`)" 
+                    class="mt-6 w-full py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-600 dark:hover:bg-indigo-400 transition-all duration-300">
+            Voir Profil
+            </button>
         </div>
-      </div>
+    </div>
 
       <!-- PAGINATION -->
       <div v-if="pagination.links.length" class="flex gap-2 justify-center mt-12 pb-10">
