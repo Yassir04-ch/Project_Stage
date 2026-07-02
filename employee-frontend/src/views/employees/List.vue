@@ -7,8 +7,8 @@ const router = useRouter();
 const employees = ref([]);
 const roleFilter = ref("");
 const loading = ref(false);
-const unreadCount = ref(0); // تأكد تربطها مع الـ API ديالك
-const user = ref({ role: { name: 'Administrateur' } }); // مثال، بدل هادي بـ الـ user ديالك الحقيقي
+const unreadCount = ref(0); 
+const user = ref({ role: { name: 'Administrateur' } }); 
 const isDark = ref(localStorage.getItem("theme") !== "light");
 const pagination = ref({ data: [], links: [] });
 
