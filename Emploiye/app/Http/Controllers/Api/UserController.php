@@ -32,12 +32,18 @@ class UserController extends Controller
     public function emploiyee(Request $request)
     {
         $employees = User::with('role')
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('firstname', 'like', '%' . $request->search . '%')
+                    ->orWhere('lastname',  'like', '%' . $request->search . '%')
+                    ->orWhere('email',     'like', '%' . $request->search . '%');
+                });
+            })
             ->when($request->filled('role'), function ($query) use ($request) {
                 $query->whereHas('role', function ($q) use ($request) {
                     $q->where('name', $request->role);
                 });
-            })
-            ->paginate(8);
+            })->paginate(8);
 
         return response()->json($employees);
     }

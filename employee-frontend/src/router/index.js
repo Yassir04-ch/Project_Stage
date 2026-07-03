@@ -161,7 +161,7 @@ router.beforeEach((to, from) => {
   }
 
   if (to.name === 'login' && token) {
-    return { name: 'dashboard' }
+    return { name: 'profile' }
   }
 
   return true
