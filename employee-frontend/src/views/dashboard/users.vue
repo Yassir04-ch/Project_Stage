@@ -1,25 +1,23 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import api from "@/api/axios";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const users = ref([]);
-const loading = ref(false);
-const statusLoading = ref({}); // tracking dynamic status changes
-const currentUser = ref(null);
+const users         = ref([]);
+const loading       = ref(false);
+const statusLoading = ref({});
+const currentUser   = ref(null);
+const unreadCount   = ref(0);
 
 const getUsers = async () => {
   loading.value = true;
   try {
     const response = await api.get("/users", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-
-    users.value = response.data.users || [];
+    users.value       = response.data.users || [];
     currentUser.value = response.data.admin || null;
   } catch (error) {
     console.log(error.response?.data);
@@ -30,18 +28,16 @@ const getUsers = async () => {
 
 const toggleStatus = async (user) => {
   const isCurrentlyActive = user.status === 'active';
-  const endpoint = isCurrentlyActive ? `/users/${user.id}/desactiver` : `/users/${user.id}/activer`;
-  
+  const endpoint = isCurrentlyActive
+    ? `/users/${user.id}/desactiver`
+    : `/users/${user.id}/activer`;
+
   statusLoading.value[user.id] = true;
   try {
     const response = await api.put(endpoint, {}, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    
     if (response.data.success) {
-      // Update local state directly
       user.status = isCurrentlyActive ? 'banni' : 'active';
     }
   } catch (error) {
@@ -51,8 +47,40 @@ const toggleStatus = async (user) => {
   }
 };
 
-onMounted(() => {
-  getUsers();
+const loadUnreadCount = async () => {
+  try {
+    const res = await api.get("/notifications", {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    unreadCount.value = (res.data.notifications || []).filter(n => !n.is_read).length;
+  } catch {}
+};
+
+const listenToNotifications = () => {
+  const userId = currentUser.value?.id; // ✅ currentUser
+  if (!userId || !window.Echo) return;
+
+  window.Echo.private(`notifications.${userId}`)
+    .listen('.notification.new', () => {
+      unreadCount.value++;
+    });
+};
+
+const stopListening = () => {
+  const userId = currentUser.value?.id; // ✅ currentUser
+  if (userId && window.Echo) {
+    window.Echo.leave(`notifications.${userId}`);
+  }
+};
+
+onMounted(async () => {
+  await getUsers();
+  await loadUnreadCount();
+  listenToNotifications();
+});
+
+onUnmounted(() => {
+  stopListening();
 });
 </script>
 
@@ -95,6 +123,10 @@ onMounted(() => {
             <button @click="router.push('/absences')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
               <i class="fa-regular fa-calendar-minus text-base w-5 group-hover:scale-110 transition-transform"></i>
               <span>Absences</span>
+            </button>
+            <button @click="router.push('/skills')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+              <i class="fa-solid fa-brain text-base w-5 group-hover:scale-110 transition-transform"></i>
+              <span>Compétences</span>
             </button>
           </nav>
         </div>
@@ -148,10 +180,14 @@ onMounted(() => {
             <span>Ajouter Employee</span>
           </button>
 
-          <button class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-all shadow-sm">
+        <button @click="router.push('/notifications')" class="relative w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-all shadow-sm">
             🔔
-          </button>
-        </div>
+            <span v-if="unreadCount > 0"
+            class="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white dark:border-slate-950">
+            {{ unreadCount > 9 ? '9+' : unreadCount }}
+          </span>
+        </button>   
+      </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

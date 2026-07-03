@@ -12,11 +12,14 @@ class SkillController extends Controller
 {
     public function __construct(private SkillService $skillService) {}
 
-    public function index()
+    public function index(Request $request)
     {
+        $admin = $request->user();
+
         return response()->json([
-            'skills' => $this->skillService->getAll()
-        ]);
+            'skills' => $this->skillService->getAll(),
+            'admin' => $admin,
+        ],200);
     }
 
     public function store(Request $request)
