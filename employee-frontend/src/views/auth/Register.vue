@@ -21,7 +21,7 @@ const form = reactive({
   type_contrat: "",
   salaire: "",
   photo: null,
-  role_id: 4, // Default Employé
+  role_id: 4,
 });
 
 const errors          = ref({});
@@ -29,22 +29,32 @@ const loading         = ref(false);
 const availableSkills = ref([]);
 const selectedSkills  = ref([]);
 
+// ✅ Flash system
+const flashMessage = ref("");
+const flashType    = ref("success");
+const flashVisible = ref(false);
+
+const showFlash = (message, type = "success") => {
+  flashMessage.value = message;
+  flashType.value    = type;
+  flashVisible.value = true;
+  setTimeout(() => (flashVisible.value = false), 4000);
+};
+
 const roles = [
-  { id: 1, name: "Administrateur", desc: "Accès complet à toute l'application", icon: "⚡" },
-  { id: 2, name: "Manager", desc: "Gestion des projets et des équipes", icon: "📊" },
-  { id: 3, name: "Ressources Humaines", desc: "Gestion administrative des employés", icon: "👥" },
-  { id: 4, name: "Employé", desc: "Accès limité aux informations personnelles", icon: "👤" }
+  { id: 1, name: "Administrateur",      desc: "Accès complet à toute l'application",         icon: "⚡" },
+  { id: 2, name: "Manager",             desc: "Gestion des projets et des équipes",           icon: "📊" },
+  { id: 3, name: "Ressources Humaines", desc: "Gestion administrative des employés",          icon: "👥" },
+  { id: 4, name: "Employé",             desc: "Accès limité aux informations personnelles",   icon: "👤" },
 ];
 
 const handleFile = (event) => {
   form.photo = event.target.files[0];
-  console.log('Photo selected:', form.photo);
 };
 
 const loadSkills = async () => {
   try {
     const res = await api.get("/skills");
-    // Fallbacks ela hssab dynamic structure dyal wrapper data
     availableSkills.value = res.data.data || res.data.skills || res.data;
   } catch (err) {
     console.error("Erreur lors du chargement des compétences:", err);
@@ -73,57 +83,55 @@ const submitRegister = async () => {
 
   try {
     const formData = new FormData();
-    formData.append("firstname", form.firstname);
-    formData.append("lastname", form.lastname);
-    formData.append("cin", form.cin);
-    formData.append("email", form.email);
-    formData.append("password", form.password);
+    formData.append("firstname",             form.firstname);
+    formData.append("lastname",              form.lastname);
+    formData.append("cin",                   form.cin);
+    formData.append("email",                 form.email);
+    formData.append("password",              form.password);
     formData.append("password_confirmation", form.password_confirmation);
-    formData.append("role_id", form.role_id);
+    formData.append("role_id",               form.role_id);
 
-    if (form.telephone)      formData.append("telephone", form.telephone);
-    if (form.adresse)        formData.append("adresse", form.adresse);
-    if (form.genre)          formData.append("genre", form.genre);
+    if (form.telephone)      formData.append("telephone",      form.telephone);
+    if (form.adresse)        formData.append("adresse",        form.adresse);
+    if (form.genre)          formData.append("genre",          form.genre);
     if (form.date_naissance) formData.append("date_naissance", form.date_naissance);
-    if (form.date_embauche)  formData.append("date_embauche", form.date_embauche);
-    if (form.type_contrat)   formData.append("type_contrat", form.type_contrat);
-    if (form.salaire)        formData.append("salaire", form.salaire);
-    if (form.photo)          formData.append("photo", form.photo);
-
-    console.log('FormData ready to submit.');
+    if (form.date_embauche)  formData.append("date_embauche",  form.date_embauche);
+    if (form.type_contrat)   formData.append("type_contrat",   form.type_contrat);
+    if (form.salaire)        formData.append("salaire",        form.salaire);
+    if (form.photo)          formData.append("photo",          form.photo);
 
     const response = await registerUser(formData);
-    console.log("REGISTER RESPONSE:", response.data);
 
-    // 🔥 Fix core: safe checking dynamic hierarchy dyal l-ID
-    const employeeId = response.data?.data?.user?.id 
-                    || response.data?.data?.id 
-                    || response.data?.user?.id 
-                    || response.data?.id;
+    const employeeId =
+      response.data?.data?.user?.id ||
+      response.data?.data?.id       ||
+      response.data?.user?.id       ||
+      response.data?.id;
 
-    console.log("RESOLVED EMPLOYEE ID FOR SKILLS:", employeeId);
- 
-    if (!employeeId) {
-       throw new Error("Impossible de récupérer l'ID de l'employé créé.");
-    }
+    if (!employeeId) throw new Error("Impossible de récupérer l'ID de l'employé créé.");
 
-    // Sync skills match safe pipeline execution
     if (selectedSkills.value.length > 0) {
       await api.post(`/users/${employeeId}/skills`, {
         skills: selectedSkills.value,
       });
     }
 
-    alert("Employé et compétences ajoutés avec succès !");
-    router.push({ name: 'dashboard' });
+     showFlash("Employé et compétences ajoutés avec succès !");
+    setTimeout(() => router.push({ name: "dashboard" }), 1600);
 
   } catch (error) {
-    if (error.response?.status === 422) {
-      errors.value = error.response.data.errors;
-      console.log("VALIDATION ERRORS:", error.response.data.errors); 
+    if (error.response?.status === 422) 
+    {
+      errors.value = error.response.data.errors || {};
+      const firstError = Object.values(errors.value)
+        .flat()
+        .shift();
+
+      showFlash(firstError || "Veuillez corriger les erreurs.", "error");    
+          
     } else {
-      console.error(error);
-      alert("Une erreur est survenue lors de l'enregistrement.");
+          showFlash("Une erreur est survenue lors de l'enregistrement.", "error");
+          console.error(error);
     }
   } finally {
     loading.value = false;
@@ -137,6 +145,28 @@ onMounted(() => loadSkills());
   <div class="min-h-screen bg-[#f8fafc] py-12 px-4 sm:px-6 lg:px-8 flex justify-center items-center font-sans relative overflow-hidden">
     
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-gradient-to-b from-indigo-50/50 via-slate-50/10 to-transparent rounded-full blur-3xl -z-10"></div>
+    <Transition
+      enter-active-class="transition ease-out duration-300"
+      enter-from-class="opacity-0 -translate-y-4"
+      enter-to-class="opacity-100 translate-y-0"
+      leave-active-class="transition ease-in duration-200"
+      leave-from-class="opacity-100 translate-y-0"
+      leave-to-class="opacity-0 -translate-y-4">
+      <div v-if="flashVisible"
+        class="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-xl text-sm font-semibold min-w-[300px] max-w-md"
+        :class="flashType === 'success'
+          ? 'bg-emerald-50 border border-emerald-200 text-emerald-800'
+          : 'bg-rose-50 border border-rose-200 text-rose-800'">
+        <span class="text-base">{{ flashType === 'success' ? '✅' : '❌' }}</span>
+        <span class="flex-1">{{ flashMessage }}</span>
+        <button @click="flashVisible = false"
+          class="text-slate-400 hover:text-slate-600 transition-colors ml-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </Transition>
 
     <div class="w-full max-w-4xl bg-white rounded-2xl shadow-[0_4px_30px_rgba(15,23,42,0.04)] border border-slate-200/80 overflow-hidden">
 
@@ -429,13 +459,3 @@ onMounted(() => loadSkills());
     </div>
   </div>
 </template>
-
-<style scoped>
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(2px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-fadeIn {
-  animation: fadeIn 0.2s ease-out forwards;
-}
-</style>

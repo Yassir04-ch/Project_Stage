@@ -23,7 +23,7 @@ const router = useRouter();
       <div class="hidden md:flex items-center gap-8 text-[14px] font-bold text-slate-500">
         <a href="#home" class="text-slate-900 hover:text-blue-600 transition-colors">Accueil</a>
         <a href="#expertise" class="hover:text-blue-600 transition-colors">Expertise</a>
-        <a href="#contact" class="hover:text-blue-600 transition-colors">Contact & Audit</a>
+        <a href="/contacts" class="hover:text-blue-600 transition-colors">Contact & Audit</a>
         
         <button
           @click="router.push('/login')"
@@ -52,7 +52,7 @@ const router = useRouter();
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-4">
           <a
-            href="#contact"
+            href="/contacts"
             class="w-full sm:w-auto bg-slate-900 text-white px-8 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md hover:bg-blue-600 transition-all text-center"
           >
             Demander un Audit Gratuit
@@ -131,53 +131,6 @@ const router = useRouter();
       </div>
     </section>
 
-    <section id="contact" class="max-w-4xl mx-auto px-6 pb-28">
-      <div class="bg-white p-8 sm:p-10 rounded-2xl shadow-[0_20px_50px_rgba(15,23,42,0.02)] border border-slate-200/60 relative overflow-hidden">
-        <div class="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-blue-500 to-sky-400"></div>
-        
-        <div class="text-center max-w-xl mx-auto mb-10 space-y-1.5">
-          <h3 class="text-xl font-black text-slate-900 uppercase tracking-tight">Initier votre Audit Architecture</h3>
-          <p class="text-slate-400 text-xs font-medium">Échangez avec nos ingénieurs Cloud à propos de vos pipelines de production.</p>
-        </div>
-
-        <form @submit.prevent class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <div class="space-y-1.5">
-            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Email Entreprise</label>
-            <input
-              type="email"
-              class="w-full border border-slate-200 px-3.5 py-2.5 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white bg-slate-50 text-xs font-semibold transition-all shadow-2xs"
-              placeholder="nom@entreprise.com"
-            />
-          </div>
-
-          <div class="space-y-1.5">
-            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Stack Technique Principale</label>
-            <input
-              type="text"
-              class="w-full border border-slate-200 px-3.5 py-2.5 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white bg-slate-50 text-xs font-semibold transition-all shadow-2xs"
-              placeholder="Ex: Snowflake, Talend, AWS"
-            />
-          </div>
-
-          <div class="sm:col-span-2 space-y-1.5">
-            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Périmètre du Projet / Besoins</label>
-            <textarea
-              class="w-full border border-slate-200 px-3.5 py-2.5 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white bg-slate-50 text-xs font-semibold transition-all shadow-2xs resize-none"
-              rows="4"
-              placeholder="Décrivez brièvement vos problématiques d'intégration ou vos enjeux de migration..."
-            ></textarea>
-          </div>
-
-          <button
-            type="submit"
-            class="sm:col-span-2 bg-slate-900 hover:bg-blue-600 text-white font-bold p-3 rounded-xl shadow-md transition-all text-xs uppercase tracking-wider mt-2"
-          >
-            Demander une consultation gratuite
-          </button>
-        </form>
-      </div>
-    </section>
-
     <footer class="bg-slate-900 text-slate-400 py-16 px-8 border-t border-slate-800">
       <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
         
@@ -216,7 +169,7 @@ const router = useRouter();
           <div class="grid grid-cols-2 gap-3 text-xs font-bold uppercase tracking-tight">
             <a href="#home" class="hover:text-white transition-colors">&middot; Accueil Hub</a>
             <a href="#expertise" class="hover:text-white transition-colors">&middot; Services</a>
-            <a href="#contact" class="hover:text-white transition-colors">&middot; Demande Audit</a>
+            <a href="/contacts" class="hover:text-white transition-colors">&middot; Demande Audit</a>
             <span @click="router.push('/login')" class="hover:text-white transition-colors cursor-pointer">&middot; Espace Employé</span>
           </div>
         </div>
@@ -246,13 +199,3 @@ const router = useRouter();
 
   </div>
 </template>
-
-<style scoped>
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-fadeIn {
-  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-</style>

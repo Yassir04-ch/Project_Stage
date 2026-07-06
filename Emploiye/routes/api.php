@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\JustificationController;
 use App\Http\Controllers\Api\AssignmentController;
+use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\NotificationController;
 
@@ -17,6 +18,8 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/getUser/{id}', [AuthController::class, 'GetUser']);
 Route::post('/createEmploiyee', [UserController::class, 'store']);
+
+Route::post('/contact', [ContactController::class, 'send']);
 
 Route::middleware('auth:sanctum')->group(function () {
 

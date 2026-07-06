@@ -21,6 +21,7 @@ import Myassignement from '@/views/auth/assignment.vue'
 import MyAbsences from '@/views/auth/absences.vue'
 import AllProjects from '@/views/projects/index.vue'
 import AllEmploiyee from '@/views/employees/List.vue'
+import Contact from '@/views/contacts/contact.vue'
 
 
 const router = createRouter({
@@ -148,6 +149,11 @@ const router = createRouter({
     name: 'emploiyee',
     component: AllEmploiyee,
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/contacts',
+    name: 'contact',
+    component: Contact,
   }
 
 ]
