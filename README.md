@@ -111,21 +111,6 @@ npm run dev
 
 ---
 
-## 🗄️ Base de données
-
-Créer une base de données MySQL puis configurer le fichier `.env` :
-
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=employee_db
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
----
-
 ## 🔔 Notifications en temps réel
 
 L'application utilise les WebSockets pour envoyer des notifications instantanées lors des modifications des affectations et des projets.
