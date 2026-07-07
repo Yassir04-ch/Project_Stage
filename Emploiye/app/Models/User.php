@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
         'status',
+        'service_id'
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -82,6 +83,10 @@ class User extends Authenticatable
         return $this->hasMany(Justification::class, 'justified_by');
     }
  
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
 
  
  

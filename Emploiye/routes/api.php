@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\ServiceController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -87,5 +88,14 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/projects/{id}/employees', [ProjectController::class, 'getProjectEmployees']);
+
+    Route::get('/services',[ServiceController::class, 'index']);
+    Route::post('/services',[ServiceController::class, 'store']);
+    Route::get('/services/{service}',[ServiceController::class, 'show']);
+    Route::put('/services/{service}',[ServiceController::class, 'update']);
+    Route::delete('/services/{service}',[ServiceController::class, 'destroy']);
+    Route::post('/services/{service}/assign',[ServiceController::class, 'assignEmployee']);
+    Route::post('/services/{service}/remove-employee',[ServiceController::class, 'removeEmployee']);
+
 
 });

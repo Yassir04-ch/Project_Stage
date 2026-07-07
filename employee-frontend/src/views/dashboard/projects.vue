@@ -104,6 +104,9 @@ onMounted(() => {
               <i class="fa-solid fa-brain text-base w-5 group-hover:scale-110 transition-transform"></i>
               <span>Compétences</span>
             </button>
+            <button @click="router.push('/services')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+              <i class="fas fa-building text-base w-5"></i><span>Services</span>
+            </button>
           </nav>
         </div>
       </div>
