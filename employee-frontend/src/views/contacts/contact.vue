@@ -1,26 +1,43 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router"; // Ztha 7it kanti mkhdm router.push f nav
 
+const router = useRouter();
 const loading = ref(false);
+const services = ref([]); // Bach n-stockiw les services li jyin m l-API
 
 const form = reactive({
     name: "",
     email: "",
     telephone: "",
+    service_id: "", // Zt hadi bach t-stoki id dial service li khtar user
     subject: "",
     message: "",
 });
 
 const errors = ref({});
 
-const submitForm = async () => {
+// Fonction bach n-jibo les services m l-API ghir kat-démarra l-page
+const fetchServices = async () => {
+    try {
+        const response = await axios.get("http://127.0.0.1:8000/api/services");
+        // centralisation 3la 7sab structure dial l'API dialek (response.data aw response.data.services)
+        services.value = response.data.services || response.data;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des services :", error);
+    }
+};
 
+onMounted(() => {
+    fetchServices();
+});
+
+const submitForm = async () => {
     loading.value = true;
     errors.value = {};
 
     try {
-
         await axios.post("http://127.0.0.1:8000/api/contact", form);
 
         alert("Votre message a été envoyé avec succès.");
@@ -28,29 +45,20 @@ const submitForm = async () => {
         form.name = "";
         form.email = "";
         form.telephone = "";
+        form.service_id = "";
         form.subject = "";
         form.message = "";
 
     } catch (error) {
-
         if (error.response?.status === 422) {
-
             errors.value = error.response.data.errors;
-
         } else {
-
             alert("Une erreur est survenue.");
-
             console.log(error);
-
         }
-
     } finally {
-
         loading.value = false;
-
     }
-
 };
 </script>
 
@@ -58,7 +66,7 @@ const submitForm = async () => {
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <div class="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased">
     
-    <!-- 1. Barre de Navigation (Fidèle à l'image) -->
+    <!-- 1. Barre de Navigation -->
     <nav class="max-w-7xl mx-auto px-6 lg:px-16 py-5 flex justify-between items-center sticky top-0 bg-slate-50/80 backdrop-blur-md z-50 border-b border-slate-200/40">
       <div class="flex items-center gap-3 group cursor-pointer" @click="router.push('/')">
         <div class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-white font-black text-sm tracking-wider shadow-xs transition-transform group-hover:scale-105">
@@ -81,7 +89,7 @@ const submitForm = async () => {
       </div>
     </nav>
 
-    <!-- 2. Hero Section avec dégradé et image d'équipe intégrée -->
+    <!-- 2. Hero Section -->
     <header class="relative bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white min-h-[380px] pt-16 pb-32 px-6 lg:px-16 overflow-hidden">
       <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
         
@@ -95,7 +103,7 @@ const submitForm = async () => {
           </p>
         </div>
 
-        <!-- Image d'illustration de l'équipe (Droite, estompée dans le dégradé) -->
+        <!-- Image d'illustration (Droite) -->
         <div class="lg:col-span-5 hidden lg:block relative h-64 w-full rounded-2xl overflow-hidden shadow-2xl opacity-40 mix-blend-luminosity">
           <img 
             src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=800&q=80" 
@@ -104,8 +112,6 @@ const submitForm = async () => {
           />
         </div>
       </div>
-
-      <!-- Trame de fond géométrique subtile -->
       <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent pointer-events-none"></div>
     </header>
 
@@ -114,7 +120,7 @@ const submitForm = async () => {
       
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        <!-- Colonne Gauche : Les 4 cartes d'informations (Grid 2x2) -->
+        <!-- Colonne Gauche : Cartes d'informations -->
         <div class="lg:col-span-7 space-y-6">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             
@@ -182,7 +188,6 @@ const submitForm = async () => {
 
           </div>
 
-          <!-- Bouton Google Maps aligné sous les cartes -->
           <div class="flex justify-start pt-2">
             <a href="https://maps.app.goo.gl/HH4zAt8QnAACthWUA?g_st=iw" target="_blank" rel="noopener noreferrer" 
                class="inline-flex items-center gap-2.5 px-6 py-3.5 bg-blue-600 text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-sm hover:bg-blue-700 hover:shadow-md transition-all duration-200">
@@ -192,178 +197,143 @@ const submitForm = async () => {
           </div>
         </div>
 
+        <!-- Formulaire de contact -->
         <div class="lg:col-span-5 bg-white rounded-[2rem] p-6 sm:p-8 border border-slate-100 shadow-lg relative overflow-hidden">
-        <form @submit.prevent="submitForm" class="space-y-5 relative z-10">
+          <form @submit.prevent="submitForm" class="space-y-5 relative z-10">
 
             <!-- Nom complet -->
             <div class="space-y-1.5">
                 <label for="name" class="block text-xs font-bold text-slate-900">
-                Nom complet
+                  Nom complet
                 </label>
-
                 <input
-                id="name"
-                type="text"
-                v-model="form.name"
-                placeholder="Sarah Chen"
-                :class="[
-                    'w-full px-4 py-3 rounded-xl bg-white border transition-all text-slate-800 font-medium text-sm outline-none focus:ring-2',
-                    errors.name
-                    ? 'border-red-500 focus:ring-red-100 focus:border-red-500'
-                    : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
-                ]"
+                  id="name"
+                  type="text"
+                  v-model="form.name"
+                  placeholder="Sarah Chen"
+                  :class="[
+                      'w-full px-4 py-3 rounded-xl bg-white border transition-all text-slate-800 font-medium text-sm outline-none focus:ring-2',
+                      errors.name ? 'border-red-500 focus:ring-red-100 focus:border-red-500' : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
+                  ]"
                 />
-
-                <p
-                v-if="errors.name"
-                class="text-red-500 text-xs font-medium"
-                >
-                {{ errors.name[0] }}
-                </p>
+                <p v-if="errors.name" class="text-red-500 text-xs font-medium">{{ errors.name[0] }}</p>
             </div>
 
             <!-- Email -->
             <div class="space-y-1.5">
                 <label for="email" class="block text-xs font-bold text-slate-900">
-                Adresse e-mail
+                  Adresse e-mail
                 </label>
-
                 <input
-                id="email"
-                type="email"
-                v-model="form.email"
-                placeholder="sarah.chen@mail.com"
-                :class="[
-                    'w-full px-4 py-3 rounded-xl bg-white border transition-all text-slate-800 font-medium text-sm outline-none focus:ring-2',
-                    errors.email
-                    ? 'border-red-500 focus:ring-red-100 focus:border-red-500'
-                    : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
-                ]"
+                  id="email"
+                  type="email"
+                  v-model="form.email"
+                  placeholder="sarah.chen@mail.com"
+                  :class="[
+                      'w-full px-4 py-3 rounded-xl bg-white border transition-all text-slate-800 font-medium text-sm outline-none focus:ring-2',
+                      errors.email ? 'border-red-500 focus:ring-red-100 focus:border-red-500' : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
+                  ]"
                 />
-
-                <p
-                v-if="errors.email"
-                class="text-red-500 text-xs font-medium"
-                >
-                {{ errors.email[0] }}
-                </p>
+                <p v-if="errors.email" class="text-red-500 text-xs font-medium">{{ errors.email[0] }}</p>
             </div>
 
             <!-- Téléphone -->
             <div class="space-y-1.5">
                 <label for="telephone" class="block text-xs font-bold text-slate-900">
-                Téléphone
+                  Téléphone
                 </label>
-
                 <input
-                id="telephone"
-                type="tel"
-                v-model="form.telephone"
-                placeholder="+212 6XXXXXXXX"
-                :class="[
-                    'w-full px-4 py-3 rounded-xl bg-white border transition-all text-slate-800 font-medium text-sm outline-none focus:ring-2',
-                    errors.telephone
-                    ? 'border-red-500 focus:ring-red-100 focus:border-red-500'
-                    : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
-                ]"
+                  id="telephone"
+                  type="tel"
+                  v-model="form.telephone"
+                  placeholder="+212 6XXXXXXXX"
+                  :class="[
+                      'w-full px-4 py-3 rounded-xl bg-white border transition-all text-slate-800 font-medium text-sm outline-none focus:ring-2',
+                      errors.telephone ? 'border-red-500 focus:ring-red-100 focus:border-red-500' : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
+                  ]"
                 />
+                <p v-if="errors.telephone" class="text-red-500 text-xs font-medium">{{ errors.telephone[0] }}</p>
+            </div>
 
-                <p
-                v-if="errors.telephone"
-                class="text-red-500 text-xs font-medium"
+            <!-- Select Service (Li zt lik jdid) -->
+            <div class="space-y-1.5">
+                <label for="service" class="block text-xs font-bold text-slate-900">
+                  Service concerné
+                </label>
+                <select
+                  id="service"
+                  v-model="form.service_id"
+                  :class="[
+                      'w-full px-4 py-3 rounded-xl bg-white border transition-all text-slate-800 font-medium text-sm outline-none focus:ring-2 appearance-none',
+                      errors.service_id ? 'border-red-500 focus:ring-red-100 focus:border-red-500' : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
+                  ]"
                 >
-                {{ errors.telephone[0] }}
-                </p>
+                  <option value="" disabled selected>Choisir un service...</option>
+                  <option v-for="service in services" :key="service.id" :value="service.id">
+                    {{ service.name }}
+                  </option>
+                </select>
+                <p v-if="errors.service_id" class="text-red-500 text-xs font-medium">{{ errors.service_id[0] }}</p>
             </div>
 
             <!-- Sujet -->
             <div class="space-y-1.5">
                 <label for="subject" class="block text-xs font-bold text-slate-900">
-                Sujet
+                  Sujet
                 </label>
-
                 <input
-                id="subject"
-                type="text"
-                v-model="form.subject"
-                placeholder="Demande d'assistance RH"
-                :class="[
-                    'w-full px-4 py-3 rounded-xl bg-white border transition-all text-slate-800 font-medium text-sm outline-none focus:ring-2',
-                    errors.subject
-                    ? 'border-red-500 focus:ring-red-100 focus:border-red-500'
-                    : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
-                ]"
+                  id="subject"
+                  type="text"
+                  v-model="form.subject"
+                  placeholder="Demande d'assistance"
+                  :class="[
+                      'w-full px-4 py-3 rounded-xl bg-white border transition-all text-slate-800 font-medium text-sm outline-none focus:ring-2',
+                      errors.subject ? 'border-red-500 focus:ring-red-100 focus:border-red-500' : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
+                  ]"
                 />
-
-                <p
-                v-if="errors.subject"
-                class="text-red-500 text-xs font-medium"
-                >
-                {{ errors.subject[0] }}
-                </p>
+                <p v-if="errors.subject" class="text-red-500 text-xs font-medium">{{ errors.subject[0] }}</p>
             </div>
 
             <!-- Message -->
             <div class="space-y-1.5">
                 <label for="message" class="block text-xs font-bold text-slate-900">
-                Message
+                  Message
                 </label>
-
                 <textarea
-                id="message"
-                rows="5"
-                v-model="form.message"
-                placeholder="Bonjour, je souhaite en savoir plus..."
-                :class="[
-                    'w-full px-4 py-3 rounded-xl bg-white border transition-all text-slate-800 font-medium text-sm outline-none resize-none focus:ring-2',
-                    errors.message
-                    ? 'border-red-500 focus:ring-red-100 focus:border-red-500'
-                    : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
-                ]"
+                  id="message"
+                  rows="5"
+                  v-model="form.message"
+                  placeholder="Bonjour, je souhaite en savoir plus..."
+                  :class="[
+                      'w-full px-4 py-3 rounded-xl bg-white border transition-all text-slate-800 font-medium text-sm outline-none resize-none focus:ring-2',
+                      errors.message ? 'border-red-500 focus:ring-red-100 focus:border-red-500' : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
+                  ]"
                 ></textarea>
-
-                <p
-                v-if="errors.message"
-                class="text-red-500 text-xs font-medium"
-                >
-                {{ errors.message[0] }}
-                </p>
+                <p v-if="errors.message" class="text-red-500 text-xs font-medium">{{ errors.message[0] }}</p>
             </div>
 
             <!-- Button -->
             <div class="pt-2 relative">
-
                 <button
-                type="submit"
-                :disabled="loading"
-                class="w-full py-3.5 bg-indigo-950 hover:bg-indigo-900 disabled:bg-slate-400 disabled:cursor-not-allowed text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-md transition-all duration-300 flex justify-center items-center gap-2"
+                  type="submit"
+                  :disabled="loading"
+                  class="w-full py-3.5 bg-indigo-950 hover:bg-indigo-900 disabled:bg-slate-400 disabled:cursor-not-allowed text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-md transition-all duration-300 flex justify-center items-center gap-2"
                 >
-
-                <i
-                    v-if="!loading"
-                    class="fa-solid fa-paper-plane text-[11px]"
-                ></i>
-
-                <i
-                    v-else
-                    class="fa-solid fa-spinner fa-spin"
-                ></i>
-
-                {{ loading ? 'Envoi...' : 'Envoyer le message' }}
-
+                  <i v-if="!loading" class="fa-solid fa-paper-plane text-[11px]"></i>
+                  <i v-else class="fa-solid fa-spinner fa-spin"></i>
+                  {{ loading ? 'Envoi...' : 'Envoyer le message' }}
                 </button>
 
                 <div class="absolute -bottom-4 -right-2 w-12 h-12 opacity-10 pointer-events-none select-none hidden sm:block">
-                <i class="fa-solid fa-paper-plane text-4xl text-slate-900 rotate-12"></i>
+                  <i class="fa-solid fa-paper-plane text-4xl text-slate-900 rotate-12"></i>
                 </div>
-
             </div>
 
-        </form>
+          </form>
         </div>
       </div>
 
-      <!-- 4. Grande Carte Google Maps Responsive -->
+      <!-- 4. Grande Carte Google Maps -->
       <section class="w-full bg-white rounded-[2rem] shadow-sm overflow-hidden border border-slate-100 p-2">
         <div class="w-full h-[400px] rounded-[1.6rem] overflow-hidden">
           <iframe 

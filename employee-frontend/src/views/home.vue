@@ -1,7 +1,27 @@
 <script setup>
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import api from "@/api/axios"; // Assure-toi que had l-path s7i7 integration dial axial 3ndek
 
 const router = useRouter();
+const services = ref([]);
+const loading = ref(true);
+
+const loadServices = async () => {
+  try {
+    const res = await api.get("/services");
+    // Hna ila l-api dial public makay7tajch token, rani khllito 3adi
+    services.value = res.data.services || [];
+  } catch (err) {
+    console.error("Erreur lors du chargement des services:", err);
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(() => {
+  loadServices();
+});
 </script>
 
 <template>
@@ -38,7 +58,7 @@ const router = useRouter();
         
         <div class="inline-flex items-center gap-2 bg-blue-50 border border-blue-100/80 px-3 py-1 rounded-full text-[11px] font-bold text-blue-700 uppercase tracking-widest mx-auto shadow-2xs animate-fadeIn">
           <span class="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></span>
-          Ingénierie & Architecture Data
+          <span class="font-extrabold">Ingénierie & Architecture Data</span>
         </div>
 
         <h2 class="text-4xl sm:text-6xl font-black tracking-tight text-slate-900 uppercase leading-[1.15]">
@@ -67,6 +87,7 @@ const router = useRouter();
       </div>
     </header>
 
+    <!-- SECTION DYNAMIC EXPERTISE -->
     <section id="expertise" class="max-w-7xl mx-auto px-6 lg:px-16 pb-28">
       <div class="text-center max-w-xl mx-auto mb-16 space-y-2">
         <span class="text-[10px] font-black uppercase tracking-widest text-blue-600">Notre savoir-faire</span>
@@ -74,58 +95,42 @@ const router = useRouter();
         <p class="text-slate-400 text-xs font-medium">Modernisation end-to-end adaptée aux stacks de production critiques.</p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Loading State -->
+      <div v-if="loading" class="flex flex-col items-center justify-center py-20 space-y-4">
+        <div class="w-9 h-9 border-3 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Chargement des services de l'entreprise...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else-if="services.length === 0" class="text-center py-16 bg-white border border-slate-200/60 rounded-2xl p-8 max-w-md mx-auto">
+        <p class="text-sm font-bold text-slate-400">Aucun service disponible pour le moment.</p>
+      </div>
+
+      <!-- Services Grid list from API -->
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         
-        <div class="bg-white border border-slate-200/60 p-6 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col justify-between group hover:border-blue-500/40 hover:shadow-[0_15px_40px_rgba(37,99,235,0.05)] transition-all duration-300">
+        <div v-for="service in services" :key="service.id" 
+          class="bg-white border border-slate-200/60 p-6 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col justify-between group hover:border-blue-500/40 hover:shadow-[0_15px_40px_rgba(37,99,235,0.05)] transition-all duration-300">
           <div>
+            <!-- Header Icon block inside dynamic loop -->
             <div class="w-11 h-11 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center mb-5 group-hover:bg-blue-50 group-hover:border-blue-100 transition-colors">
-              <svg class="w-5 h-5 text-slate-600 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.128l1.41-.513M5.106 17.785l1.15-.827m11.379-8.16l1.15-.827M8.14 21.27l.707-1.03m10.304-6.117l.707-1.03M12 3v1.5M12 19.5V21M9.143 3.73l.707 1.03M11.414 12h.008v.008H11.414V12zm0-3h.008v.008H11.414V9zm0 6h.008v.008H11.414V15z"></path></svg>
+              <svg class="w-5 h-5 text-slate-600 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+              </svg>
             </div>
-            <h4 class="font-extrabold text-slate-900 text-sm uppercase tracking-tight mb-2">Data Integration</h4>
+            
+            <h4 class="font-extrabold text-slate-900 text-sm uppercase tracking-tight mb-2">{{ service.name }}</h4>
             <p class="text-slate-400 text-xs font-medium leading-relaxed">
-              Pipelines ETL/ELT robustes et streaming temps réel. Connexion unifiée de vos silos applicatifs via Talend et architectures managées.
+              {{ service.description || "Pas de description fournie pour ce département d'ingénierie." }}
             </p>
           </div>
-          <span class="text-[10px] font-bold text-blue-600/0 group-hover:text-blue-600/100 transition-all pt-4 block font-mono">ETL / Streaming &rarr;</span>
-        </div>
-
-        <div class="bg-white border border-slate-200/60 p-6 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col justify-between group hover:border-blue-500/40 hover:shadow-[0_15px_40px_rgba(37,99,235,0.05)] transition-all duration-300">
-          <div>
-            <div class="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100/50 flex items-center justify-center mb-5">
-              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z"></path></svg>
-            </div>
-            <h4 class="font-extrabold text-slate-900 text-sm uppercase tracking-tight mb-2">Cloud Architecture</h4>
-            <p class="text-slate-400 text-xs font-medium leading-relaxed">
-              Conception et optimisation sur Snowflake, AWS et BigQuery. Modélisations scalables pensées pour les requêtes analytiques massives.
-            </p>
+          
+          <div class="flex items-center justify-between pt-5 mt-4 border-t border-slate-50">
+            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider font-mono">Expertise active &rarr;</span>
+            <span v-if="service.employees_count || service.employees?.length" class="text-[10px] bg-slate-100 text-slate-500 font-extrabold px-2 py-0.5 rounded-md uppercase">
+              {{ service.employees_count ?? service.employees?.length }} Consultants
+            </span>
           </div>
-          <span class="text-[10px] font-bold text-blue-600/100 pt-4 block font-mono">Snowflake & AWS &rarr;</span>
-        </div>
-
-        <div class="bg-white border border-slate-200/60 p-6 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col justify-between group hover:border-blue-500/40 hover:shadow-[0_15px_40px_rgba(37,99,235,0.05)] transition-all duration-300">
-          <div>
-            <div class="w-11 h-11 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center mb-5 group-hover:bg-blue-50 group-hover:border-blue-100 transition-colors">
-              <svg class="w-5 h-5 text-slate-600 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"></path></svg>
-            </div>
-            <h4 class="font-extrabold text-slate-900 text-sm uppercase tracking-tight mb-2">Data Governance</h4>
-            <p class="text-slate-400 text-xs font-medium leading-relaxed">
-              Mise en conformité complète, audits de qualité de données et gestion fine des catalogues pour sécuriser les métadonnées de l'entreprise.
-            </p>
-          </div>
-          <span class="text-[10px] font-bold text-blue-600/0 group-hover:text-blue-600/100 transition-all pt-4 block font-mono">Security / Lineage &rarr;</span>
-        </div>
-
-        <div class="bg-white border border-slate-200/60 p-6 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col justify-between group hover:border-blue-500/40 hover:shadow-[0_15px_40px_rgba(37,99,235,0.05)] transition-all duration-300">
-          <div>
-            <div class="w-11 h-11 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center mb-5 group-hover:bg-blue-50 group-hover:border-blue-100 transition-colors">
-              <svg class="w-5 h-5 text-slate-600 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"></path></svg>
-            </div>
-            <h4 class="font-extrabold text-slate-900 text-sm uppercase tracking-tight mb-2">BI & Analytics</h4>
-            <p class="text-slate-400 text-xs font-medium leading-relaxed">
-              Transformation de bases de données brutes en dashboards décisionnels interactifs pour guider le pilotage stratégique de votre direction.
-            </p>
-          </div>
-          <span class="text-[10px] font-bold text-blue-600/0 group-hover:text-blue-600/100 transition-all pt-4 block font-mono">Dashboards / KPI &rarr;</span>
         </div>
 
       </div>
