@@ -136,6 +136,7 @@ const ganttColor = (id) => {
   return colors[id % colors.length]
 }
 
+
 onMounted(fetchData)
 </script>
 

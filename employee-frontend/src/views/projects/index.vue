@@ -258,9 +258,8 @@ onUnmounted(() => stopListening());
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         <div v-for="p in filteredProjects" :key="p.id"
           :class="isDark ? 'bg-slate-900/30 border-slate-900 hover:border-slate-700' : 'bg-white border-slate-200/80 shadow-sm hover:border-slate-300 hover:shadow-md'"
-          class="p-5 rounded-2xl border transition-all duration-200 flex flex-col gap-4 cursor-pointer group"
-          @click="router.push(`/projects/${p.id}`)">
-
+          class="p-5 rounded-2xl border transition-all duration-200 flex flex-col gap-4 cursor-pointer group">
+          
           <!-- Top -->
           <div class="flex items-start justify-between gap-3">
             <div class="flex items-center gap-3 min-w-0 flex-1">
@@ -309,15 +308,6 @@ onUnmounted(() => stopListening());
               <span class="block text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Fin</span>
               <span :class="isDark ? 'text-slate-200' : 'text-slate-800'" class="text-xs font-bold">{{ formatDate(p.end_date) }}</span>
             </div>
-          </div>
-
-          <!-- Footer -->
-          <div class="flex items-center justify-between pt-1">
-            <span :class="isDark ? 'text-slate-600' : 'text-slate-300'" class="text-[9px] font-mono">ID #{{ p.id }}</span>
-            <span :class="isDark ? 'text-indigo-400 group-hover:text-indigo-300' : 'text-indigo-500 group-hover:text-indigo-700'"
-              class="text-[10px] font-black uppercase tracking-wider transition-colors flex items-center gap-1">
-              Voir détails <i class="fas fa-arrow-right text-[8px]"></i>
-            </span>
           </div>
 
         </div>

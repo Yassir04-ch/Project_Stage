@@ -42,13 +42,13 @@ const router = createRouter({
       path: "/project",
       name: "project",
       component: Project,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, roles: ['Administrateur', 'Manager'] }
     },
     {
       path: "/users",
       name: "dashboard",
       component: Users,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, roles: ['Administrateur', 'Ressources Humaines'] }
     },
     {
       path: "/",
@@ -59,13 +59,13 @@ const router = createRouter({
       path: "/absences",
       name: "absences",
       component: Absences,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, roles: ['Administrateur', 'Ressources Humaines'] }
     },
     {
       path: "/absences_create",
       name: "absences_create",
       component: CreateAbsences,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, roles: ['Administrateur', 'Ressources Humaines'] }
     },
     {
       path: "/justification_create",
@@ -83,7 +83,7 @@ const router = createRouter({
       path: "/projects",
       name: "Projects",
       component: Projects,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, roles: ['Administrateur', 'Manager'] }
     },
     {
       path: '/projects/:id',
@@ -110,69 +110,74 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-    path: '/users/edit/:id',
-    name: 'user-edit',
-    component: UserEditView,
-    meta: { requiresAuth: true } 
-  },
-  {
-    path: '/skills',
-    name: 'skills',
-    component: Skills,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/notifications',
-    name: 'notifications',
-    component: Notifications,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/Myassignement',
-    name: 'Myassignement',
-    component: Myassignement,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/myabsences',
-    name: 'my.absences',
-    component: MyAbsences,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/allprojects',
-    name: 'allprojects',
-    component: AllProjects,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/emploiyee',
-    name: 'emploiyee',
-    component: AllEmploiyee,
-    meta: { requiresAuth: true }
-  },
-   {
-    path: '/services',
-    name: 'service',
-    component: Service,
-  },
-  {
-    path: '/contacts',
-    name: 'contact',
-    component: Contact,
-  }
+      path: '/users/edit/:id',
+      name: 'user-edit',
+      component: UserEditView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/skills',
+      name: 'skills',
+      component: Skills,
+      meta: { requiresAuth: true, roles: ['Administrateur', 'Ressources Humaines'] }
+    },
+    {
+      path: '/notifications',
+      name: 'notifications',
+      component: Notifications,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/Myassignement',
+      name: 'Myassignement',
+      component: Myassignement,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/myabsences',
+      name: 'my.absences',
+      component: MyAbsences,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/allprojects',
+      name: 'allprojects',
+      component: AllProjects,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/emploiyee',
+      name: 'emploiyee',
+      component: AllEmploiyee,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/services',
+      name: 'service',
+      meta: { requiresAuth: true, roles: ['Administrateur', 'Manager'] }
+    },
+    {
+      path: '/contacts',
+      name: 'contact',
+      component: Contact,
+    }
 
-]
+  ]
 });
 
 router.beforeEach((to, from) => {
   const token = localStorage.getItem('token')
+  const userRole = localStorage.getItem('userRole')
 
   if (to.meta.requiresAuth && !token) {
     return { name: 'login' }
   }
 
   if (to.name === 'login' && token) {
+    return { name: 'profile' }
+  }
+
+  if (to.meta.roles && !to.meta.roles.includes(userRole)) {
     return { name: 'profile' }
   }
 

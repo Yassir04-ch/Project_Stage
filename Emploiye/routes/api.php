@@ -91,10 +91,10 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
 
-    // Administrateur + Manager + Ressources Humaines
-    Route::middleware('role:Administrateur,Manager,Ressources Humaines')->group(function () {
+    // Administrateur  + Ressources Humaines
+    Route::get('/emploiyee', [UserController::class, 'emploiyee']);
+    Route::middleware('role:Administrateur,Ressources Humaines')->group(function () {
         Route::get('/users', [AdminController::class, 'users']);
-        Route::get('/emploiyee', [UserController::class, 'emploiyee']);
 
         Route::get('/projects/{id}/employees', [ProjectController::class, 'getProjectEmployees']);
 
