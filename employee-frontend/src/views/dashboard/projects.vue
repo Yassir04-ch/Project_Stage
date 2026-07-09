@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import api from '@/api/axios'
 import { useRouter } from 'vue-router'
 
@@ -12,7 +12,6 @@ const currentUser = ref(null)
 const getData = async () => {
   loading.value = true
   try {
-    // 1. Fetch Projects Data
     const projectResponse = await api.get('/projects', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -20,7 +19,6 @@ const getData = async () => {
     })
     projects.value = projectResponse.data.data || []
 
-    // 2. Fetch Admin Profile safely to keep sidebar sync
     const userResponse = await api.get('/users', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -35,7 +33,6 @@ const getData = async () => {
   }
 }
 
-// 🔥 Helper function bach n-format-iw l-date l-twila
 const formatDate = (dateStr) => {
   if (!dateStr) return '--'
   try {
@@ -53,6 +50,10 @@ const getStatusClass = (status) => {
   if (st.includes('done') || st.includes('terminé') || st.includes('completed')) return 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
   return 'bg-indigo-50 text-indigo-700 border-indigo-200/60'
 }
+
+const canAccessSkills = computed(() =>
+  ["Administrateur", "Ressources Humaines"].includes(currentUser.value?.role?.name)
+);
 
 onMounted(() => {
   getData()
@@ -90,20 +91,20 @@ onMounted(() => {
               <span>Projects</span>
             </button>
 
-            <button @click="router.push('/users')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+            <button v-if="canAccessSkills"  @click="router.push('/users')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
               <span class="text-base opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all">👥</span>
               <span>Utilisateurs</span>
             </button>
 
-            <button @click="router.push('/absences')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+            <button v-if="canAccessSkills"  @click="router.push('/absences')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
               <i class="fa-regular fa-calendar-minus text-base w-5 group-hover:scale-110 transition-transform"></i>
               <span>Absences</span>
             </button>
 
-            <button @click="router.push('/skills')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
-              <i class="fa-solid fa-brain text-base w-5 group-hover:scale-110 transition-transform"></i>
-              <span>Compétences</span>
-            </button>
+            <button v-if="canAccessSkills" @click="router.push('/skills')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+            <i class="fa-solid fa-brain text-base w-5 group-hover:scale-110 transition-transform"></i><span>Compétences</span>
+           </button>
+
             <button @click="router.push('/services')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
               <i class="fas fa-building text-base w-5"></i><span>Services</span>
             </button>

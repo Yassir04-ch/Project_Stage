@@ -111,6 +111,11 @@ onMounted(async () => {
   listenToNotifications();
 });
 
+
+const canAccessSkills = computed(() =>
+  ["Administrateur", "Ressources Humaines", "Manager"].includes(user.value?.role?.name)
+);
+
 onUnmounted(() => {
   stopListening();
 });
@@ -161,7 +166,7 @@ onUnmounted(() => {
         </button>
 
         <button
-          v-if="user?.role?.name === 'Administrateur'"
+           v-if="canAccessSkills"
           @click="router.push('/users')"
           :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'"
           class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">

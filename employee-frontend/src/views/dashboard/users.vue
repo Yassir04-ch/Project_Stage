@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, computed } from "vue";
 import api from "@/api/axios";
 import { useRouter } from "vue-router";
 
@@ -57,7 +57,7 @@ const loadUnreadCount = async () => {
 };
 
 const listenToNotifications = () => {
-  const userId = currentUser.value?.id; // ✅ currentUser
+  const userId = currentUser.value?.id; 
   if (!userId || !window.Echo) return;
 
   window.Echo.private(`notifications.${userId}`)
@@ -67,11 +67,16 @@ const listenToNotifications = () => {
 };
 
 const stopListening = () => {
-  const userId = currentUser.value?.id; // ✅ currentUser
+  const userId = currentUser.value?.id;
   if (userId && window.Echo) {
     window.Echo.leave(`notifications.${userId}`);
   }
 };
+
+const canAccessSkills = computed(() =>
+  ["Administrateur"].includes(currentUser.value?.role?.name)
+);
+
 
 onMounted(async () => {
   await getUsers();
@@ -110,7 +115,7 @@ onUnmounted(() => {
               <span>Dashboard</span>
             </button>
 
-            <button @click="router.push('/projects')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+            <button v-if="canAccessSkills" @click="router.push('/projects')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
               <span class="text-base opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all">📁</span>
               <span>Projects</span>
             </button>
@@ -128,7 +133,7 @@ onUnmounted(() => {
               <i class="fa-solid fa-brain text-base w-5 group-hover:scale-110 transition-transform"></i>
               <span>Compétences</span>
             </button>
-             <button @click="router.push('/services')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+             <button v-if="canAccessSkills" @click="router.push('/services')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
               <i class="fas fa-building text-base w-5"></i><span>Services</span>
             </button>
           </nav>

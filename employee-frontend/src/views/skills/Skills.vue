@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted, onUnmounted, ref, computed } from "vue";
 import api from '@/api/axios'
 import { useRouter } from "vue-router";
 
@@ -73,6 +73,10 @@ const deleteSkill = async (skill) => {
   }
 }
 
+const canAccessSkills = computed(() =>
+  ["Administrateur"].includes(currentUser.value?.role?.name)
+);
+
 onMounted(() => loadSkills())
 </script>
 
@@ -100,7 +104,7 @@ onMounted(() => loadSkills())
               <span>Dashboard</span>
             </button>
 
-            <button @click="router.push('/projects')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left"">
+            <button v-if="canAccessSkills" @click="router.push('/projects')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left"">
               <span class="text-base group-hover:scale-110 transition-transform">📁</span>
               <span>Projects</span>
             </button>
@@ -119,7 +123,7 @@ onMounted(() => loadSkills())
               <i class="fa-solid fa-brain text-base w-5 group-hover:scale-110 transition-transform"></i>
               <span>Compétences</span>
             </button>
-             <button @click="router.push('/services')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+             <button v-if="canAccessSkills" @click="router.push('/services')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
               <i class="fas fa-building text-base w-5"></i><span>Services</span>
             </button>
           </nav>

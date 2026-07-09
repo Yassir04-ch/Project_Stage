@@ -1,3 +1,21 @@
+<script setup>
+import { computed } from "vue";
+import { useRouter } from "vue-router";
+
+const props = defineProps({
+  currentUser: {
+    type: Object,
+    default: null,
+  },
+});
+
+const router = useRouter();
+
+const canAccessSkills = computed(() =>
+  ["Administrateur", "Ressources Humaines"].includes(props.currentUser?.role?.name)
+);
+</script>
+
 <template>
   <aside class="bg-slate-950 text-slate-200 w-72 min-h-screen p-6 flex flex-col justify-between shadow-2xl shrink-0 border-r border-slate-800/40">
     <div class="flex flex-col">
@@ -18,13 +36,13 @@
           <button @click="router.push('/projects')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
             <span class="text-base opacity-70 group-hover:opacity-100">📁</span><span>Projets</span>
           </button>
-          <button @click="router.push('/users')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+          <button v-if="canAccessSkills" @click="router.push('/users')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
             <span class="text-base opacity-70 group-hover:opacity-100">👥</span><span>Utilisateurs</span>
           </button>
-          <button @click="router.push('/absences')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+          <button v-if="canAccessSkills" @click="router.push('/absences')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
             <i class="fa-regular fa-calendar-minus text-base w-5"></i><span>Absences</span>
           </button>
-          <button @click="router.push('/skills')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+          <button v-if="canAccessSkills" @click="router.push('/skills')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
             <i class="fa-solid fa-brain text-base w-5"></i><span>Compétences</span>
           </button>
           <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-indigo-600 text-white font-semibold shadow-md shadow-indigo-600/10 text-sm text-left">
@@ -53,16 +71,3 @@
     </div>
   </aside>
 </template>
-
-<script setup>
-import { useRouter } from "vue-router";
-
-defineProps({
-  currentUser: {
-    type: Object,
-    default: null,
-  },
-});
-
-const router = useRouter();
-</script>
