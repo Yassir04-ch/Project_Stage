@@ -19,17 +19,31 @@ const submitlogin = async () => {
 
   try {
     const response = await loginUser(form);
+
+    console.log("========== LOGIN RESPONSE ==========");
+    console.log(response.data);
+
     localStorage.setItem("token", response.data.data.token);
+
     const user = response.data.data.user;
-    console.log(user);
+
+    console.log("User:", user);
+    console.log("Role:", user?.role);
+    console.log("Role Name:", user?.role?.name);
+
+    if (user?.role?.name) {
+      localStorage.setItem("userRole", user.role.name);
+    }
+
+    console.log("Stored Role:", localStorage.getItem("userRole"));
 
     router.push("/profile");
 
   } catch (error) {
+    console.log(error.response?.data);
+
     if (error.response?.status === 422) {
       errors.value = error.response.data.errors;
-    } else {
-      console.log(error.response?.data);
     }
   } finally {
     loading.value = false;

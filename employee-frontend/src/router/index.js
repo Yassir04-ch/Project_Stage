@@ -153,7 +153,7 @@ const router = createRouter({
     },
     {
       path: '/services',
-      name: 'service',
+      name: 'Service',
       meta: { requiresAuth: true, roles: ['Administrateur', 'Manager'] }
     },
     {
