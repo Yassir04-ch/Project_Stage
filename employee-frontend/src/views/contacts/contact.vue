@@ -1,28 +1,26 @@
 <script setup>
 import { reactive, ref, onMounted } from "vue";
 import axios from "axios";
-import { useRouter } from "vue-router"; // Ztha 7it kanti mkhdm router.push f nav
+import { useRouter } from "vue-router"; 
 
 const router = useRouter();
 const loading = ref(false);
-const services = ref([]); // Bach n-stockiw les services li jyin m l-API
+const services = ref([]); 
 
 const form = reactive({
     name: "",
     email: "",
     telephone: "",
-    service_id: "", // Zt hadi bach t-stoki id dial service li khtar user
+    service_id: "",
     subject: "",
     message: "",
 });
 
 const errors = ref({});
 
-// Fonction bach n-jibo les services m l-API ghir kat-démarra l-page
-const fetchServices = async () => {
+ const fetchServices = async () => {
     try {
         const response = await axios.get("http://127.0.0.1:8000/api/services");
-        // centralisation 3la 7sab structure dial l'API dialek (response.data aw response.data.services)
         services.value = response.data.services || response.data;
     } catch (error) {
         console.error("Erreur lors de la récupération des services :", error);
@@ -66,7 +64,6 @@ const submitForm = async () => {
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <div class="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased">
     
-    <!-- 1. Barre de Navigation -->
     <nav class="max-w-7xl mx-auto px-6 lg:px-16 py-5 flex justify-between items-center sticky top-0 bg-slate-50/80 backdrop-blur-md z-50 border-b border-slate-200/40">
       <div class="flex items-center gap-3 group cursor-pointer" @click="router.push('/')">
         <div class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-white font-black text-sm tracking-wider shadow-xs transition-transform group-hover:scale-105">
@@ -89,11 +86,9 @@ const submitForm = async () => {
       </div>
     </nav>
 
-    <!-- 2. Hero Section -->
     <header class="relative bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white min-h-[380px] pt-16 pb-32 px-6 lg:px-16 overflow-hidden">
       <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
         
-        <!-- Texte de présentation (Gauche) -->
         <div class="lg:col-span-7 space-y-4 max-w-xl">
           <h2 class="text-4xl md:text-5xl font-black tracking-tight leading-tight">
             Contactez-nous
@@ -103,7 +98,6 @@ const submitForm = async () => {
           </p>
         </div>
 
-        <!-- Image d'illustration (Droite) -->
         <div class="lg:col-span-5 hidden lg:block relative h-64 w-full rounded-2xl overflow-hidden shadow-2xl opacity-40 mix-blend-luminosity">
           <img 
             src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=800&q=80" 
@@ -115,16 +109,13 @@ const submitForm = async () => {
       <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent pointer-events-none"></div>
     </header>
 
-    <!-- 3. Section principale en superposition (Overlap) -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 -mt-24 pb-16 relative z-20 space-y-12">
       
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        <!-- Colonne Gauche : Cartes d'informations -->
         <div class="lg:col-span-7 space-y-6">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             
-            <!-- Card 1: Email -->
             <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100/80 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative group">
               <div class="h-40 w-full rounded-2xl overflow-hidden relative mb-4">
                 <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=500&q=80" alt="Email Support" class="w-full h-full object-cover" />
@@ -140,7 +131,6 @@ const submitForm = async () => {
               </div>
             </div>
 
-            <!-- Card 2: Téléphone -->
             <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100/80 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative group">
               <div class="h-40 w-full rounded-2xl overflow-hidden relative mb-4">
                 <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=500&q=80" alt="Phone Support" class="w-full h-full object-cover" />
@@ -151,12 +141,11 @@ const submitForm = async () => {
               <div class="px-1">
                 <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Téléphone</h3>
                 <a href="tel:+21266240029" class="text-slate-800 font-extrabold text-sm hover:text-indigo-600 transition-colors block">
-                  +212 66240029
+                  +212 6 62 18 10 12
                 </a>
               </div>
             </div>
 
-            <!-- Card 3: Adresse -->
             <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100/80 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative group">
               <div class="h-40 w-full rounded-2xl overflow-hidden relative mb-4">
                 <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=500&q=80" alt="Office Location" class="w-full h-full object-cover" />
@@ -170,7 +159,6 @@ const submitForm = async () => {
               </div>
             </div>
 
-            <!-- Card 4: Horaires -->
             <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100/80 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative group">
               <div class="h-40 w-full rounded-2xl overflow-hidden relative mb-4">
                 <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=500&q=80" alt="Working Hours" class="w-full h-full object-cover" />

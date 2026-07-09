@@ -156,15 +156,15 @@ onMounted(() => {
           <ul class="space-y-3 text-xs font-medium">
             <li class="flex items-start gap-2.5">
               <span class="opacity-70 text-sm">📍</span>
-              <span class="leading-relaxed">Casablanca Nearshore Park, Shore 7,<br>Boulevard Al Qods, Sidi Maârouf, Maroc</span>
+              <span class="leading-relaxed">El Jadida, Maroc</span>
             </li>
             <li class="flex items-center gap-2.5">
               <span class="opacity-70 text-sm">📞</span>
-              <span class="font-mono text-slate-300">+212 (0) 522 45 89 00</span>
+              <span class="font-mono text-slate-300">+212 6 62 18 10 12</span>
             </li>
             <li class="flex items-center gap-2.5">
               <span class="opacity-70 text-sm">✉️</span>
-              <span class="font-mono text-blue-300">contact@dataexpress.ma</span>
+              <span class="font-mono text-blue-300">mhomce@dataxpress.ma</span>
             </li>
           </ul>
         </div>
@@ -172,7 +172,7 @@ onMounted(() => {
         <div class="space-y-4">
           <h5 class="text-white text-[11px] font-black tracking-widest uppercase text-slate-300">Navigation Rapide</h5>
           <div class="grid grid-cols-2 gap-3 text-xs font-bold uppercase tracking-tight">
-            <a href="#home" class="hover:text-white transition-colors">&middot; Accueil Hub</a>
+            <a href="" class="hover:text-white transition-colors">&middot; Accueil Hub</a>
             <a href="#expertise" class="hover:text-white transition-colors">&middot; Services</a>
             <a href="/contacts" class="hover:text-white transition-colors">&middot; Demande Audit</a>
             <span @click="router.push('/login')" class="hover:text-white transition-colors cursor-pointer">&middot; Espace Employé</span>
@@ -191,7 +191,7 @@ onMounted(() => {
     </footer>
 
     <a 
-      href="https://wa.me/212522458900" 
+      href="https://wa.me/212662181012" 
       target="_blank" 
       rel="noopener noreferrer"
       class="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#20ba56] text-white p-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"

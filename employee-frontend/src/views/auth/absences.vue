@@ -195,9 +195,6 @@ onUnmounted(() => stopListening());
           <h2 :class="isDark ? 'text-white' : 'text-slate-900'" class="text-2xl font-black tracking-tight uppercase">Mes Absences</h2>
           <p class="text-xs text-slate-400 font-medium mt-1">Historique de vos pointages et justifications.</p>
         </div>
-        <button @click="router.push('/justification_create')" class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-all shadow-lg shadow-indigo-600/20 active:scale-95 self-start">
-          <i class="fas fa-plus"></i> Soumettre une justification
-        </button>
       </div>
 
       <div class="grid grid-cols-2 md:grid-cols-5 gap-3">

@@ -217,21 +217,6 @@ onUnmounted(() => {
               </p>
             </div>
 
-            <div class="grid grid-cols-3 gap-3 py-2 text-center">
-              <div :class="isDark ? 'bg-slate-900/30 border-slate-900/60' : 'bg-slate-50 border-slate-200/60'" class="p-3 rounded-2xl border">
-                <div :class="isDark ? 'text-white' : 'text-slate-900'" class="text-base font-black">236</div>
-                <div class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mt-1">Commits</div>
-              </div>
-              <div :class="isDark ? 'bg-slate-900/30 border-slate-900/60' : 'bg-slate-50 border-slate-200/60'" class="p-3 rounded-2xl border">
-                <div :class="isDark ? 'text-white' : 'text-slate-900'" class="text-base font-black">120</div>
-                <div class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mt-1">Tickets</div>
-              </div>
-              <div :class="isDark ? 'bg-slate-900/30 border-slate-900/60' : 'bg-slate-50 border-slate-200/60'" class="p-3 rounded-2xl border">
-                <div class="text-base font-black text-indigo-500 dark:text-indigo-400 font-mono">1.3K</div>
-                <div class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mt-1">Hours</div>
-              </div>
-            </div>
-
             <div class="space-y-4 pt-2">
               <div :class="isDark ? 'bg-slate-900/20 border-slate-900/40 hover:border-slate-800' : 'bg-slate-50/60 border-slate-200/80 hover:border-slate-300'" class="flex items-center gap-4 px-4 py-3 rounded-2xl border transition-colors">
                 <i class="fas fa-passport text-indigo-500 dark:text-indigo-400/80 text-sm w-5"></i>
