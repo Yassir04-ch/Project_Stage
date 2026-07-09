@@ -154,6 +154,7 @@ const router = createRouter({
     {
       path: '/services',
       name: 'Service',
+      component: Service,
       meta: { requiresAuth: true, roles: ['Administrateur', 'Manager'] }
     },
     {
