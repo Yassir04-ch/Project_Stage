@@ -54,7 +54,6 @@ const loadUnreadCount = async () => {
   } catch {}
 };
 
-// ✅ watch search + roleFilter bach API call ytdir automatiquement
 let searchTimeout = null;
 watch(search, () => {
   clearTimeout(searchTimeout);
@@ -81,11 +80,13 @@ onMounted(() => {
     <nav :class="isDark ? 'bg-slate-950/40 border-slate-900/80 text-slate-200' : 'bg-white/60 border-slate-200 text-slate-800'"
       class="backdrop-blur-xl px-8 py-4 flex justify-between items-center shadow-2xl border-b shrink-0 sticky top-0 z-50 w-full transition-colors duration-300">
 
-      <div class="flex items-center gap-3.5">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white text-xl font-black shadow-[0_4px_12px_rgba(99,102,241,0.3)] italic">D</div>
+      <div class="flex items-center gap-3.5 cursor-pointer" @click="router.push('/')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
+           D
+        </div>
         <div>
-          <h1 :class="isDark ? 'text-white' : 'text-slate-900'" class="text-base font-black tracking-wider uppercase italic leading-none">DataXpress</h1>
-          <p class="text-[10px] text-indigo-500 font-bold tracking-widest uppercase mt-1">Workspace Hub</p>
+            <h1 :class="isDark ? 'text-white' : 'text-slate-900'" class="text-base font-black tracking-wider uppercase italic leading-none">DataXpress</h1>
+            <p class="text-[10px] text-indigo-500 font-bold tracking-widest uppercase mt-1">Workspace Hub</p>
         </div>
       </div>
 

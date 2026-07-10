@@ -131,49 +131,95 @@ const formatTime = (dateStr) => {
     });
 };
 
+
 onMounted(async () => {
     await loadNotifications();
-    listenToNotifications(); // ✅ zid had ba3d ma currentUser.id khassha tkun mwjouda
+    listenToNotifications();
 });
 
 onUnmounted(() => {
-    stopListening(); // ✅ cleanup mlli component khrj
+    stopListening(); 
 });
 </script>
 
 <template>
-<div class="min-h-screen bg-[#f8fafc] font-sans antialiased pb-12">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <div class="min-h-screen bg-[#f8fafc] font-sans antialiased pb-12">
     
-    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 lg:px-8 shadow-sm">
-        <div class="max-w-6xl mx-auto flex items-center justify-between h-16">
-            
-            <div class="flex items-center gap-2 cursor-pointer" @click="router.push('/dashboard')">
-                <div class="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-md shadow-indigo-600/20">
-                    ⚡
-                </div>
-                <span class="text-sm font-bold text-slate-900 tracking-tight hidden sm:block">Dashboard HR</span>
-            </div>
+    <nav :class="isDark ? 'bg-slate-950/40 border-slate-900/80 text-slate-200' : 'bg-white/60 border-slate-200 text-slate-800'"
+     class="backdrop-blur-xl px-6 py-3 flex justify-between items-center shadow-2xl border-b shrink-0 sticky top-0 z-50 w-full transition-colors duration-300">
 
-            <div class="flex items-center gap-4">
-                <button class="relative p-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-xl transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.03 6.03 0 00-7-5.91V4a2 2 0 11-4 0v1.09A6.03 6.03 0 000 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                    </svg>
-                    <span v-if="unreadCount > 0" class="absolute top-1 right-1 w-2.5 h-2.5 bg-rose-500 border-2 border-white rounded-full"></span>
+         <div class="flex items-center gap-3.5 cursor-pointer" @click="router.push('/')">
+             <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
+                D
+            </div>
+            <div>
+                <h1 :class="isDark ? 'text-white' : 'text-slate-900'" class="text-base font-black tracking-wider uppercase italic leading-none">DataXpress</h1>
+                <p class="text-[10px] text-indigo-500 font-bold tracking-widest uppercase mt-1">Workspace Hub</p>
+            </div>
+         </div>
+
+         <div class="flex items-center gap-3">
+            
+             <div :class="isDark ? 'bg-slate-900/40 border-slate-800/60' : 'bg-slate-100 border-slate-200'"
+                class="flex items-center gap-1 p-1.5 rounded-xl border">
+
+                 <button @click="router.push('/notifications')"
+                        class="px-4 py-2 rounded-lg text-xs font-black bg-indigo-600 text-white shadow-[0_4px_12px_rgba(79,70,229,0.25)] hover:bg-indigo-700 transition-all flex items-center gap-2">
+                    <i class="fas fa-bell text-sm opacity-60"></i>
+                    <span class="hidden lg:inline">Notifications</span>
+                    <span v-if="unreadCount > 0"
+                        class="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white dark:border-slate-950">
+                        {{ unreadCount > 9 ? '9+' : unreadCount }}
+                    </span>
                 </button>
 
-                <div class="h-6 w-[1px] bg-slate-200"></div>
+                 <button @click="router.push('/myabsences')"
+                        class="px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-slate-500 hover:text-slate-900 hover:bg-white/80">
+                    <i class="fa-regular fa-calendar-minus text-sm opacity-60"></i>
+                    <span class="hidden lg:inline">Mes Absences</span>
+                </button>
 
-                <div class="flex items-center gap-2.5 cursor-pointer group" @click="router.push('/profile')">
-                    <div class="w-9 h-9 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center font-bold text-xs text-indigo-700 overflow-hidden shadow-sm group-hover:border-indigo-400 transition-colors uppercase">
-                        <img v-if="photoUrl" :src="photoUrl" alt="Avatar Frame" class="w-full h-full object-cover" />
+                 <button @click="router.push('/Myassignement')"
+                        class="px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-slate-500 hover:text-slate-900 hover:bg-white/80">
+                    <i class="fas fa-folder text-sm opacity-60"></i>
+                    <span class="hidden lg:inline">Assignement</span>
+                </button>
+
+                 <button @click="router.push('/allprojects')"
+                        class="px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-slate-500 hover:text-slate-900 hover:bg-white/80">
+                    <i class="fas fa-diagram-project text-sm opacity-60"></i>
+                    <span class="hidden lg:inline">Projects</span>
+                </button>
+
+                 <button v-if="currentUser?.role === 'Administrateur' || user?.role?.name === 'Administrateur'"
+                        @click="router.push('/users')"
+                        class="px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-slate-500 hover:text-slate-900 hover:bg-white/80">
+                    <i class="fas fa-gauge text-sm opacity-60"></i>
+                    <span class="hidden lg:inline">Dashboard</span>
+                </button>
+
+                 <button @click="router.push('/emploiyee')"
+                        class="px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-slate-500 hover:text-slate-900 hover:bg-white/80">
+                    <i class="fas fa-users text-sm"></i>
+                    <span class="hidden lg:inline">Employés</span>
+                </button>
+
+                 <button @click="router.push('/profile')"
+                        class="px-2 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2.5 group text-left">
+                    
+                     <div :class="isDark ? 'bg-slate-950 border-slate-800' : 'bg-white border-slate-200'" 
+                        class="w-7 h-7 rounded-full border flex items-center justify-center font-black text-[10px] text-indigo-500 overflow-hidden shadow-sm group-hover:border-indigo-500 transition-colors uppercase shrink-0">
+                        <img v-if="photoUrl" :src="photoUrl" alt="User Avatar" class="w-full h-full object-cover" />
                         <span v-else>{{ currentUser?.name ? currentUser.name.charAt(0) : 'U' }}</span>
                     </div>
-                    <div class="hidden sm:flex flex-col text-left">
-                        <span class="text-xs font-bold text-slate-800 tracking-tight group-hover:text-indigo-600 transition-colors">{{ currentUser?.name }}</span>
-                        <span class="text-[10px] font-medium text-slate-400">{{ currentUser?.role }}</span>
+
+                     <div class="hidden xl:flex flex-col leading-tight pr-1">
+                        <span :class="isDark ? 'text-slate-200 group-hover:text-indigo-400' : 'text-slate-800 group-hover:text-indigo-600'" class="text-[11px] font-bold transition-colors">{{ currentUser?.name || 'User' }}</span>
+                        <span class="text-[9px] font-medium text-slate-400">{{ currentUser?.role || 'Member' }}</span>
                     </div>
-                </div>
+                </button>
+
             </div>
 
         </div>

@@ -1,8 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import api from "@/api/axios"; // Assure-toi que had l-path s7i7 integration dial axial 3ndek
-
+import api from "@/api/axios"; 
 const router = useRouter();
 const services = ref([]);
 const loading = ref(true);
@@ -10,7 +9,6 @@ const loading = ref(true);
 const loadServices = async () => {
   try {
     const res = await api.get("/services");
-    // Hna ila l-api dial public makay7tajch token, rani khllito 3adi
     services.value = res.data.services || [];
   } catch (err) {
     console.error("Erreur lors du chargement des services:", err);
@@ -31,14 +29,15 @@ onMounted(() => {
     <div class="absolute top-[400px] right-0 w-[300px] h-[300px] bg-sky-100/30 rounded-full blur-3xl -z-10"></div>
 
     <nav class="max-w-7xl mx-auto px-6 lg:px-16 py-5 flex justify-between items-center sticky top-0 bg-slate-50/80 backdrop-blur-md z-50 border-b border-slate-200/40">
-      <div class="flex items-center gap-3 group cursor-pointer" @click="router.push('/')">
-        <div class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-white font-black text-sm tracking-wider shadow-xs transition-transform group-hover:scale-105">
-          DX
+       <div class="flex items-center gap-3.5 cursor-pointer" @click="router.push('/')">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
+             D
+          </div>
+          <div>
+            <h1 :class="isDark ? 'text-white' : 'text-slate-900'" class="text-base font-black tracking-wider uppercase italic leading-none">DataXpress</h1>
+              <p class="text-[10px] text-indigo-500 font-bold tracking-widest uppercase mt-1">Workspace Hub</p>
+          </div>
         </div>
-        <h1 class="text-lg font-black tracking-tight text-slate-900 uppercase">
-          Data<span class="text-blue-600">Xpress</span>
-        </h1>
-      </div>
 
       <div class="hidden md:flex items-center gap-8 text-[14px] font-bold text-slate-500">
         <a href="#home" class="text-slate-900 hover:text-blue-600 transition-colors">Accueil</a>

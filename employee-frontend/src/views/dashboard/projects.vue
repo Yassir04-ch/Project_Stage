@@ -69,9 +69,9 @@ onMounted(() => {
       
       <div class="flex flex-col">
         <div class="flex items-center gap-3.5 mb-10 pb-4 border-b border-slate-900">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 text-blue-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
             D
-          </div>
+        </div>
           <div>
             <h1 class="text-lg font-black tracking-tight text-white uppercase italic">DATAXPRESS</h1>
             <p class="text-xs text-indigo-400 font-bold tracking-wider uppercase">Workspace Admin</p>

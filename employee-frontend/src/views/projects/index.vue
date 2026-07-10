@@ -128,10 +128,12 @@ onUnmounted(() => stopListening());
       class="backdrop-blur-xl px-8 py-4 flex justify-between items-center shadow-2xl border-b shrink-0 sticky top-0 z-50 w-full transition-colors duration-300">
 
       <div class="flex items-center gap-3.5 cursor-pointer" @click="router.push('/')">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white text-xl font-black shadow-[0_4px_12px_rgba(99,102,241,0.3)] italic">D</div>
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
+            D
+        </div>
         <div>
-          <h1 :class="isDark ? 'text-white' : 'text-slate-900'" class="text-base font-black tracking-wider uppercase italic leading-none">DataXpress</h1>
-          <p class="text-[10px] text-indigo-500 font-bold tracking-widest uppercase mt-1">Workspace Hub</p>
+            <h1 :class="isDark ? 'text-white' : 'text-slate-900'" class="text-base font-black tracking-wider uppercase italic leading-none">DataXpress</h1>
+            <p class="text-[10px] text-indigo-500 font-bold tracking-widest uppercase mt-1">Workspace Hub</p>
         </div>
       </div>
 
@@ -162,6 +164,12 @@ onUnmounted(() => stopListening());
 
           <button class="px-4 py-2.5 rounded-lg text-xs font-black bg-indigo-600 text-white shadow-[0_4px_12px_rgba(79,70,229,0.25)] flex items-center gap-2">
             <i class="fas fa-diagram-project text-sm"></i><span class="hidden md:inline">Projects</span>
+          </button>
+
+          <button @click="router.push('/emploiyee')"
+             class="px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-slate-500 hover:text-slate-900 hover:bg-white/80">
+             <i class="fas fa-users text-sm"></i>
+             <span class="hidden lg:inline">Employés</span>
           </button>
 
           <button v-if="user?.role?.name === 'Administrateur'"
@@ -259,7 +267,7 @@ onUnmounted(() => stopListening());
         <div v-for="p in filteredProjects" :key="p.id"
           :class="isDark ? 'bg-slate-900/30 border-slate-900 hover:border-slate-700' : 'bg-white border-slate-200/80 shadow-sm hover:border-slate-300 hover:shadow-md'"
           class="p-5 rounded-2xl border transition-all duration-200 flex flex-col gap-4 cursor-pointer group">
-          
+
           <!-- Top -->
           <div class="flex items-start justify-between gap-3">
             <div class="flex items-center gap-3 min-w-0 flex-1">

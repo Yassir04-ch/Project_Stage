@@ -72,9 +72,9 @@ onMounted(() => {
       
       <div class="flex flex-col">
         <div class="flex items-center gap-3.5 mb-10 pb-4 border-b border-slate-900">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
-            D
-          </div>
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 text-blue-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
+              D
+          </div> 
           <div>
             <h1 class="text-lg font-black tracking-tight text-white uppercase italic">DATAXPRESS</h1>
             <p class="text-xs text-indigo-400 font-bold tracking-wider uppercase">Workspace Admin</p>
@@ -84,7 +84,7 @@ onMounted(() => {
         <div class="space-y-2">
           <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Workspace</p>
           <nav class="space-y-1.5">
-            <button @click="router.push('/dashboard')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+            <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
               <span class="text-base opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all">🏠</span>
               <span>Dashboard</span>
             </button>

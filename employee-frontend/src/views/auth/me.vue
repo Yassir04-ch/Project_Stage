@@ -128,15 +128,15 @@ onUnmounted(() => {
   <div :class="isDark ? 'bg-slate-950 text-slate-400' : 'bg-slate-50 text-slate-600'" class="min-h-screen font-sans antialiased w-full flex flex-col selection:bg-indigo-500/30 selection:text-white transition-colors duration-300">
 
    <nav :class="isDark ? 'bg-slate-950/40 border-slate-900/80 text-slate-200' : 'bg-white/60 border-slate-200 text-slate-800'" class="backdrop-blur-xl px-8 py-4 flex justify-between items-center shadow-2xl border-b shrink-0 sticky top-0 z-50 w-full transition-colors duration-300">
-    <div class="flex items-center gap-3.5">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white text-xl font-black shadow-[0_4px_12px_rgba(99,102,241,0.3)] italic">
-        D
-      </div>
-      <div>
-        <h1 :class="isDark ? 'text-white' : 'text-slate-900'" class="text-base font-black tracking-wider uppercase italic leading-none">DataXpress</h1>
-        <p class="text-[10px] text-indigo-500 dark:text-indigo-400 font-bold tracking-widest uppercase mt-1">Workspace Hub</p>
-      </div>
-    </div>
+     <div class="flex items-center gap-3.5 cursor-pointer" @click="router.push('/')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
+                D
+        </div>
+        <div>
+          <h1 :class="isDark ? 'text-white' : 'text-slate-900'" class="text-base font-black tracking-wider uppercase italic leading-none">DataXpress</h1>
+            <p class="text-[10px] text-indigo-500 font-bold tracking-widest uppercase mt-1">Workspace Hub</p>
+        </div>
+     </div>
 
     <div class="flex items-center gap-3">
       <div :class="isDark ? 'bg-slate-900/40 border-slate-800/60' : 'bg-slate-100 border-slate-200'" class="flex items-center gap-1 p-1.5 rounded-xl border">
@@ -175,7 +175,6 @@ onUnmounted(() => {
         </button>
         <button @click="router.push('/emploiyee')" :class="isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-900'" class="px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
           <i class="fas fa-user text-sm"></i>
-          <span class="hidden md:inline">Emploiyée</span>
         </button>
 
         <button @click="router.push('/profile')" class="px-4 py-2.5 rounded-lg text-xs font-black bg-indigo-600 text-white shadow-[0_4px_12px_rgba(79,70,229,0.25)] flex items-center gap-2">

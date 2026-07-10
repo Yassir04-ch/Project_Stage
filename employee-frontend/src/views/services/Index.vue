@@ -1,3 +1,40 @@
+<script setup>
+import { useServices } from "@/composables/useServices";
+
+import Sidebar from "@/components/services/Sidebar.vue";
+import Header from "@/components/services/Header.vue";
+import FlashMessage from "@/components/services/FlashMessage.vue";
+import ServiceList from "@/components/services/ServiceList.vue";
+import ServiceDetails from "@/components/services/ServiceDetails.vue";
+import ServiceFormModal from "@/components/services/ServiceFormModal.vue";
+import AddMemberModal from "@/components/services/AddMemberModal.vue";
+
+const {
+  services,
+  employees,
+  loading,
+  currentUser,
+  selectedService,
+  showForm,
+  formMode,
+  formLoading,
+  flash,
+  showAddMemberModal,
+  searchEmployee,
+  form,
+  loadServiceDetail,
+  submitForm,
+  deleteService,
+  handleAssign,
+  removeEmployee,
+  openCreate,
+  openEdit,
+  resetForm,
+  filteredUnassignedEmployees,
+  getPhotoUrl,
+} = useServices();
+</script>
+
 <template>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -50,40 +87,3 @@
     @update:search-employee="searchEmployee = $event"
   />
 </template>
-
-<script setup>
-import { useServices } from "@/composables/useServices";
-
-import Sidebar from "@/components/services/Sidebar.vue";
-import Header from "@/components/services/Header.vue";
-import FlashMessage from "@/components/services/FlashMessage.vue";
-import ServiceList from "@/components/services/ServiceList.vue";
-import ServiceDetails from "@/components/services/ServiceDetails.vue";
-import ServiceFormModal from "@/components/services/ServiceFormModal.vue";
-import AddMemberModal from "@/components/services/AddMemberModal.vue";
-
-const {
-  services,
-  employees,
-  loading,
-  currentUser,
-  selectedService,
-  showForm,
-  formMode,
-  formLoading,
-  flash,
-  showAddMemberModal,
-  searchEmployee,
-  form,
-  loadServiceDetail,
-  submitForm,
-  deleteService,
-  handleAssign,
-  removeEmployee,
-  openCreate,
-  openEdit,
-  resetForm,
-  filteredUnassignedEmployees,
-  getPhotoUrl,
-} = useServices();
-</script>

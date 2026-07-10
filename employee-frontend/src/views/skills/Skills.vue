@@ -88,7 +88,7 @@ onMounted(() => loadSkills())
     <aside class="bg-slate-900 text-white w-72 min-h-screen p-5 flex flex-col justify-between shadow-2xl">
       <div>
          <div class="flex items-center gap-3.5 mb-10 pb-4 border-b border-slate-900">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 text-blue-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
             D
           </div>
           <div>
