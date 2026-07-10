@@ -1,83 +1,96 @@
 <script setup>
 import { onMounted, ref, computed } from "vue";
-import api from '@/api/axios'
+import api from '@/api/axios';
 import { useRouter } from "vue-router";
-
 
 const router = useRouter();
 
-const skills     = ref([])
-const loading    = ref(false)
-const creating   = ref(false)
-const showForm   = ref(false)
-const newSkillName = ref('')
-const success    = ref('')
-const error      = ref('')
-const formError  = ref('')
+const skills       = ref([]);
+const loading    = ref(false);
+const creating   = ref(false);
+const showForm   = ref(false);
+const newSkillName = ref('');
+const success    = ref('');
+const error      = ref('');
+const formError  = ref('');
 const currentUser = ref(null);
 
-
-
 const loadSkills = async () => {
-  loading.value = true
+  loading.value = true;
+  error.value = '';
   try {
-
-     const response = await api.get("/skills", {
+    const res = await api.get('/skills', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
+    skills.value = res.data.skills || [];
 
-    const res = await api.get('/skills')
-    skills.value = res.data.skills
-    currentUser.value = response.data.admin || null;
+    const userResponse = await api.get("/users", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    currentUser.value = userResponse.data.admin || null;
 
   } catch (err) {
-    error.value = 'Erreur lors du chargement'
+    console.error("Erreur lors du chargement:", err);
+    error.value = 'Erreur lors du chargement des données';
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 const createSkill = async () => {
   if (!newSkillName.value.trim()) {
-    formError.value = 'Le nom est obligatoire'
-    return
+    formError.value = 'Le nom est obligatoire';
+    return;
   }
-  creating.value = true
-  formError.value = ''
+  creating.value = true;
+  formError.value = '';
   try {
-    const res = await api.post('/skills', { name: newSkillName.value.trim() })
-    skills.value.push(res.data.skill)
-    newSkillName.value = ''
-    showForm.value = false
-    success.value = 'Compétence créée avec succès'
-    setTimeout(() => success.value = '', 3000)
+    const res = await api.post('/skills', 
+      { name: newSkillName.value.trim() },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    skills.value.push(res.data.skill);
+    newSkillName.value = '';
+    showForm.value = false;
+    success.value = 'Compétence créée avec succès';
+    setTimeout(() => success.value = '', 3000);
   } catch (err) {
-    formError.value = err.response?.data?.errors?.name?.[0] ?? 'Erreur lors de la création'
+    formError.value = err.response?.data?.errors?.name?.[0] ?? 'Erreur lors de la création';
   } finally {
-    creating.value = false
+    creating.value = false;
   }
-}
+};
 
 const deleteSkill = async (skill) => {
-  if (!confirm(`Supprimer "${skill.name}" ?`)) return
+  if (!confirm(`Supprimer "${skill.name}" ?`)) return;
   try {
-    await api.delete(`/skills/${skill.id}`)
-    skills.value = skills.value.filter(s => s.id !== skill.id)
-    success.value = 'Compétence supprimée'
-    setTimeout(() => success.value = '', 3000)
+    await api.delete(`/skills/${skill.id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    skills.value = skills.value.filter(s => s.id !== skill.id);
+    success.value = 'Compétence supprimée';
+    setTimeout(() => success.value = '', 3000);
   } catch (err) {
-    error.value = 'Erreur lors de la suppression'
-    setTimeout(() => error.value = '', 3000)
+    error.value = 'Erreur lors de la suppression';
+    setTimeout(() => error.value = '', 3000);
   }
-}
+};
 
-const canAccessSkills = computed(() =>
+const canAccess = computed(() =>
   ["Administrateur"].includes(currentUser.value?.role?.name)
 );
 
-onMounted(() => loadSkills())
+onMounted(() => loadSkills());
 </script>
 
 <template>
@@ -104,8 +117,8 @@ onMounted(() => loadSkills())
               <span>Dashboard</span>
             </button>
 
-            <button v-if="canAccessSkills" @click="router.push('/projects')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left"">
-              <span class="text-base group-hover:scale-110 transition-transform">📁</span>
+            <button v-if="canAccess" @click="router.push('/projects')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+              <span class="text-base opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all">📁</span>
               <span>Projects</span>
             </button>
 
@@ -123,7 +136,7 @@ onMounted(() => loadSkills())
               <i class="fa-solid fa-brain text-base w-5 group-hover:scale-110 transition-transform"></i>
               <span>Compétences</span>
             </button>
-             <button v-if="canAccessSkills" @click="router.push('/services')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+             <button v-if="canAccess" @click="router.push('/services')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
               <i class="fas fa-building text-base w-5"></i><span>Services</span>
             </button>
           </nav>

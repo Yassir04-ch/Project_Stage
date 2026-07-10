@@ -2,9 +2,13 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import api from "@/api/axios"; 
+
 const router = useRouter();
 const services = ref([]);
 const loading = ref(true);
+
+// Zedt lik had l-variable hit kenti msta3melha f l-HTML w ma-diclaratyhach
+const isDark = ref(false);
 
 const loadServices = async () => {
   try {
@@ -31,7 +35,7 @@ onMounted(() => {
     <nav class="max-w-7xl mx-auto px-6 lg:px-16 py-5 flex justify-between items-center sticky top-0 bg-slate-50/80 backdrop-blur-md z-50 border-b border-slate-200/40">
        <div class="flex items-center gap-3.5 cursor-pointer" @click="router.push('/')">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 flex items-center justify-center text-white text-xl font-black shadow-md shadow-indigo-500/20">
-             D
+              D
           </div>
           <div>
             <h1 :class="isDark ? 'text-white' : 'text-slate-900'" class="text-base font-black tracking-wider uppercase italic leading-none">DataXpress</h1>
@@ -40,7 +44,7 @@ onMounted(() => {
         </div>
 
       <div class="hidden md:flex items-center gap-8 text-[14px] font-bold text-slate-500">
-        <a href="#home" class="text-slate-900 hover:text-blue-600 transition-colors">Accueil</a>
+        <a href="" class="text-slate-900 hover:text-blue-600 transition-colors">Accueil</a>
         <a href="#expertise" class="hover:text-blue-600 transition-colors">Expertise</a>
         <a href="/contacts" class="hover:text-blue-600 transition-colors">Contact & Audit</a>
         
@@ -52,41 +56,44 @@ onMounted(() => {
       </div>
     </nav>
 
-    <header id="home" class="max-w-7xl mx-auto px-6 lg:px-16 pt-20 pb-24 text-center relative">
-      <div class="max-w-3xl mx-auto space-y-6">
-        
-        <div class="inline-flex items-center gap-2 bg-blue-50 border border-blue-100/80 px-3 py-1 rounded-full text-[11px] font-bold text-blue-700 uppercase tracking-widest mx-auto shadow-2xs animate-fadeIn">
-          <span class="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></span>
-          <span class="font-extrabold">Ingénierie & Architecture Data</span>
-        </div>
+    <header id="home" class="relative w-full min-h-[80vh] flex items-center justify-center overflow-hidden isolate">
+  
+      <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+        <source src="/video.mp4" type="video/mp4">
+      </video>
 
-        <h2 class="text-4xl sm:text-6xl font-black tracking-tight text-slate-900 uppercase leading-[1.15]">
-          Accelerate Your<br>
-          <span class="bg-gradient-to-r from-blue-600 to-sky-500 bg-clip-text text-transparent">Data Maturity</span>
-        </h2>
-        
-        <p class="text-slate-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-medium">
-          DATAXPRESS orchestre et modernise vos écosystèmes complexes en pipelines analytiques fluides, sécurisés et hautement performants.
-        </p>
+      <div class="absolute inset-0 bg-white/30 backdrop-blur-[1px] z-10"></div>
 
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-4">
-          <a
-            href="/contacts"
-            class="w-full sm:w-auto bg-slate-900 text-white px-8 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md hover:bg-blue-600 transition-all text-center"
-          >
-            Demander un Audit Gratuit
-          </a>
-          <a
-            href="#expertise"
-            class="w-full sm:w-auto bg-white text-slate-700 border border-slate-200/80 px-8 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition-all shadow-2xs text-center"
-          >
-            Découvrir nos Services
-          </a>
+      <div class="max-w-7xl mx-auto px-6 lg:px-16 pt-20 pb-24 text-center relative z-20 w-full">
+        <div class="max-w-3xl mx-auto space-y-6">
+          
+          <div class="inline-flex items-center gap-2 bg-white/80 border border-blue-100/80 px-3 py-1 rounded-full text-[11px] font-bold text-blue-700 uppercase tracking-widest mx-auto shadow-2xs animate-fadeIn backdrop-blur-sm">
+            <span class="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></span>
+            <span class="font-extrabold">Ingénierie & Architecture Data</span>
+          </div>
+
+          <h2 class="text-4xl sm:text-6xl font-black tracking-tight text-slate-900 uppercase leading-[1.15] drop-shadow-sm">
+            Accelerate Your<br>
+            <span class="bg-gradient-to-r from-blue-700 to-sky-500 bg-clip-text text-transparent">Data Maturity</span>
+          </h2>
+          
+          <p class="text-slate-700 text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-semibold">
+            DATAXPRESS orchestre et modernise vos écosystèmes complexes en pipelines analytiques fluides, sécurisés et hautement performants.
+          </p>
+
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-4">
+            <a href="/contacts" class="w-full sm:w-auto bg-slate-900 text-white px-8 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md hover:bg-blue-600 transition-all text-center">
+              Demander un Audit Gratuit
+            </a>
+            <a href="#expertise" class="w-full sm:w-auto bg-white/90 backdrop-blur-sm text-slate-800 border border-slate-200/80 px-8 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition-all shadow-2xs text-center">
+              Découvrir nos Services
+            </a>
+          </div>
+          
         </div>
       </div>
     </header>
 
-    <!-- SECTION DYNAMIC EXPERTISE -->
     <section id="expertise" class="max-w-7xl mx-auto px-6 lg:px-16 pb-28">
       <div class="text-center max-w-xl mx-auto mb-16 space-y-2">
         <span class="text-[10px] font-black uppercase tracking-widest text-blue-600">Notre savoir-faire</span>
@@ -94,24 +101,20 @@ onMounted(() => {
         <p class="text-slate-400 text-xs font-medium">Modernisation end-to-end adaptée aux stacks de production critiques.</p>
       </div>
 
-      <!-- Loading State -->
       <div v-if="loading" class="flex flex-col items-center justify-center py-20 space-y-4">
         <div class="w-9 h-9 border-3 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
         <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Chargement des services de l'entreprise...</p>
       </div>
 
-      <!-- Empty State -->
       <div v-else-if="services.length === 0" class="text-center py-16 bg-white border border-slate-200/60 rounded-2xl p-8 max-w-md mx-auto">
         <p class="text-sm font-bold text-slate-400">Aucun service disponible pour le moment.</p>
       </div>
 
-      <!-- Services Grid list from API -->
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         
         <div v-for="service in services" :key="service.id" 
           class="bg-white border border-slate-200/60 p-6 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col justify-between group hover:border-blue-500/40 hover:shadow-[0_15px_40px_rgba(37,99,235,0.05)] transition-all duration-300">
           <div>
-            <!-- Header Icon block inside dynamic loop -->
             <div class="w-11 h-11 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center mb-5 group-hover:bg-blue-50 group-hover:border-blue-100 transition-colors">
               <svg class="w-5 h-5 text-slate-600 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
