@@ -81,7 +81,7 @@ onMounted(() => {
         <div class="space-y-2">
           <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Workspace</p>
           <nav class="space-y-1.5">
-            <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+            <button @click="router.push('/statystic')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
               <span class="text-base opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all">🏠</span>
               <span>Dashboard</span>
             </button>

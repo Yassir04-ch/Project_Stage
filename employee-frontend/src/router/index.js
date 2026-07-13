@@ -23,6 +23,7 @@ import AllProjects from '@/views/projects/index.vue'
 import AllEmploiyee from '@/views/employees/List.vue'
 import Contact from '@/views/contacts/contact.vue'
 import Service from '@/views/services/Index.vue'
+import Statistic from '@/views/dashboard/index.vue'
 
 
 const router = createRouter({
@@ -49,6 +50,11 @@ const router = createRouter({
       name: "dashboard",
       component: Users,
       meta: { requiresAuth: true, roles: ['Administrateur', 'Ressources Humaines'] }
+    },
+    {
+      path: "/statystic",
+      name: "statystic",
+      component: Statistic,
     },
     {
       path: "/",

@@ -77,6 +77,23 @@ const canAccessSkills = computed(() =>
   ["Administrateur"].includes(currentUser.value?.role?.name)
 );
 
+// 📊 Calcul dyal les statistiques par rôle (Nafs l-logic)
+const countAdmins = computed(() => 
+  users.value.filter(u => u.role?.name === 'Administrateur').length
+);
+
+const countManagers = computed(() => 
+  users.value.filter(u => u.role?.name === 'Manager').length
+);
+
+const countRH = computed(() => 
+  users.value.filter(u => u.role?.name === 'Ressources Humaines').length
+);
+
+const countEmployees = computed(() => 
+  users.value.filter(u => u.role?.name === 'Employé').length
+);
+
 
 onMounted(async () => {
   await getUsers();
@@ -110,7 +127,7 @@ onUnmounted(() => {
         <div class="space-y-2">
           <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Workspace</p>
           <nav class="space-y-1.5">
-            <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+            <button @click="router.push('/statystic')"  class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
               <span class="text-base opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all">🏠</span>
               <span>Dashboard</span>
             </button>
@@ -188,31 +205,38 @@ onUnmounted(() => {
             <span>Ajouter Employee</span>
           </button>
 
-        <button @click="router.push('/notifications')" class="relative w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-all shadow-sm">
-            🔔
-            <span v-if="unreadCount > 0"
-            class="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white dark:border-slate-950">
-            {{ unreadCount > 9 ? '9+' : unreadCount }}
-          </span>
-        </button>   
+          <button @click="router.push('/notifications')" class="relative w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-all shadow-sm">
+              🔔
+              <span v-if="unreadCount > 0"
+              class="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white dark:border-slate-950">
+              {{ unreadCount > 9 ? '9+' : unreadCount }}
+            </span>
+          </button>   
+        </div>
       </div>
-      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        
         <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all">
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Effectif global</span>
-          <h2 class="text-3xl font-black mt-2 text-slate-900 tracking-tight">120</h2>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Administrateurs</span>
+          <h2 class="text-3xl font-black mt-2 text-slate-900 tracking-tight">{{ countAdmins }}</h2>
         </div>
 
         <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all">
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Projets actifs</span>
-          <h2 class="text-3xl font-black mt-2 text-slate-900 tracking-tight">35</h2>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Managers</span>
+          <h2 class="text-3xl font-black mt-2 text-slate-900 tracking-tight">{{ countManagers }}</h2>
         </div>
 
         <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all">
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Chiffre mensuel</span>
-          <h2 class="text-3xl font-black mt-2 text-slate-900 tracking-tight">$24K</h2>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Ressources Humaines</span>
+          <h2 class="text-3xl font-black mt-2 text-slate-900 tracking-tight">{{ countRH }}</h2>
         </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Employés</span>
+          <h2 class="text-3xl font-black mt-2 text-slate-900 tracking-tight">{{ countEmployees }}</h2>
+        </div>
+
       </div>
 
       <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
