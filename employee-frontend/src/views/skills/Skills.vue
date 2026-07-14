@@ -122,6 +122,11 @@ onMounted(() => loadSkills());
               <span>Projects</span>
             </button>
 
+            <button  @click="router.push('/offres')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+              <i class="fas fa-briefcase text-base group-hover:scale-110 transition-transform"></i>
+              <span>Offres d'emploi</span>
+            </button>
+
             <button @click="router.push('/users')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
               <span class="text-base opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all">👥</span>
               <span>Utilisateurs</span>

@@ -7,7 +7,6 @@ const router = useRouter();
 const services = ref([]);
 const loading = ref(true);
 
-// Zedt lik had l-variable hit kenti msta3melha f l-HTML w ma-diclaratyhach
 const isDark = ref(false);
 
 const loadServices = async () => {
@@ -46,6 +45,7 @@ onMounted(() => {
       <div class="hidden md:flex items-center gap-8 text-[14px] font-bold text-slate-500">
         <a href="" class="text-slate-900 hover:text-blue-600 transition-colors">Accueil</a>
         <a href="#expertise" class="hover:text-blue-600 transition-colors">Expertise</a>
+        <a href="/carrieres" class="hover:text-blue-600 transition-colors">carrieres</a>
         <a href="/contacts" class="hover:text-blue-600 transition-colors">Contact & Audit</a>
         
         <button

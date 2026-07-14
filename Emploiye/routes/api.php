@@ -7,9 +7,11 @@ use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AbsenceController;
+use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\JustificationController;
 use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\JobOfferController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ServiceController;
@@ -112,6 +114,19 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/services/{service}/assign', [ServiceController::class, 'assignEmployee']);
         Route::post('/services/{service}/remove-employee', [ServiceController::class, 'removeEmployee']);
+    });
+
+
+      Route::middleware('role:Administrateur,Ressources Humaines')->group(function () {
+        Route::post('/job-offers', [JobOfferController::class, 'store']);
+        Route::put('/job-offers/{jobOffer}', [JobOfferController::class, 'update']);
+        Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']);
+        Route::get('/job-offers/{jobOffer}/applications', [ApplicationController::class, 'indexByOffer']);
+        Route::put('/applications/{application}/status', [ApplicationController::class, 'updateStatus']);
+        Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']);
+        Route::get('/job-offers', [JobOfferController::class, 'index']);
+        Route::get('/job-offers/{jobOffer}', [JobOfferController::class, 'show']);
+        Route::post('/job-offers/{jobOffer}/apply', [ApplicationController::class, 'store']);
     });
 
 });

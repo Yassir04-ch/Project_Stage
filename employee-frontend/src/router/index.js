@@ -24,6 +24,11 @@ import AllEmploiyee from '@/views/employees/List.vue'
 import Contact from '@/views/contacts/contact.vue'
 import Service from '@/views/services/Index.vue'
 import Statistic from '@/views/dashboard/index.vue'
+import Careers from '@/views/offers/Careers.vue'
+import OfferDetail from '@/views/offers/OfferDetail.vue'
+import ManageOffers from '@/views/offers/ManageOffers.vue'
+import OfferForm from '@/views/offers/create.vue'
+import OfferApplications from '@/views/offers/Applications.vue'
 
 
 const router = createRouter({
@@ -167,10 +172,49 @@ const router = createRouter({
       path: '/contacts',
       name: 'contact',
       component: Contact,
+    },
+    {
+      path: '/contacts',
+      name: 'contact',
+      component: Contact,
+    },
+    {
+      path: '/carrieres',
+      name: 'careers',
+      component: Careers,
+    },
+    {
+      path: '/carrieres/:id',
+      name: 'careers.detail',
+      component: OfferDetail,
+    },
+    {
+      path: '/offres',
+      name: 'offers.manage',
+      component: ManageOffers,
+      meta: { requiresAuth: true, roles: ['Administrateur', 'Ressources Humaines'] }
+    },
+    {
+      path: '/offres/nouvelle',
+      name: 'offers.create',
+      component: OfferForm,
+      meta: { requiresAuth: true, roles: ['Administrateur', 'Ressources Humaines'] }
+    },
+    {
+      path: '/offres/:id/modifier',
+      name: 'offers.edit',
+      component: OfferForm,
+      meta: { requiresAuth: true, roles: ['Administrateur', 'Ressources Humaines'] }
+    },
+    {
+      path: '/offres/:id/candidatures',
+      name: 'offers.applications',
+      component: OfferApplications,
+      meta: { requiresAuth: true, roles: ['Administrateur', 'Ressources Humaines'] }
     }
-
   ]
-});
+  
+  });
 
 router.beforeEach((to, from) => {
   const token = localStorage.getItem('token')

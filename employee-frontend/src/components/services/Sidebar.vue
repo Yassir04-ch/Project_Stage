@@ -36,6 +36,10 @@ const canAccessSkills = computed(() =>
           <button @click="router.push('/projects')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
             <span class="text-base opacity-70 group-hover:opacity-100">📁</span><span>Projets</span>
           </button>
+          <button v-if="canAccessSkills" @click="router.push('/offres')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
+            <i class="fas fa-briefcase text-base group-hover:scale-110 transition-transform"></i>
+            <span>Offres d'emploi</span>
+          </button>
           <button v-if="canAccessSkills" @click="router.push('/users')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/60 font-medium transition-all text-sm group text-left">
             <span class="text-base opacity-70 group-hover:opacity-100">👥</span><span>Utilisateurs</span>
           </button>
