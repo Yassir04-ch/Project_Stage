@@ -174,11 +174,6 @@ const router = createRouter({
       component: Contact,
     },
     {
-      path: '/contacts',
-      name: 'contact',
-      component: Contact,
-    },
-    {
       path: '/carrieres',
       name: 'careers',
       component: Careers,

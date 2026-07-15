@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\JustificationController;
 use App\Http\Controllers\Api\AssignmentController;
+use App\Http\Controllers\Api\ChatbotController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\JobOfferController;
 use App\Http\Controllers\Api\SkillController;
@@ -53,7 +54,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/projects', [ProjectController::class, 'index']);
     Route::get('/projects/{id}', [ProjectController::class, 'show']);
 
-    Route::get('/services', [ServiceController::class, 'index']);
     Route::get('/services/{service}', [ServiceController::class, 'show']);
 
 
@@ -124,9 +124,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/job-offers/{jobOffer}/applications', [ApplicationController::class, 'indexByOffer']);
         Route::put('/applications/{application}/status', [ApplicationController::class, 'updateStatus']);
         Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']);
+        });
+        
+});
+        Route::get('/services', [ServiceController::class, 'index']);
         Route::get('/job-offers', [JobOfferController::class, 'index']);
         Route::get('/job-offers/{jobOffer}', [JobOfferController::class, 'show']);
         Route::post('/job-offers/{jobOffer}/apply', [ApplicationController::class, 'store']);
-    });
 
-});
+        Route::post('/chatbot', [ChatbotController::class, 'chat']);
