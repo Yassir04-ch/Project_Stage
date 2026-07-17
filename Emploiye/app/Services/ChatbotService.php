@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\JobOffer;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class ChatbotService
@@ -16,75 +15,74 @@ class ChatbotService
             throw new \Exception('OPENROUTER_API_KEY introuvable.');
         }
 
-        // Offres d'emploi en cache pendant 5 minutes
-        $jobs = Cache::remember('chatbot_open_jobs', 300, function () {
-            return JobOffer::where('status', 'open')
-                ->select(
-                    'title',
-                    'description',
-                    'requirements',
-                    'location',
-                    'contract_type',
-                    'salary_min',
-                    'salary_max',
-                    'deadline'
-                )
-                ->get();
-        });
+        // Récupération des offres ouvertes
+        $jobs = JobOffer::where('status', 'open')
+            ->select(
+                'title',
+                'description',
+                'requirements',
+                'location',
+                'contract_type',
+                'salary_min',
+                'salary_max',
+                'deadline'
+            )
+            ->get();
 
         $jobsText = "";
 
-        if ($jobs->count()) {
+        if ($jobs->isNotEmpty()) {
+
             foreach ($jobs as $job) {
 
                 $jobsText .= "
-                    Titre : {$job->title}
-                    Description : {$job->description}
-                    Compétences : {$job->requirements}
-                    Localisation : {$job->location}
-                    Contrat : {$job->contract_type}
-                    Salaire : {$job->salary_min} - {$job->salary_max}
-                    Date limite : {$job->deadline}
+Titre : {$job->title}
+Description : {$job->description}
+Compétences : {$job->requirements}
+Localisation : {$job->location}
+Contrat : {$job->contract_type}
+Salaire : {$job->salary_min} - {$job->salary_max}
+Date limite : {$job->deadline}
 
-                    ";
+";
             }
+
         } else {
+
             $jobsText = "Aucune offre d'emploi ouverte actuellement.";
+
         }
 
         $systemPrompt = "
-            Tu es le chatbot officiel de DataXpress.
+Tu es le chatbot officiel de DataXpress.
 
-            Ton rôle est d'aider les visiteurs du site.
+Tu aides uniquement les visiteurs concernant :
 
-            Tu réponds UNIQUEMENT aux questions concernant :
+- DataXpress
+- Les services
+- Les employés
+- Les carrières
+- Les stages
+- Les offres d'emploi
+- Le recrutement
+- Les contacts
 
-            - DataXpress
-            - L'entreprise
-            - Les services
-            - Les employés
-            - Les carrières
-            - Les stages
-            - Les offres d'emploi
-            - Le recrutement
-            - Les contacts
+Règles :
 
-            Informations importantes :
+- Réponds toujours en français.
+- Sois professionnel.
+- Si la question concerne les offres d'emploi, utilise uniquement la liste ci-dessous.
+- Si aucune offre n'existe, indique qu'il n'y a actuellement aucune offre ouverte.
+- Si on demande comment postuler, indique d'aller sur la page Carrières.
+- Si on demande les coordonnées, indique d'aller sur la page Contact.
+- Si la question est hors sujet (football, cuisine, politique, etc.), réponds :
 
-            - Si le visiteur demande les offres d'emploi, utilise UNIQUEMENT la liste ci-dessous.
-            - Si aucune offre n'existe, indique qu'il n'y a actuellement aucune offre ouverte.
-            - Si le visiteur demande comment postuler, indique qu'il doit consulter la page Carrières.
-            - Si le visiteur demande les coordonnées, invite-le à consulter la page Contact.
-            - Si la question est hors sujet (football, cuisine, politique, jeux vidéo...), réponds uniquement :
+Je peux uniquement répondre aux questions concernant DataXpress, ses services, ses carrières et son recrutement.
 
-            Je peux uniquement répondre aux questions concernant DataXpress, les carrières et le recrutement.
+Offres actuellement disponibles :
 
-            Réponds toujours en français.
-
-            Voici les offres actuellement disponibles :
-
-            {$jobsText}
-            ";
+{$jobsText}
+";
 
         $response = Http::timeout(30)
             ->retry(2, 1000)
@@ -110,10 +108,13 @@ class ChatbotService
                 ],
 
                 'temperature' => 0.4,
+                'max_tokens' => 500,
             ]);
 
-        if (!$response->successful()) {
-            throw new \Exception($response->body());
+       if (!$response->successful()) {
+
+            return "Le chatbot est actuellement très sollicité.
+            Veuillez réessayer dans quelques instants.";
         }
 
         return data_get(

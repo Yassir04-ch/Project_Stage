@@ -196,7 +196,7 @@ onMounted(() => {
       href="https://wa.me/212662181012" 
       target="_blank" 
       rel="noopener noreferrer"
-      class="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#20ba56] text-white p-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"
+      class="fixed bottom-24 right-6 z-50 bg-[#25D366] hover:bg-[#20ba56] text-white p-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"
       title="Contactez-nous sur WhatsApp"
     >
       <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
